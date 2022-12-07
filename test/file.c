@@ -60,8 +60,7 @@ void editor(char  *str){
 
 int main(){
     char *s=readline("> ");
-//    char *pshol=strtok(s," \t");
-    printf("%s\n", s);
+    printf("\"%s\"\n", s);
     while (s != NULL){
         printf("\"%s\"\n", s);
         editor(s);
