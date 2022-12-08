@@ -1,6 +1,7 @@
 #include "stdlib.h"
 #include "stdio.h"
 #include "string.h"
+#include "readline/readline.h"
 
 #define PROMPT "> "
 #define VOWELS "aeiouAEIOU"
