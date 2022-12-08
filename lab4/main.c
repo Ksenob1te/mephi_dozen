@@ -1,43 +1,9 @@
-#include "stdlib.h"
+#include "methods.h"
 #include "stdio.h"
-//#include "string.h"
+#include "stdlib.h"
 
 #define PROMPT "> "
 #define VOWELS "aeiouAEIOU"
-
-char * strcat(char * destptr, const char * srcptr) {
-    int destLen, i;
-    for (destLen = 0; destptr[destLen] != '\0'; ++destLen);
-    for (i = destLen; srcptr[i - destLen] != '\0'; ++i) {
-        destptr[i] = srcptr[i - destLen];
-    }
-    destptr[i] = '\0';
-    return destptr;
-}
-
-char *readline(char *prompt) {
-    printf("%s", prompt);
-    char *ptr = (char *) malloc(sizeof(char));
-    char buf[81];
-    int n, len = 0, bufLen;
-    *ptr = '\0';
-    do {
-        n = scanf("%80[^\n]%n", buf, &bufLen);
-        if (n < 0) {
-            free(ptr);
-            ptr = NULL;
-            continue;
-        }
-        if (n == 0)
-            scanf("%*c");
-        else {
-            len += bufLen;
-            ptr = (char *) realloc(ptr, len + 1);
-            strcat(ptr, buf);
-        }
-    } while (n > 0);
-    return ptr;
-}
 
 int checkVowel(char element) {
     char *vowels = VOWELS;
@@ -46,6 +12,7 @@ int checkVowel(char element) {
     }
     return 0;
 }
+
 char *process(char *str) {
     int vowels_counter = 0;
     int counter = 0, ans_counter = 0;
@@ -62,11 +29,15 @@ char *process(char *str) {
 }
 
 int main(void) {
-    char *str = readline(PROMPT);
-    printf("\"%s\"\n", str);
-    char *ans = process(str);
-    printf("\"%s\"\n", ans);
-    free(str);
-    free(ans);
+    char *str;
+    do {
+        str = readline(PROMPT);
+        if (!str) continue;
+        printf("\"%s\"\n", str);
+        char *ans = process(str);
+        printf("\"%s\"\n", ans);
+        free(str);
+        free(ans);
+    } while (str);
     return 0;
 }
