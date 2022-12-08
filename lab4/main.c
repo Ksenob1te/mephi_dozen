@@ -38,7 +38,6 @@ char *process(char *str) {
             words[words_counter++] = str + counter + (counter == 0?0:1);
         }
     }
-    printf("%d\n", letter_counter + words_counter + vowels_counter);
     char *ans = malloc((letter_counter + words_counter + vowels_counter) * sizeof(char));
     for (int i = 0; i < words_counter; ++i) {
         for (int j = 0; j < wordlen(words[i]); j++) {
