@@ -51,7 +51,8 @@ char *process(char *str) {
     int counter = 0, ans_counter = 0;
     for (; str[counter] != '\0'; ++counter)
         vowels_counter += checkVowel(str[counter]);
-    char *ans = malloc((counter + vowels_counter) * sizeof(char));
+    char *ans = malloc((counter + vowels_counter + 1) * sizeof(char));
+    ans[counter + vowels_counter] = '\0';
     for (int i = 0; i < counter; ++i) {
         ans[ans_counter++] = str[i];
         if (checkVowel(str[i]))
@@ -64,8 +65,8 @@ int main(void) {
     char *str = readline(PROMPT);
     printf("\"%s\"\n", str);
     char *ans = process(str);
-    free(str);
     printf("\"%s\"\n", ans);
+    free(str);
     free(ans);
     return 0;
 }
