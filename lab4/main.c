@@ -3,7 +3,7 @@
 //#include "string.h"
 
 #define PROMPT "> "
-#define VOWELS {'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'}
+#define VOWELS "aeiouAEIOU"
 
 char * strcat(char * destptr, const char * srcptr) {
     int destLen, i;
@@ -39,8 +39,33 @@ char *readline(char *prompt) {
     return ptr;
 }
 
+int checkVowel(char element) {
+    char *vowels = VOWELS;
+    for (int i = 0; vowels[i] != '\0'; ++i) {
+        if (element == vowels[i]) return 1;
+    }
+    return 0;
+}
+char *process(char *str) {
+    int vowels_counter = 0;
+    int counter = 0, ans_counter = 0;
+    for (; str[counter] != '\0'; ++counter)
+        vowels_counter += checkVowel(str[counter]);
+    char *ans = malloc((counter + vowels_counter) * sizeof(char));
+    for (int i = 0; i < counter; ++i) {
+        ans[ans_counter++] = str[i];
+        if (checkVowel(str[i]))
+            ans[ans_counter++] = str[i];
+    }
+    return ans;
+}
+
 int main(void) {
     char *str = readline(PROMPT);
-    printf("\"%s\"", str);
+    printf("\"%s\"\n", str);
+    char *ans = process(str);
+    free(str);
+    printf("\"%s\"\n", ans);
+    free(ans);
     return 0;
 }
