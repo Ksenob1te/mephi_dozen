@@ -65,8 +65,8 @@ int main(void) {
     char *str = readline(PROMPT);
     printf("\"%s\"\n", str);
     char *ans = process(str);
-    free(str);
     printf("\"%s\"\n", ans);
+    free(str);
     free(ans);
     return 0;
 }
