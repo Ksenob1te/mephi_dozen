@@ -1,13 +1,12 @@
 #include "stdio.h"
 #include "stdlib.h"
 
-#ifdef MY_LIB
+#ifndef MY_LIB
 #include "methods.h"
 #else
 #include "readline/readline.h"
 #include "string.h"
 #endif
-
 
 
 #define PROMPT "> "
