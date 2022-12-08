@@ -56,6 +56,7 @@ void editor(char  *str){
     for (int i=0; i<res_len;i++){
         printf("%s ", res[i]);
     }
+    printf("\n");
 }
 
 int main(){
