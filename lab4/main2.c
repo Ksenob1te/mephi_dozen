@@ -13,6 +13,7 @@ int checkVowel(char element) {
     }
     return 0;
 }
+
 char *process(char *str) {
     int vowels_counter = 0;
     int counter = 0, ans_counter = 0;
