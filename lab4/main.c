@@ -1,3 +1,6 @@
+#include "stdio.h"
+#include "stdlib.h"
+
 #ifdef MY_LIB
 #include "methods.h"
 #else
@@ -5,8 +8,7 @@
 #include "string.h"
 #endif
 
-#include "stdio.h"
-#include "stdlib.h"
+
 
 #define PROMPT "> "
 #define VOWELS "aeiouAEIOU"
