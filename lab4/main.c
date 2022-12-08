@@ -33,9 +33,9 @@ int main(void) {
     do {
         str = readline(PROMPT);
         if (!str) continue;
-        printf("\"%s\"\n", str);
+        printf("Input data: \"%s\"\n", str);
         char *ans = process(str);
-        printf("\"%s\"\n", ans);
+        printf("Result data: \"%s\"\n", ans);
         free(str);
         free(ans);
     } while (str);

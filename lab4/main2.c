@@ -29,11 +29,15 @@ char *process(char *str) {
 }
 
 int main(void) {
-    char *str = readline(PROMPT);
-    printf("\"%s\"\n", str);
-    char *ans = process(str);
-    printf("\"%s\"\n", ans);
-    free(str);
-    free(ans);
+    char *str;
+    do {
+        str = readline(PROMPT);
+        if (!str) continue;
+        printf("Input data: \"%s\"\n", str);
+        char *ans = process(str);
+        printf("Result data: \"%s\"\n", ans);
+        free(str);
+        free(ans);
+    } while (str);
     return 0;
 }
