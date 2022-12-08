@@ -1,4 +1,10 @@
+#ifdef MY_LIB
 #include "methods.h"
+#else
+#include "readline/readline.h"
+#include "string.h"
+#endif
+
 #include "stdio.h"
 #include "stdlib.h"
 
