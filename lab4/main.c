@@ -20,36 +20,32 @@ int checkVowel(char element) {
     return 0;
 }
 
-int checkContinuousSpaces(const char *str, int place) {
-    if (place > 0 &&
-        (str[place] == '\t' || str[place] == ' ') &&
-        (str[place - 1] == '\t' || str[place - 1] == ' ')) {
-        return 1;
-    } else {
-        return 0;
-    }
+int wordlen(char *str) {
+    int counter = 0;
+    for (; str[counter] != ' ' && str[counter] != '\t' && str[counter] != '\0'; ++counter);
+    return counter;
 }
 
 char *process(char *str) {
     int vowels_counter = 0;
-    int counter = 0, ans_counter = 0, spaces_delete = 0;
+    int counter = 0, words_counter = 0, ans_counter = 0, letter_counter = 0;
+    char *words[wordlen(str)];
     for (; str[counter] != '\0'; ++counter) {
         vowels_counter += checkVowel(str[counter]);
-        spaces_delete += checkContinuousSpaces(str, counter);
-    }
-    for (int i = 0; str[i] == ' ' || str[i] == '\t'; i++) {spaces_delete++; str[i] = '\0';}
-    for (int i = counter - 1; str[i] == ' ' || str[i] == '\t'; i--) {spaces_delete++; str[i] = '\0';}
-
-    int new_len = counter + vowels_counter - spaces_delete + 1;
-    char *ans = malloc(new_len * sizeof(char));
-    ans[new_len] = '\0';
-
-    for (int i = 0; i < counter; ++i) {
-        if (str[i] != '\0' && !checkContinuousSpaces(str, i)) {
-            ans[ans_counter++] = ((str[i] == '\t')?' ':str[i]);
-            if (checkVowel(str[i]))
-                ans[ans_counter++] = str[i];
+        letter_counter += (str[counter] != '\t' && str[counter] != '\0')?1:0;
+        if ((str[counter] == ' ' || str[counter] == '\t' || counter == 0) &&
+        (str[counter + 1] != '\0' && str[counter + 1] != ' ' && str[counter + 1] != '\t')) {
+            words[words_counter++] = str + counter + (counter == 0?0:1);
         }
+    }
+    char *ans = malloc((letter_counter + words_counter) * sizeof(char));
+    for (int i = 0; i < words_counter; ++i) {
+        for (int j = 0; j < wordlen(words[i]); j++) {
+            ans[ans_counter++] = words[i][j];
+            if (checkVowel(words[i][j]))
+                ans[ans_counter++] = words[i][j];
+        }
+        ans[ans_counter++] = (i != words_counter - 1)?' ':'\0';
     }
     return ans;
 }

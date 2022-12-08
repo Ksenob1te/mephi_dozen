@@ -5,7 +5,7 @@
 #ifndef LAB4_METHODS_H
 #define LAB4_METHODS_H
 
-char * strcat(char * destptr, const char * srcptr);
+char *strcat(char *destptr, const char *srcptr);
 char *readline(char *prompt);
 
 #endif //LAB4_METHODS_H
