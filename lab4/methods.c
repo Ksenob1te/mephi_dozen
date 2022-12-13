@@ -15,6 +15,35 @@ char * strcat(char * destptr, const char * srcptr) {
     return destptr;
 }
 
+char * strtok(char *string, const char *delim) {
+    static char *last;
+    if (string == NULL && (string = last) == NULL) return (NULL);
+    char c, sc, *span, *temp;
+    cont:
+    c = *string++;
+    for (span = (char *)delim; (sc = *span++) != '\0';)
+        if (c == sc)
+            goto cont;
+    if (string[-1] == '\0') {
+        last = NULL;
+        return (NULL);
+    }
+    temp = string - 1;
+    for (c = *string++;;c = *string++) {
+        span = (char *)delim;
+        do {
+            if ((sc = *span++) == c) {
+                if (c == 0)
+                    string = NULL;
+                else
+                    string[-1] = 0;
+                last = string;
+                return (temp);
+            }
+        } while (sc != '\0');
+    }
+}
+
 char *readline(char *prompt) {
     printf("%s", prompt);
     char *ptr = (char *) malloc(sizeof(char));

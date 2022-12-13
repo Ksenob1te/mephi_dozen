@@ -10,6 +10,7 @@
 
 
 #define PROMPT "> "
+#define DELIM "\t "
 #define VOWELS "aeiouAEIOU"
 
 int checkVowel(char element) {
@@ -20,33 +21,27 @@ int checkVowel(char element) {
     return 0;
 }
 
-int wordlen(char *str) {
-    int counter = 0;
-    for (; str[counter] != ' ' && str[counter] != '\t' && str[counter] != '\0'; ++counter);
-    return counter;
-}
 
 char *process(char *str) {
-    int vowels_counter = 0;
-    int counter = 0, words_counter = 0, ans_counter = 0, letter_counter = 0;
-    char *words[wordlen(str)];
-    for (; str[counter] != '\0'; ++counter) {
-        vowels_counter += checkVowel(str[counter]);
-        letter_counter += (str[counter] != '\t' && str[counter] != '\0')?1:0;
-        if ((str[counter] == ' ' || str[counter] == '\t' || counter == 0) &&
-        (str[counter + 1] != '\0' && str[counter + 1] != ' ' && str[counter + 1] != '\t')) {
-            words[words_counter++] = str + counter + (counter == 0?0:1);
+    int vowels_counter = 0, ans_counter = 0;
+    int counter, size = 1;
+    char *ans = malloc(0), *res = strtok(str, DELIM);
+    while (res != NULL) {
+        for (counter = 0; res[counter] != '\0'; ++counter) {
+//            printf("'%c': %d\n", res[counter], counter);
+            vowels_counter += checkVowel(res[counter]);
         }
-    }
-    char *ans = malloc((letter_counter + words_counter + vowels_counter) * sizeof(char));
-    for (int i = 0; i < words_counter; ++i) {
-        for (int j = 0; j < wordlen(words[i]); j++) {
-            ans[ans_counter++] = words[i][j];
-            if (checkVowel(words[i][j]))
-                ans[ans_counter++] = words[i][j];
+        size += vowels_counter + counter + 1;
+        ans = realloc(ans, size * sizeof(int));
+        for (counter = 0; res[counter] != '\0'; ++counter) {
+            ans[ans_counter++] = res[counter];
+            if (checkVowel(res[counter])) ans[ans_counter++] = res[counter];
         }
-        ans[ans_counter++] = (i != words_counter - 1)?' ':'\0';
+        ans[ans_counter++] = ' ';
+        res = strtok(NULL, DELIM);
     }
+    if (ans_counter == 0) return calloc(0, sizeof(char));
+    ans[ans_counter - 1] = '\0';
     return ans;
 }
 
