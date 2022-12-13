@@ -40,7 +40,7 @@ char *process(char *str) {
         ans[ans_counter++] = ' ';
         res = strtok(NULL, DELIM);
     }
-    if (ans_counter == 0) return calloc(0, sizeof(char));
+    if (ans_counter == 0) return calloc(1, sizeof(char));
     ans[ans_counter - 1] = '\0';
     return ans;
 }
