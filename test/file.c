@@ -31,7 +31,7 @@ void dubl_sec(char **str, size_t* len) {
 int main() {
     char *str = malloc(100 * sizeof(char));
     size_t len = 100;
-    gets(str);
+    fgets(str, 100, stdin);
 //    scanf("%99s", str);
     dubl_sec(&str, &len);
     printf("%s", str);
