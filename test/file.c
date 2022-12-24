@@ -35,5 +35,6 @@ int main() {
 //    scanf("%99s", str);
     dubl_sec(&str, &len);
     printf("%s", str);
+    free(str);
     return 0;
 }
