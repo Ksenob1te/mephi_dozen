@@ -1,72 +1,39 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <readline/readline.h>
-#define DELIM " \t"
+#include "string.h"
 
-short check(char *str1, char *str2) {
-    int count=0;
-    for (int i=0;i<strlen(str1);i++) {
-        for (int j=0;j<strlen(str2);j++) {
-            if (str1[i]==str2[j]) {
-                count+=1;
-                break;
+void dubl_sec(char **str, size_t* len) {
+    size_t new_len = 0;
+    char *result = malloc(*len * 2 * sizeof(char));
+    char *word = strtok(*str, " ");
+    int wc = 1;
+    while (word != NULL) {
+        for (int i = 0; word[i]; ++i) {
+            result[new_len++] = word[i];
+        }
+        result[new_len++] = ' ';
+        if (wc % 2 == 0) {
+            for (int i = 0; word[i]; ++i) {
+                result[new_len++] = word[i];
             }
+            result[new_len++] = ' ';
         }
+        wc++;
+        word = strtok(NULL, " ");
     }
-    if (count==strlen(str1)) return 1;
-    return 0;
+    result[new_len++] = '\0';
+    result = realloc(result, new_len * sizeof(char));
+    free(*str);
+    *str = result;
+    *len = new_len;
 }
 
-
-char* registr(char *str1) {
-    char* buff=calloc(strlen(str1)+1, sizeof(char));
-    for (int i=0; i<=strlen(str1);i++){
-
-
-        if((int) str1[i] >= 65 && (int) str1[i] <= 90){
-            buff[i] = (char) ((int) str1[i] + 32);
-        }
-        else buff[i]=str1[i];
-    }
-    return buff;
-}
-
-void editor(char  *str){
-    int res_len=0;
-    char **res=calloc(res_len+1, sizeof(char*));
-    char *word=strtok(str, DELIM);
-    while (word!=NULL){
-        res[res_len] = word;
-        res_len+=1;
-        res= realloc(res,(res_len+1) * sizeof(char*));
-        word=strtok(NULL, DELIM);
-    }
-    for (int i=0;i<res_len;i++) {
-        for (int j=i+1;j<res_len;j++) {
-            if (check(registr(res[i]), registr(res[j]))==1) {
-                char *buff=res[j];
-                for (int g=j-1 ; g>i; g--){
-                    res[g+1]=res[g];
-                }
-                res[i+1]=buff;
-            }
-        }
-    }
-    for (int i=0; i<res_len;i++){
-        printf("%s ", res[i]);
-    }
-    printf("\n");
-}
-
-int main(){
-    char *s=readline("> ");
-    printf("\"%s\"\n", s);
-    while (s != NULL){
-        printf("\"%s\"\n", s);
-        editor(s);
-        free(s);
-        s=readline("> ");
-    }
+int main() {
+    char *str = malloc(100 * sizeof(char));
+    size_t len = 100;
+    gets(str);
+//    scanf("%99s", str);
+    dubl_sec(&str, &len);
+    printf("%s", str);
     return 0;
 }
