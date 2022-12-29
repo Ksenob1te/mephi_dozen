@@ -1,14 +1,18 @@
-//
-// Created by Ksenob1te on 13.12.2022.
-//
-
 #ifndef LAB4_VOTER_H
 #define LAB4_VOTER_H
 
-typedef struct Voter {
+
+struct Voter {
     char *username;
-    char place[7];
+    char *place;
     int age;
+};
+
+extern const struct VoterClass {
+    struct Voter (*new)(char *username, char *place, int age);
 } Voter;
+
+
+static struct Voter newVoter(char *username, char *place, int age);
 
 #endif //LAB4_VOTER_H

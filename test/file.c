@@ -15,6 +15,7 @@ void dubl_sec(char **str, size_t* len) {
         if (wc % 2 == 0) {
             for (int i = 0; word[i]; ++i) {
                 result[new_len++] = word[i];
+
             }
             result[new_len++] = ' ';
         }
