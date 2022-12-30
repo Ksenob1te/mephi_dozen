@@ -96,11 +96,9 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "Error occurred within commandline parameters\n");
         return 132;
     }
-//    if (!strcmp(sortType, "qsort")) qsort((void *) array, len, sizeof(struct Voter), comp);
-//    if (!strcmp(sortType, "bubble")) bubbleSort((void *) array, len, sizeof(struct Voter), comp);
-//    if (!strcmp(sortDir, "insertion"))
-//    pairInsertionSort((void *) array, len, sizeof(struct Voter), comp);
-//    set(array, array + 1, sizeof(struct Voter));
+    if (!strcmp(sortType, "qsort")) qsort((void *) array, len, sizeof(struct Voter), comp);
+    if (!strcmp(sortType, "bubble")) bubbleSort((void *) array, len, sizeof(struct Voter), comp);
+    if (!strcmp(sortType, "insertion")) pairInsertionSort((void *) array, len, sizeof(struct Voter), comp);
     for (int i = 0; i < len; ++i) {
         printf("%s; %s; %s\n", array[i].username, array[i].place, array[i].age);
     }
