@@ -10,8 +10,8 @@ static char *fInput = NULL, *fOutput = NULL, *sortType = NULL, *sortDir = NULL, 
 int parseArgs(int argc, char *argv[]) {
     int status;
     while (optind < argc) {
-        printf("%d/ ", optind);
-        if ((status = getopt(argc, argv, "s:t:d:")) != -1)
+        if ((status = getopt(argc, argv, "s:t:d:")) != -1) {
+            printf("%s %d \n", optarg, optind);
             switch (status) {
                 case 's': sortType = optarg; break;
                 case 't': sortField = optarg; break;
@@ -19,6 +19,8 @@ int parseArgs(int argc, char *argv[]) {
                 default:
                     break;
             }
+        }
+
         else {
 //            printf("%s\n", argv[optind]);
             if (!fInput) fInput = argv[optind];
