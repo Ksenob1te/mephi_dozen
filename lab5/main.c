@@ -99,8 +99,9 @@ int main(int argc, char *argv[]) {
     if (!strcmp(sortType, "qsort")) qsort((void *) array, len, sizeof(struct Voter), comp);
     if (!strcmp(sortType, "bubble")) bubbleSort((void *) array, len, sizeof(struct Voter), comp);
     if (!strcmp(sortType, "insertion")) pairInsertionSort((void *) array, len, sizeof(struct Voter), comp);
+    fprintf(OF, "Sorted by %s sort by %s field %s\n", sortType, sortField, sortDir);
     for (int i = 0; i < len; ++i) {
-        printf("%s; %s; %s\n", array[i].username, array[i].place, array[i].age);
+        fprintf(OF, "%d: [%s, %s, %s]\n", i + 1, array[i].username, array[i].place, array[i].age);
         array[i].clear(array + i);
     }
     free(array);
