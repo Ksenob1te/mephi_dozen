@@ -6,6 +6,8 @@ struct Voter {
     char *username;
     char *place;
     char *age;
+
+    void (*clear) (struct Voter*);
 };
 
 extern const struct VoterClass {

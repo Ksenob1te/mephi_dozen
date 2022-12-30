@@ -101,9 +101,7 @@ int main(int argc, char *argv[]) {
     if (!strcmp(sortType, "insertion")) pairInsertionSort((void *) array, len, sizeof(struct Voter), comp);
     for (int i = 0; i < len; ++i) {
         printf("%s; %s; %s\n", array[i].username, array[i].place, array[i].age);
-        free(array[i].username);
-        free(array[i].place);
-        free(array[i].age);
+        array[i].clear(array + i);
     }
     free(array);
     fclose(IF);

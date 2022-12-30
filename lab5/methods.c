@@ -113,6 +113,7 @@ void pairInsertionSort(void *arr, int len, size_t sizeofElement, int (*comp)()) 
         void *arr_1 = malloc(sizeofElement), *arr_2 = malloc(sizeofElement);
         memcpy(arr_1, arr + i * sizeofElement, sizeofElement);
         memcpy(arr_2, arr + left * sizeofElement, sizeofElement);
+
 //        free(arr + i * sizeofElement);
 //        free(arr + left * sizeofElement);
         if (comp(arr_1, arr_2, sizeofElement) < 0)
@@ -129,11 +130,14 @@ void pairInsertionSort(void *arr, int len, size_t sizeofElement, int (*comp)()) 
             set(arr + (i + 1) * sizeofElement, arr + i * sizeofElement, sizeofElement);
         }
         set(arr + (i + 1) * sizeofElement, arr_2, sizeofElement);
+        free(arr_1);
+        free(arr_2);
     }
     void *last = malloc(sizeofElement);
     memcpy(last, arr + right * sizeofElement, sizeofElement);
-    while ((--right > 0) && comp(last, arr + right * sizeofElement) < 0) {
+    while ((--right >= 0) && comp(last, arr + right * sizeofElement) < 0) {
         set(arr + (right + 1) * sizeofElement, arr + right * sizeofElement, sizeofElement);
     }
     set(arr + (right + 1) * sizeofElement, last, sizeofElement);
+    free(last);
 }
