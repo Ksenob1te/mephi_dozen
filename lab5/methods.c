@@ -123,7 +123,7 @@ void pairInsertionSort(void *arr, int len, size_t sizeofElement, int (*comp)()) 
         }
 
         set(arr + (++i + 1) * sizeofElement, arr_1, sizeofElement);
-        printf("%s %s\n", ((struct Voter*) (arr + (i + 1) * sizeofElement))->place, ((struct Voter*) arr_2)->place);
+//        printf("%s %s\n", ((struct Voter*) (arr + (i + 1) * sizeofElement))->place, ((struct Voter*) arr_2)->place);
 
         while ((--i > 0) && comp(arr_2, arr + i * sizeofElement) < 0) {
             set(arr + (i + 1) * sizeofElement, arr + i * sizeofElement, sizeofElement);

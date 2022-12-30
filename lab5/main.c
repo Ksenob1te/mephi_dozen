@@ -19,12 +19,13 @@ int parseArgs(int argc, char *argv[]) {
                     break;
             }
         else {
+            printf("%s\n", argv[optind]);
             if (!fInput) fInput = argv[optind];
             else fOutput = argv[optind];
             optind++;
         }
     }
-    printf("%s\n", fInput);
+//    printf("%s\n", fInput);
     if (!fInput || !fOutput) {
         fprintf(stderr, "No Input/Output file in the arguments\n");
         return 1;
@@ -87,8 +88,8 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "Error occurred within commandline parameters\n");
         return 132;
     }
-//    if (!strcmp(sortDir, "qsort")) qsort((void *) array, len, sizeof(struct Voter), comp);
-//    if (!strcmp(sortDir, "bubble")) bubbleSort((void *) array, len, sizeof(struct Voter), comp);
+//    if (!strcmp(sortType, "qsort")) qsort((void *) array, len, sizeof(struct Voter), comp);
+//    if (!strcmp(sortType, "bubble")) bubbleSort((void *) array, len, sizeof(struct Voter), comp);
 //    if (!strcmp(sortDir, "insertion"))
         pairInsertionSort((void *) array, len, sizeof(struct Voter), comp);
 //    set(array, array + 1, sizeof(struct Voter));
