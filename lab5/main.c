@@ -12,20 +12,24 @@ int parseArgs(int argc, char *argv[]) {
     while (optind < argc) {
         if ((status = getopt(argc, argv, "s:t:d:")) != -1) {
             switch (status) {
-                case 's': sortType = optarg; break;
-                case 't': sortField = optarg; break;
-                case 'd': sortDir = optarg; break;
+                case 's':
+                    sortType = optarg;
+                    break;
+                case 't':
+                    sortField = optarg;
+                    break;
+                case 'd':
+                    sortDir = optarg;
+                    break;
                 default:
                     break;
             }
-        }
-
-        else {
-            printf("%s %d \n", optarg, optind);
+        } else {
             if (!fInput) fInput = argv[optind];
             else fOutput = argv[optind];
             optind++;
         }
+        printf("%d \n", status);
     }
 //    printf("%s\n", fInput);
     if (!fInput || !fOutput) {
@@ -93,7 +97,7 @@ int main(int argc, char *argv[]) {
 //    if (!strcmp(sortType, "qsort")) qsort((void *) array, len, sizeof(struct Voter), comp);
 //    if (!strcmp(sortType, "bubble")) bubbleSort((void *) array, len, sizeof(struct Voter), comp);
 //    if (!strcmp(sortDir, "insertion"))
-        pairInsertionSort((void *) array, len, sizeof(struct Voter), comp);
+    pairInsertionSort((void *) array, len, sizeof(struct Voter), comp);
 //    set(array, array + 1, sizeof(struct Voter));
     for (int i = 0; i < len; ++i) {
         printf("%s; %s; %s\n", array[i].username, array[i].place, array[i].age);
