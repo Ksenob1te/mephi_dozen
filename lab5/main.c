@@ -12,7 +12,6 @@ int parseArgs(int argc, char *argv[]) {
     while (optind < argc && tempOptind < argc) {
         tempOptind = optind;
         status = getopt(argc, argv, "s:t:d:");
-        printf("%d\n", status);
         if (status != -1) {
             switch (status) {
                 case 's':
@@ -28,6 +27,7 @@ int parseArgs(int argc, char *argv[]) {
                     break;
             }
         } else {
+            optind = tempOptind;
             if (!fInput) fInput = argv[tempOptind];
             else fOutput = argv[tempOptind];
             optind++;
