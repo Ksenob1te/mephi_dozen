@@ -11,7 +11,6 @@ int parseArgs(int argc, char *argv[]) {
     int status;
     while (optind < argc) {
         if ((status = getopt(argc, argv, "s:t:d:")) != -1) {
-            printf("%s %d \n", optarg, optind);
             switch (status) {
                 case 's': sortType = optarg; break;
                 case 't': sortField = optarg; break;
@@ -22,7 +21,7 @@ int parseArgs(int argc, char *argv[]) {
         }
 
         else {
-//            printf("%s\n", argv[optind]);
+            printf("%s %d \n", optarg, optind);
             if (!fInput) fInput = argv[optind];
             else fOutput = argv[optind];
             optind++;
