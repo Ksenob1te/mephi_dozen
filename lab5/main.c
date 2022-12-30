@@ -10,6 +10,7 @@ static char *fInput = NULL, *fOutput = NULL, *sortType = NULL, *sortDir = NULL, 
 int parseArgs(int argc, char *argv[]) {
     int status;
     while (optind < argc) {
+        printf("%d/ ", optind);
         if ((status = getopt(argc, argv, "s:t:d:")) != -1)
             switch (status) {
                 case 's': sortType = optarg; break;
@@ -19,7 +20,7 @@ int parseArgs(int argc, char *argv[]) {
                     break;
             }
         else {
-            printf("%s\n", argv[optind]);
+//            printf("%s\n", argv[optind]);
             if (!fInput) fInput = argv[optind];
             else fOutput = argv[optind];
             optind++;
