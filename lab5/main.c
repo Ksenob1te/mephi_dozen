@@ -27,10 +27,10 @@ int parseArgs(int argc, char *argv[]) {
         } else {
             if (!fInput) fInput = argv[optind];
             else fOutput = argv[optind];
+            printf("%d ", optind);
             optind++;
             printf("%d ", optind);
         }
-        printf("%d\n", optind);
     }
 //    printf("%s\n", fInput);
     if (!fInput || !fOutput) {
