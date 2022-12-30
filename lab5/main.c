@@ -8,7 +8,7 @@
 static char *fInput = NULL, *fOutput = NULL, *sortType = NULL, *sortDir = NULL, *sortField = NULL;
 
 int parseArgs(int argc, char *argv[]) {
-    int status, tempOptind;
+    int status = 0, tempOptind = 0;
     while (optind < argc && tempOptind < argc) {
         tempOptind = optind;
         status = getopt(argc, argv, "s:t:d:");
