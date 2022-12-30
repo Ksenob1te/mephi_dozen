@@ -4,6 +4,7 @@
 #include "ctype.h"
 #include "voter.h"
 
+
 char *freadline(FILE *file) {
     char *ptr = (char *) malloc(sizeof(char));
     char buf[81];
@@ -138,4 +139,30 @@ void pairInsertionSort(void *arr, int len, size_t sizeofElement, int (*comp)()) 
     }
     set(arr + (right + 1) * sizeofElement, last, sizeofElement);
     free(last);
+}
+
+
+struct Voter generateRandom() {
+    char *place = malloc(8 * sizeof(char));
+    place[0] = (char)('A' + (rand() % 26));
+    place[1] = (char)('A' + (rand() % 26));
+    place[2] = (char)('A' + (rand() % 26));
+    place[3] = '-';
+    place[4] = (char)('0' + (rand() % 10));
+    place[5] = (char)('0' + (rand() % 10));
+    place[6] = (char)('0' + (rand() % 10));
+    place[7] = '\0';
+
+    char *name = malloc(4 * sizeof(char));
+    name[0] = (char)('A' + (rand() % 26));
+    name[1] = (char)('A' + (rand() % 26));
+    name[2] = (char)('A' + (rand() % 26));
+    name[3] = '\0';
+
+    char *age = malloc(3 * sizeof(char));
+    age[0] = (char)('0' + (rand() % 10));
+    age[1] = (char)('0' + (rand() % 10));
+    age[2] = '\0';
+
+    return Voter.new(name, place, age);
 }

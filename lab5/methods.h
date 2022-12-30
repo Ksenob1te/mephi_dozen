@@ -17,5 +17,6 @@ int ageComparatorDec(const void *p1, const void *p2);
 void bubbleSort(void *arr, int len, size_t sizeofElement, int (*comp)());
 void pairInsertionSort(void *arr, int len, size_t sizeofElement, int (*comp)());
 void set(void *a, void *b, size_t len);
+struct Voter generateRandom();
 
 #endif //MEPHI_DOZEN_METHODS_H

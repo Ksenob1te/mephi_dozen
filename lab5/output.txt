@@ -1,4 +1,5 @@
 Sorted by insertion sort by name field incremental
+The elapsed time is 0.0000 seconds
 1: [A, FFF-123, 11]
 2: [B, BBB-019, 20]
 3: [C, CCC-011, 22]

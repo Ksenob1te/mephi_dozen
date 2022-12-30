@@ -4,6 +4,7 @@
 #include "string.h"
 #include "methods.h"
 #include "voter.h"
+#include "time.h"
 
 static char *fInput = NULL, *fOutput = NULL, *sortType = NULL, *sortDir = NULL, *sortField = NULL;
 
@@ -61,6 +62,7 @@ int parseArgs(int argc, char *argv[]) {
 
 
 int main(int argc, char *argv[]) {
+    srand(time(NULL));
     int status = parseArgs(argc, argv);
     if (status) return 132;
     FILE *IF = fopen(fInput, "r"), *OF = fopen(fOutput, "w");
@@ -70,6 +72,11 @@ int main(int argc, char *argv[]) {
     }
     int len = 0;
     status = 0;
+//    struct Voter *array = malloc(10000 * sizeof(struct Voter));
+//    for (int i = 0; i < 10000; ++i) {
+//        array[i] = generateRandom();
+//    }
+//    len = 10000;
     struct Voter *array = malloc(0);
     while (status == 0) {
         char *username = freadline(IF);
@@ -81,8 +88,7 @@ int main(int argc, char *argv[]) {
             fprintf(stderr, "Error with %d input object, it won't be used\n", len + 1);
         } else {
             array = realloc(array, (len + 1) * sizeof(struct Voter));
-            array[len] = Voter.new(username, place, age);
-            len++;
+            array[len++] = Voter.new(username, place, age);
         }
     }
     int (*comp)() = NULL;
@@ -96,10 +102,13 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "Error occurred within commandline parameters\n");
         return 132;
     }
+    clock_t begin = clock();
     if (!strcmp(sortType, "qsort")) qsort((void *) array, len, sizeof(struct Voter), comp);
     if (!strcmp(sortType, "bubble")) bubbleSort((void *) array, len, sizeof(struct Voter), comp);
     if (!strcmp(sortType, "insertion")) pairInsertionSort((void *) array, len, sizeof(struct Voter), comp);
+    clock_t end = clock();
     fprintf(OF, "Sorted by %s sort by %s field %s\n", sortType, sortField, sortDir);
+    fprintf(OF, "The elapsed time is %.4lf seconds\n", ((double)(end - begin)) / CLOCKS_PER_SEC);
     for (int i = 0; i < len; ++i) {
         fprintf(OF, "%d: [%s, %s, %s]\n", i + 1, array[i].username, array[i].place, array[i].age);
         array[i].clear(array + i);
