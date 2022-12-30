@@ -105,5 +105,6 @@ int main(int argc, char *argv[]) {
         free(array[i].place);
         free(array[i].age);
     }
-
+    fclose(IF);
+    fclose(OF);
 }
