@@ -24,7 +24,7 @@ int parseArgs(int argc, char *argv[]) {
             optind++;
         }
     }
-    printf("%s\n", argv[5]);
+    printf("%s\n", fInput);
     if (!fInput || !fOutput) {
         fprintf(stderr, "No Input/Output file in the arguments\n");
         return 1;
