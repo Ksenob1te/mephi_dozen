@@ -11,7 +11,9 @@ int parseArgs(int argc, char *argv[]) {
     int status, tempOptind;
     while (optind < argc && tempOptind < argc) {
         tempOptind = optind;
-        if ((status = getopt(argc, argv, "s:t:d:")) != -1) {
+        status = getopt(argc, argv, "s:t:d:");
+        printf("%d\n", status);
+        if (status != -1) {
             switch (status) {
                 case 's':
                     sortType = optarg;
@@ -70,7 +72,6 @@ int main(int argc, char *argv[]) {
     status = 0;
     struct Voter *array = malloc(0);
     while (status == 0) {
-        printf("1");
         char *username = freadline(IF);
         char *place = freadline(IF);
         char *age = freadline(IF);
