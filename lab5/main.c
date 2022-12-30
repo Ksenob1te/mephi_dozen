@@ -28,7 +28,6 @@ int parseArgs(int argc, char *argv[]) {
         } else {
             if (!fInput) fInput = argv[tempOptind];
             else fOutput = argv[tempOptind];
-            tempOptind++;
             optind++;
         }
     }
