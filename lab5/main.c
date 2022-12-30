@@ -70,6 +70,7 @@ int main(int argc, char *argv[]) {
     status = 0;
     struct Voter *array = malloc(0);
     while (status == 0) {
+        printf("1");
         char *username = freadline(IF);
         char *place = freadline(IF);
         char *age = freadline(IF);
