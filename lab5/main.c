@@ -8,8 +8,9 @@
 static char *fInput = NULL, *fOutput = NULL, *sortType = NULL, *sortDir = NULL, *sortField = NULL;
 
 int parseArgs(int argc, char *argv[]) {
-    int status;
-    while (optind < argc) {
+    int status, tempOptind;
+    while (optind < argc && tempOptind < argc) {
+        tempOptind = optind;
         if ((status = getopt(argc, argv, "s:t:d:")) != -1) {
             switch (status) {
                 case 's':
@@ -25,11 +26,10 @@ int parseArgs(int argc, char *argv[]) {
                     break;
             }
         } else {
-            if (!fInput) fInput = argv[optind];
-            else fOutput = argv[optind];
-            printf("%d ", optind);
+            if (!fInput) fInput = argv[tempOptind];
+            else fOutput = argv[tempOptind];
+            tempOptind++;
             optind++;
-            printf("%d ", optind);
         }
     }
 //    printf("%s\n", fInput);
