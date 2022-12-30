@@ -114,19 +114,17 @@ void pairInsertionSort(void *arr, int len, size_t sizeofElement, int (*comp)()) 
         memcpy(arr_1, arr + i * sizeofElement, sizeofElement);
         memcpy(arr_2, arr + left * sizeofElement, sizeofElement);
 
-//        free(arr + i * sizeofElement);
-//        free(arr + left * sizeofElement);
         if (comp(arr_1, arr_2, sizeofElement) < 0)
             swap(arr_1, arr_2, sizeofElement);
 
-        while ((--i > 0) && comp(arr_1, arr + i * sizeofElement) < 0) {
+        while ((--i >= 0) && comp(arr_1, arr + i * sizeofElement) < 0) {
             set(arr + (i + 2) * sizeofElement, arr + i * sizeofElement, sizeofElement);
         }
 
         set(arr + (++i + 1) * sizeofElement, arr_1, sizeofElement);
 //        printf("%s %s\n", ((struct Voter*) (arr + (i + 1) * sizeofElement))->place, ((struct Voter*) arr_2)->place);
 
-        while ((--i > 0) && comp(arr_2, arr + i * sizeofElement) < 0) {
+        while ((--i >= 0) && comp(arr_2, arr + i * sizeofElement) < 0) {
             set(arr + (i + 1) * sizeofElement, arr + i * sizeofElement, sizeofElement);
         }
         set(arr + (i + 1) * sizeofElement, arr_2, sizeofElement);
