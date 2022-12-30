@@ -9,28 +9,28 @@ static char *fInput = NULL, *fOutput = NULL, *sortType = NULL, *sortDir = NULL, 
 
 int parseArgs(int argc, char *argv[]) {
     int status;
-    printf("%d \n", argc);
-//    while (optind < argc) {
-//        if ((status = getopt(argc, argv, "s:t:d:")) != -1) {
-//            switch (status) {
-//                case 's':
-//                    sortType = optarg;
-//                    break;
-//                case 't':
-//                    sortField = optarg;
-//                    break;
-//                case 'd':
-//                    sortDir = optarg;
-//                    break;
-//                default:
-//                    break;
-//            }
-//        } else {
-//            if (!fInput) fInput = argv[optind];
-//            else fOutput = argv[optind];
-//            optind++;
-//        }
-//    }
+    while (optind < argc) {
+        if ((status = getopt(argc, argv, "s:t:d:")) != -1) {
+            switch (status) {
+                case 's':
+                    sortType = optarg;
+                    break;
+                case 't':
+                    sortField = optarg;
+                    break;
+                case 'd':
+                    sortDir = optarg;
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            if (!fInput) fInput = argv[optind];
+            else fOutput = argv[optind];
+            printf("%d %s\n", optind, argv[optind]);
+            optind++;
+        }
+    }
 //    printf("%s\n", fInput);
     if (!fInput || !fOutput) {
         fprintf(stderr, "No Input/Output file in the arguments\n");
