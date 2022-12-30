@@ -5,14 +5,14 @@
 struct Voter {
     char *username;
     char *place;
-    int age;
+    char *age;
 };
 
 extern const struct VoterClass {
-    struct Voter (*new)(char *username, char *place, int age);
+    struct Voter (*new)(char *username, char *place, char *age);
 } Voter;
 
 
-static struct Voter newVoter(char *username, char *place, int age);
+static struct Voter newVoter(char *username, char *place, char *age);
 
 #endif //LAB4_VOTER_H

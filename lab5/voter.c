@@ -2,7 +2,7 @@
 
 const struct VoterClass Voter = {.new=&newVoter};
 
-static struct Voter newVoter(char *username, char *place, int age) {
+static struct Voter newVoter(char *username, char *place, char *age) {
     return (struct Voter) {
         .username=username,
         .place=place,
