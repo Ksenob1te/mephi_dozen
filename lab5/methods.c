@@ -84,21 +84,56 @@ int ageComparatorDec(const void *p1, const void *p2) {
     return -strcmp(l, r);
 }
 
-void swap(void * a, void * b, size_t len)
-{
-    unsigned char * p = a, * q = b, tmp;
-    for (size_t i = 0; i != len; ++i)
-    {
+void swap(void *a, void *b, size_t len) {
+    unsigned char *p = a, *q = b, tmp;
+    for (size_t i = 0; i != len; ++i) {
         tmp = p[i];
         p[i] = q[i];
         q[i] = tmp;
     }
 }
 
+void set(void *a, void *b, size_t len) {
+    unsigned char *p = a, *q = b;
+    for (size_t i = 0; i != len; ++i)
+        p[i] = q[i];
+}
 
-void bubbleSort(void *arr, int len, int sizeofElement, int (*comp)()) {
+
+void bubbleSort(void *arr, int len, size_t sizeofElement, int (*comp)()) {
     for (int i = 0; i < len - 1; i++)
         for (int j = 0; j < len - i - 1; j++)
             if (comp(arr + j * sizeofElement, arr + (j + 1) * sizeofElement, sizeofElement) > 0)
                 swap(arr + j * sizeofElement, arr + (j + 1) * sizeofElement, sizeofElement);
+}
+
+void pairInsertionSort(void *arr, int len, size_t sizeofElement, int (*comp)()) {
+    int left = 0, right = len - 1;
+    for (int i = left; ++left <= right; i = ++left) {
+        void *arr_1 = malloc(sizeofElement), *arr_2 = malloc(sizeofElement);
+        memcpy(arr_1, arr + i * sizeofElement, sizeofElement);
+        memcpy(arr_2, arr + left * sizeofElement, sizeofElement);
+//        free(arr + i * sizeofElement);
+//        free(arr + left * sizeofElement);
+        if (comp(arr_1, arr_2, sizeofElement) < 0)
+            swap(arr_1, arr_2, sizeofElement);
+
+        while ((--i > 0) && comp(arr_1, arr + i * sizeofElement) < 0) {
+            set(arr + (i + 2) * sizeofElement, arr + i * sizeofElement, sizeofElement);
+        }
+
+        set(arr + (++i + 1) * sizeofElement, arr_1, sizeofElement);
+        printf("%s %s\n", ((struct Voter*) (arr + (i + 1) * sizeofElement))->place, ((struct Voter*) arr_2)->place);
+
+        while ((--i > 0) && comp(arr_2, arr + i * sizeofElement) < 0) {
+            set(arr + (i + 1) * sizeofElement, arr + i * sizeofElement, sizeofElement);
+        }
+        set(arr + (i + 1) * sizeofElement, arr_2, sizeofElement);
+    }
+    void *last = malloc(sizeofElement);
+    memcpy(last, arr + right * sizeofElement, sizeofElement);
+    while ((--right > 0) && comp(last, arr + right * sizeofElement) < 0) {
+        set(arr + (right + 1) * sizeofElement, arr + right * sizeofElement, sizeofElement);
+    }
+    set(arr + (right + 1) * sizeofElement, last, sizeofElement);
 }

@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
     if (status) return 132;
     FILE *IF = fopen(fInput, "r"), *OF = fopen(fOutput, "w");
     if (IF == NULL) {
-        fprintf(stderr, "Error with opening files, check routes and try again");
+        fprintf(stderr, "Error with opening files, check routes and try again\n");
         return 132;
     }
     int len = 0;
@@ -68,14 +68,29 @@ int main(int argc, char *argv[]) {
         if (!username || !place || !age) {
             status = 1;
         } else if (checkPlace(place) || checkAge(age)) {
-            fprintf(stderr, "Error with %d input object, it won't be used", len + 1);
+            fprintf(stderr, "Error with %d input object, it won't be used\n", len + 1);
         } else {
             array = realloc(array, (len + 1) * sizeof(struct Voter));
             array[len] = Voter.new(username, place, age);
             len++;
         }
     }
-    bubbleSort((void *) array, len, sizeof(struct Voter), usernameComparatorDec);
+    int (*comp)() = NULL;
+    if (!strcmp(sortField, "name") && !strcmp(sortDir, "incremental")) comp = usernameComparatorInc;
+    if (!strcmp(sortField, "name") && !strcmp(sortDir, "decremental")) comp = usernameComparatorDec;
+    if (!strcmp(sortField, "place") && !strcmp(sortDir, "incremental")) comp = placeComparatorInc;
+    if (!strcmp(sortField, "place") && !strcmp(sortDir, "decremental")) comp = placeComparatorDec;
+    if (!strcmp(sortField, "age") && !strcmp(sortDir, "incremental")) comp = ageComparatorInc;
+    if (!strcmp(sortField, "age") && !strcmp(sortDir, "decremental")) comp = ageComparatorDec;
+    if (!comp) {
+        fprintf(stderr, "Error occurred within commandline parameters\n");
+        return 132;
+    }
+//    if (!strcmp(sortDir, "qsort")) qsort((void *) array, len, sizeof(struct Voter), comp);
+//    if (!strcmp(sortDir, "bubble")) bubbleSort((void *) array, len, sizeof(struct Voter), comp);
+//    if (!strcmp(sortDir, "insertion"))
+        pairInsertionSort((void *) array, len, sizeof(struct Voter), comp);
+//    set(array, array + 1, sizeof(struct Voter));
     for (int i = 0; i < len; ++i) {
         printf("%s; %s; %s\n", array[i].username, array[i].place, array[i].age);
     }

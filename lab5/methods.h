@@ -14,6 +14,8 @@ int placeComparatorDec(const void *p1, const void *p2);
 int ageComparatorInc(const void *p1, const void *p2);
 int ageComparatorDec(const void *p1, const void *p2);
 
-void bubbleSort(void *arr, int len, int sizeofElement, int (*comp)());
+void bubbleSort(void *arr, int len, size_t sizeofElement, int (*comp)());
+void pairInsertionSort(void *arr, int len, size_t sizeofElement, int (*comp)());
+void set(void *a, void *b, size_t len);
 
 #endif //MEPHI_DOZEN_METHODS_H
