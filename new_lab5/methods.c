@@ -144,20 +144,20 @@ void (*get_sort(int sort_type))
 
 Abonent generate_random() {
     char *name = malloc(8 * sizeof(char));
-    for (int i = 0; i < 13; ++i)
+    for (int i = 0; i < 7; ++i)
         name[i] = (char)('A' + (rand() % 26));
     name[7] = '\0';
 
     char *phone = malloc(13 * sizeof(char));
     phone[0] = '+';
-    for (int i = 1; i < 13; ++i)
+    for (int i = 1; i < 12; ++i)
         phone[i] = (char)('0' + (rand() % 10));
-    phone[13] = '\0';
+    phone[12] = '\0';
 
     char *time = malloc(15 * sizeof(char));
-    for (int i = 0; i < 15; ++i)
+    for (int i = 0; i < 14; ++i)
         time[i] = (char)('0' + (rand() % 10));
-    time[15] = '\0';
+    time[14] = '\0';
 
     return new_abonent(name, phone, time);
 }
