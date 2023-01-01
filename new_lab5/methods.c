@@ -1,13 +1,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <stdio.h>
-#include "abonent.h"
+#include "methods.h"
 
 
 int check_phone(const char *phone) {
     if (phone[0] != '+') return 1;
-    int i = 0;
+    int i;
     for (i = 1; phone[i] && i < 16; ++i) {
         if (!isdigit(phone[i]) && phone[i] != ' ') return 1;
     }
@@ -140,5 +139,26 @@ void (*get_sort(int sort_type))
     if (sort_type == 1) return shaker_sort;
     if (sort_type == 2) return shell_sort;
     return qsort;
+}
+
+
+Abonent generate_random() {
+    char *name = malloc(8 * sizeof(char));
+    for (int i = 0; i < 13; ++i)
+        name[i] = (char)('A' + (rand() % 26));
+    name[7] = '\0';
+
+    char *phone = malloc(13 * sizeof(char));
+    phone[0] = '+';
+    for (int i = 1; i < 13; ++i)
+        phone[i] = (char)('0' + (rand() % 10));
+    phone[13] = '\0';
+
+    char *time = malloc(15 * sizeof(char));
+    for (int i = 0; i < 15; ++i)
+        time[i] = (char)('0' + (rand() % 10));
+    time[15] = '\0';
+
+    return new_abonent(name, phone, time);
 }
 
