@@ -1,8 +1,10 @@
-Sorted by insertion sort by name field incremental
-The elapsed time is 0.0000 seconds
-1: [A, FFF-123, 11]
-2: [B, BBB-019, 20]
-3: [C, CCC-011, 22]
-4: [D, AAA-123, 19]
-5: [D, LLL-123, 10]
-6: [K, FFF-124, 30]
+0.0002
+0.0004
+0.0004
+0.0007
+0.0007
+0.0006
+0.0009
+0.0010
+0.0012
+0.0014

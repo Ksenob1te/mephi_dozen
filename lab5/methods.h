@@ -6,6 +6,7 @@
 char *freadline(FILE *file);
 int checkPlace(char *str);
 int checkAge(char *str);
+int convertInt(const char *str);
 
 int usernameComparatorInc(const void *p1, const void *p2);
 int usernameComparatorDec(const void *p1, const void *p2);

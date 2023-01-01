@@ -1,41 +1,67 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "string.h"
+#include "time.h"
 
-void dubl_sec(char **str, size_t* len) {
-    size_t new_len = 0;
-    char *result = malloc(*len * 2 * sizeof(char));
-    char *word = strtok(*str, " ");
-    int wc = 1;
-    while (word != NULL) {
-        for (int i = 0; word[i]; ++i) {
-            result[new_len++] = word[i];
-        }
-        result[new_len++] = ' ';
-        if (wc % 2 == 0) {
-            for (int i = 0; word[i]; ++i) {
-                result[new_len++] = word[i];
+typedef struct Node {
+    int data;
+    struct Node *next;
+} Node;
 
-            }
-            result[new_len++] = ' ';
-        }
-        wc++;
-        word = strtok(NULL, " ");
+typedef struct List {
+    Node *head;
+} List;
+
+void remove_next(Node *node) {
+    Node *remove = node->next;
+    node->next = remove->next;
+    free(remove);
+}
+
+void process(List *list) {
+    Node *cur = list->head;
+
+    Node *tail;
+    while (cur->next != NULL) {
+        cur = cur->next;
     }
-    result[new_len++] = '\0';
-    result = realloc(result, new_len * sizeof(char));
-    free(*str);
-    *str = result;
-    *len = new_len;
+    tail = cur;
+    while (list->head->data == tail->data) {
+        list->head = list->head->next;
+    }
+    cur = list->head;
+    while (cur != NULL && cur->next != NULL) {
+        if (cur->next->data == tail->data) remove_next(cur);
+        else cur = cur->next;
+    }
 }
 
 int main() {
-    char *str = malloc(100 * sizeof(char));
-    size_t len = 100;
-    fgets(str, 100, stdin);
-//    scanf("%99s", str);
-    dubl_sec(&str, &len);
-    printf("%s", str);
-    free(str);
-    return 0;
+    List list;
+    srand(time(NULL));
+    Node *p = malloc(sizeof(Node));
+    p->data = rand() % 3;
+    p->next = NULL;
+    list.head = p;
+    for (int i = 2; i < 10; i ++) {
+        Node *node = malloc(sizeof(Node));
+        node->data = rand() % 3;
+        node->next = NULL;
+        p->next = node;
+        p = node;
+    }
+    Node *node = list.head;
+    for (int i = 0; node->next != NULL; ++i) {
+        printf("%d ", node->data);
+        node = node->next;
+    }
+    printf("%d\n", node->data);
+    process(&list);
+
+    node = list.head;
+    for (int i = 0; node->next != NULL; ++i) {
+        printf("%d ", node->data);
+        node = node->next;
+    }
+    printf("%d", node->data);
 }

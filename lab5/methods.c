@@ -49,6 +49,15 @@ int checkAge(char *str) {
     return 0;
 }
 
+int convertInt(const char *str) {
+    int k = 0;
+    for (int i = 0; str[i]; ++i) {
+        k *= 10;
+        k += (int)(str[i] - '0');
+    }
+    return k;
+}
+
 int usernameComparatorInc(const void *p1, const void *p2) {
     char *l = ((struct Voter *) p1)->username;
     char *r = ((struct Voter *) p2)->username;
@@ -109,23 +118,23 @@ void bubbleSort(void *arr, int len, size_t sizeofElement, int (*comp)()) {
 }
 
 void pairInsertionSort(void *arr, int len, size_t sizeofElement, int (*comp)()) {
-    int left = 0, right = len - 1;
-    for (int i = left; ++left <= right; i = ++left) {
-        void *arr_1 = malloc(sizeofElement), *arr_2 = malloc(sizeofElement);
-        memcpy(arr_1, arr + i * sizeofElement, sizeofElement);
-        memcpy(arr_2, arr + left * sizeofElement, sizeofElement);
+            int left = 0, right = len - 1;
+            for (int i = left; ++left <= right; i = ++left) {
+                void *arr_1 = malloc(sizeofElement), *arr_2 = malloc(sizeofElement);
+                memcpy(arr_1, arr + i * sizeofElement, sizeofElement);
+                memcpy(arr_2, arr + left * sizeofElement, sizeofElement);
 
-        if (comp(arr_1, arr_2, sizeofElement) < 0)
-            swap(arr_1, arr_2, sizeofElement);
+                if (comp(arr_1, arr_2, sizeofElement) < 0)
+                    swap(arr_1, arr_2, sizeofElement);
 
-        while ((--i >= 0) && comp(arr_1, arr + i * sizeofElement) < 0) {
-            set(arr + (i + 2) * sizeofElement, arr + i * sizeofElement, sizeofElement);
-        }
+                while ((--i >= 0) && comp(arr_1, arr + i * sizeofElement) < 0) {
+                    set(arr + (i + 2) * sizeofElement, arr + i * sizeofElement, sizeofElement);
+                }
 
-        set(arr + (++i + 1) * sizeofElement, arr_1, sizeofElement);
+                set(arr + (++i + 1) * sizeofElement, arr_1, sizeofElement);
 //        printf("%s %s\n", ((struct Voter*) (arr + (i + 1) * sizeofElement))->place, ((struct Voter*) arr_2)->place);
 
-        while ((--i >= 0) && comp(arr_2, arr + i * sizeofElement) < 0) {
+                while ((--i >= 0) && comp(arr_2, arr + i * sizeofElement) < 0) {
             set(arr + (i + 1) * sizeofElement, arr + i * sizeofElement, sizeofElement);
         }
         set(arr + (i + 1) * sizeofElement, arr_2, sizeofElement);

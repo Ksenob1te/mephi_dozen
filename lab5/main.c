@@ -34,7 +34,7 @@ int parseArgs(int argc, char *argv[]) {
             optind++;
         }
     }
-//    printf("%s\n", fInput);
+//    printf("%s\n", elementsCount);
     if (!fInput || !fOutput) {
         fprintf(stderr, "No Input/Output file in the arguments\n");
         return 1;
@@ -108,7 +108,7 @@ int main(int argc, char *argv[]) {
     if (!strcmp(sortType, "insertion")) pairInsertionSort((void *) array, len, sizeof(struct Voter), comp);
     clock_t end = clock();
     fprintf(OF, "Sorted by %s sort by %s field %s\n", sortType, sortField, sortDir);
-    fprintf(OF, "The elapsed time is %.4lf seconds\n", ((double)(end - begin)) / CLOCKS_PER_SEC);
+    fprintf(OF, "The elapsed ti me is %.4lf seconds\n", ((double)(end - begin)) / CLOCKS_PER_SEC);
     for (int i = 0; i < len; ++i) {
         fprintf(OF, "%d: [%s, %s, %s]\n", i + 1, array[i].username, array[i].place, array[i].age);
         array[i].clear(array + i);
