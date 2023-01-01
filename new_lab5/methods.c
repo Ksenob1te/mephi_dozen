@@ -119,16 +119,16 @@ void shaker_sort(void *array, size_t size, size_t sizeOfElement, int (*comparato
 }
 
 void shell_sort(void *array, size_t size, size_t sizeOfElement, int (*comparator)(const void*, const void*)) {
-    array = realloc(array, (size + 1) * sizeOfElement);
     for (size_t interval = size / 2; interval > 0; interval /= 2) {
         for (size_t i = interval; i < size; i += 1) {
-            memmove(array + size * sizeOfElement, array + i * sizeOfElement, sizeOfElement);
-            void *temp = array + size * sizeOfElement;
+            void *temp = malloc(sizeOfElement);
+            memmove(temp, array + i * sizeOfElement, sizeOfElement);
             size_t j;
             for (j = i; j >= interval && comparator(array + (j - interval) * sizeOfElement, temp) > 0; j -= interval) {
                 memmove(array + j * sizeOfElement, array + (j - interval) * sizeOfElement, sizeOfElement);
             }
             memmove(array + j * sizeOfElement, temp, sizeOfElement);
+            free(temp);
         }
     }
 }
