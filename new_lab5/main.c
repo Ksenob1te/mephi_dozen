@@ -59,22 +59,12 @@ int main(int argc, char *argv[]) {
 
     int (*comp)() = get_comparator(sort_field, sort_dir);
     void (*sort)() = get_sort(sort_type);
-//    printf("%d", comp(array, array + 1));
     sort((void *) array, len, sizeof(Abonent), comp);
-
     fprint_array(o_file, array, &len);
-//    fprint_array(o_file, array, &len);
-//    clock_t begin = clock();
-//    if (!strcmp(type, "qsort")) qsort((void *) array, len, sizeof(struct Voter), comp);
-//    if (!strcmp(type, "bubble")) bubbleSort((void *) array, len, sizeof(struct Voter), comp);
-//    if (!strcmp(type, "insertion")) pairInsertionSort((void *) array, len, sizeof(struct Voter), comp);
-//    clock_t end = clock();
-//    fprintf(OF, "Sorted by %s sort by %s field %s\n", type, field, dir);
-//    fprintf(OF, "The elapsed ti me is %.4lf seconds\n", ((double)(end - begin)) / CLOCKS_PER_SEC);
-//    for (int i = 0; i < len; ++i) {
-//        fprintf(OF, "%d: [%s, %s, %s]\n", i + 1, array[i].username, array[i].place, array[i].age);
-//        array[i].clear(array + i);
-//    }
+
+    for (int i = 0; i < len; ++i) {
+        array[i].clear(array + i);
+    }
     free(array);
     fclose(i_file);
     fclose(o_file);
