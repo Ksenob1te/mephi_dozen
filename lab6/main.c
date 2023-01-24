@@ -7,7 +7,8 @@ int main() {
     while (temp != EOF) {
         addNext(list, temp);
         temp = (char) getchar();
-        if (temp == EOF) break;
-        printf("data: %c\n", temp);
+    }
+    for (Node *i = list->head; i->next != NULL; i = i->next) {
+        printf("%c", i->data);
     }
 }
