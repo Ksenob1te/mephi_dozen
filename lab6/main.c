@@ -5,7 +5,7 @@
 int main() {
     char temp = (char) getchar();
     List *list = initList();
-    while (temp != '0') {
+    while (temp != EOF) {
         addNext(list, temp);
         temp = (char) getchar();
     }
