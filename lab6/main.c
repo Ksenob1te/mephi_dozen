@@ -9,6 +9,10 @@ int main() {
         addNext(list, temp);
         temp = (char) getchar();
     }
+
+    Node *current_word = list->head;
+    printf("%c", next_word(current_word)->data);
+
     for (Node *i = list->head; i != NULL; i = i->next) {
         printf("%c", i->data);
         free(i->prev);
