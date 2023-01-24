@@ -5,7 +5,7 @@
 int main() {
     char temp = (char) getchar();
     List *list = initList();
-    while (temp != EOF) {
+    while (temp != '0') {
         addNext(list, temp);
         temp = (char) getchar();
     }
@@ -15,8 +15,8 @@ int main() {
     for (Node *i = current_word; i != NULL; i = next_word(i)) {
         for (Node *j = next_word(i); j != NULL; j = next_word(j)) {
             if (compareWords(i, j)) {
-//                if (!selected_one) {swap_words(list, list->head, i); selected_one = 1;}
-//                swap_words(list, next_word(i), j);
+                if (!selected_one) {swap_words(list, list->head, i); selected_one = 1;}
+                swap_words(list, next_word(i), j);
                 break;
             }
         }

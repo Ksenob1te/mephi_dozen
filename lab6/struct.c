@@ -35,13 +35,32 @@ void swap_words(List *list, Node* word1, Node* word2) {
     for (e2 = word2; e2->next && e2->next->data != ' '; e2 = e2->next);
     if (list->head == f1) list->head = f2;
     else if (list->head == f2) list->head = f1;
-    Node *temp = f1->prev;
-    f1->prev = e2->next;
-    f2->prev = temp;
+    if (list->tail == e1) list->tail = e2;
+    else if (list->tail == e2) list->tail = e1;
 
-    temp = e1->next;
+    Node *temp1 = f1->prev, *temp2 = e1->next;
+    f1->prev = f2->prev;
+    if (f2->prev) f2->prev->next = f1;
     e1->next = e2->next;
-    e2->next = temp;
+    if (e2->next) e2->next->prev = e1;
+
+    f2->prev = temp1;
+    if (temp1) temp1->next = f2;
+    e2->next = temp2;
+    if (temp2) temp2->prev = e2;
+
+//    Node *temp1 = f1->prev, *temp2 = f2->prev;
+//    e1->next = e2->next;
+//    if (e2->next) e2->next->prev = e1;
+//    f2->prev = temp;
+//    if (temp) temp->next = f2;
+//
+//    if (f2->prev) f2->prev->next = f1;
+//    f1->prev = f2->prev;
+//
+//    temp = e1->next;
+//    e1->next = e2->next;
+//    e2->next = temp;
 }
 
 Node * next_word(Node *word) {
