@@ -8,7 +8,7 @@ int main() {
         addNext(list, temp);
         temp = (char) getchar();
     }
-    for (Node *i = list->head; i->next != NULL; i = i->next) {
+    for (Node *i = list->head; i != NULL; i = i->next) {
         printf("%c", i->data);
     }
 }
