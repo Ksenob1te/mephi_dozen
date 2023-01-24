@@ -13,5 +13,6 @@ int main() {
         printf("%c", i->data);
         free(i->prev);
     }
+    free(list->tail);
     free(list);
 }
