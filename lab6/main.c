@@ -23,11 +23,10 @@ int main() {
 
     }
 
-    for (Node *i = list->head; i != NULL;) {
+    for (Node *i = list->head; i != NULL; i = i->next) {
         printf("%c", i->data);
-        Node *t = i->next;
-        free(i);
-        i = t;
+        free(i->prev);
     }
+    free(list->tail);
     free(list);
 }
