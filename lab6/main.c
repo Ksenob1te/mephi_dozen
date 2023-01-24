@@ -22,11 +22,12 @@ int main() {
         }
 
     }
-
+    printf("\nResult:\n");
     for (Node *i = list->head; i != NULL; i = i->next) {
         printf("%c", i->data);
         free(i->prev);
     }
     free(list->tail);
     free(list);
+    printf("\n");
 }
