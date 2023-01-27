@@ -14,6 +14,7 @@ typedef struct List {
 
 List *initList();
 void swap_words(List *list, Node* word1, Node* word2);
+Node *removeEl(List *list, Node *element);
 void addNext(List *list, char element);
 Node * next_word(Node *word);
 int compareWords(Node *word1, Node *word2);

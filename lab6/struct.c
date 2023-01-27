@@ -21,10 +21,14 @@ void addNext(List *list, char element) {
     list->tail = node;
 }
 
-void swap(Node *node1, Node *node2) {
-    char temp = node1->data;
-    node1->data = node2->data;
-    node2->data = temp;
+Node *removeEl(List *list, Node *element) {
+    if (list->head == element) list->head = element->next;
+    if (list->tail == element) list->tail = element->prev;
+    if (element->prev) element->prev->next = element->next;
+    if (element->next) element->next->prev = element->prev;
+    Node *el = element->next;
+    free(element);
+    return el;
 }
 
 void swap_words(List *list, Node* word1, Node* word2) {
@@ -48,24 +52,12 @@ void swap_words(List *list, Node* word1, Node* word2) {
     if (temp1) temp1->next = f2;
     e2->next = temp2;
     if (temp2) temp2->prev = e2;
-
-//    Node *temp1 = f1->prev, *temp2 = f2->prev;
-//    e1->next = e2->next;
-//    if (e2->next) e2->next->prev = e1;
-//    f2->prev = temp;
-//    if (temp) temp->next = f2;
-//
-//    if (f2->prev) f2->prev->next = f1;
-//    f1->prev = f2->prev;
-//
-//    temp = e1->next;
-//    e1->next = e2->next;
-//    e2->next = temp;
 }
 
 Node * next_word(Node *word) {
     Node *e;
-    for (e = word; e && e->data != ' '; e = e->next);
+    for (e = word; e && e->data != ' ' && e->data != '\t'; e = e->next);
+    if (e && e->data == '\t') e->data = ' ';
     if (e != NULL) return e->next;
     else return NULL;
 }
