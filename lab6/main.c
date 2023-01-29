@@ -5,8 +5,12 @@
 int main() {
     char temp = (char) getchar();
     List *list = initList();
+    int checker = 0;
     while (temp != EOF && temp != '\n') {
-        addNext(list, temp);
+        if (checker || (temp != ' ' && temp != '\t'))
+            addNext(list, temp);
+        else
+            checker = 1;
         temp = (char) getchar();
     }
     printf("\nInput string: \"");
