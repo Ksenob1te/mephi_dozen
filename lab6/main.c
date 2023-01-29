@@ -5,7 +5,7 @@
 int main() {
     char temp = (char) getchar();
     List *list = initList();
-    while (temp != EOF) {
+    while (temp != EOF && temp != '\n') {
         addNext(list, temp);
         temp = (char) getchar();
     }
@@ -13,7 +13,6 @@ int main() {
     for (Node *i = list->head; i != NULL; i = i->next)
         printf("%c", i->data);
     printf("\"\n");
-
     Node *current_word = list->head;
     for (Node *i = next_word(current_word); i != NULL; i = next_word(i)) {
         Node *j;

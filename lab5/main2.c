@@ -63,7 +63,7 @@ int parseArgs(int argc, char *argv[]) {
 int main(int argc, char *argv[]) {
     int status = parseArgs(argc, argv);
     if (status) return 132;
-    for (int counter = 1000; counter <= 10000; counter += 1000) {
+    for (int counter = 1000; counter <= 10000; counter += 200) {
         clock_t timer = 0;
         for (int j = 0; j < convertInt(arraysCount); ++j) {
             srand(time(NULL));
