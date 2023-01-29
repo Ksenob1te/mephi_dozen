@@ -22,6 +22,7 @@ void addNext(List *list, char element) {
 }
 
 Node *removeEl(List *list, Node *element) {
+    if (!element) return element;
     if (list->head == element) list->head = element->next;
     if (list->tail == element) list->tail = element->prev;
     if (element->prev) element->prev->next = element->next;

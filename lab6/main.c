@@ -20,7 +20,7 @@ int main() {
     Node *current_word = list->head;
     for (Node *i = next_word(current_word); i != NULL; i = next_word(i)) {
         Node *j;
-        for (j = i; j->data == ' ' || j->data == '\t';) j = removeEl(list, j);
+        for (j = i; j && (j->data == ' ' || j->data == '\t');) j = removeEl(list, j);
         i = j;
     }
     Node *selected_last = NULL;
