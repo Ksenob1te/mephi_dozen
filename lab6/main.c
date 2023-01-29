@@ -7,10 +7,10 @@ int main() {
     List *list = initList();
     int checker = 0;
     while (temp != EOF && temp != '\n') {
-        if (checker || (temp != ' ' && temp != '\t'))
+        if (checker || (temp != ' ' && temp != '\t')) {
             addNext(list, temp);
-        else
             checker = 1;
+        }
         temp = (char) getchar();
     }
     printf("\nInput string: \"");
