@@ -7,7 +7,7 @@ int inIntArray(int *array, int sizeOfArray) {
     int *ptr = array;
     for (int i = 0; i < sizeOfArray; i++) {
         status = scanf("%d", ptr);
-        if (status <= 0) {printf("Error in input\n"); return 1;}
+        if (status <= 0) {printf("Error in input, try this again\n"); scanf("%*[^\n]*c"); i--; continue;}
         ++ptr;
     }
     return 0;
@@ -63,23 +63,25 @@ int ** inputPtrArray(int *sizes, int n) {
     int **array = malloc(n * sizeof(int *));
     int *ptr = sizes;
     int **ptr_arr = array;
-    int status;
     for (int i = 0; i < n; ++i, ++ptr_arr, ++ptr) {
         *ptr_arr = malloc(*ptr * sizeof(int));
-        status = inIntArray(*ptr_arr, *ptr);
-        if (status) {clearPtrArr(array, i + 1); free(array); free(sizes); return NULL;}
+        inIntArray(*ptr_arr, *ptr);
     }
     return array;
 }
 
 int main(void) {
     int n = 0, status;
+    start:
     status = scanf("%d", &n);
-    if (status <= 0) return 0;
+    if (status <= 0) {
+        printf("Error in input, try this again\n");
+        scanf("%*[^\n]*c");
+        goto start;
+    }
     int *sizes = malloc(n * sizeof(int));
 
-    status = inIntArray(sizes, n);
-    if (status) {free(sizes); return 1;}
+    inIntArray(sizes, n);
 
     int ** array = inputPtrArray(sizes, n);
     if (!array) return 1;
