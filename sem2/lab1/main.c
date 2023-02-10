@@ -67,7 +67,7 @@ int ** inputPtrArray(int *sizes, int n) {
     for (int i = 0; i < n; ++i, ++ptr_arr, ++ptr) {
         *ptr_arr = malloc(*ptr * sizeof(int));
         status = inIntArray(*ptr_arr, *ptr);
-        if (status) {clearPtrArr(ptr_arr, i + 1); free(array); free(sizes); return NULL;}
+        if (status) {clearPtrArr(array, i + 1); free(array); free(sizes); return NULL;}
     }
     return array;
 }
