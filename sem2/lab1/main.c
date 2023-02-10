@@ -7,7 +7,8 @@ int inIntArray(int *array, int sizeOfArray) {
     int *ptr = array;
     for (int i = 0; i < sizeOfArray; i++) {
         status = scanf("%d", ptr);
-        if (status <= 0) {printf("Error in input, try this again\n"); scanf("%*[^\n]*c"); i--; continue;}
+        if (status == 0) {printf("Error in input, try this again\n"); scanf("%*[^\n]*c"); i--; continue;}
+        if (status == EOF) return 1;
         ++ptr;
     }
     return 0;
@@ -63,9 +64,11 @@ int ** inputPtrArray(int *sizes, int n) {
     int **array = malloc(n * sizeof(int *));
     int *ptr = sizes;
     int **ptr_arr = array;
+    int status;
     for (int i = 0; i < n; ++i, ++ptr_arr, ++ptr) {
         *ptr_arr = malloc(*ptr * sizeof(int));
-        inIntArray(*ptr_arr, *ptr);
+        status = inIntArray(*ptr_arr, *ptr);
+        if (status) {clearPtrArr(array, i + 1); free(array); free(sizes); return NULL;}
     }
     return array;
 }
@@ -79,9 +82,11 @@ int main(void) {
         scanf("%*[^\n]*c");
         goto start;
     }
+    if (n <= 0) return 0;
     int *sizes = malloc(n * sizeof(int));
 
-    inIntArray(sizes, n);
+    status = inIntArray(sizes, n);
+    if (status) {free(sizes); return 1;}
 
     int ** array = inputPtrArray(sizes, n);
     if (!array) return 1;
