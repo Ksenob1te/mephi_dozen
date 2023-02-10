@@ -77,11 +77,12 @@ int main(void) {
     int n = 0, status;
     start:
     status = scanf("%d", &n);
-    if (status <= 0) {
+    if (status == 0) {
         printf("Error in input, try this again\n");
         scanf("%*[^\n]*c");
         goto start;
     }
+    if (status == EOF) return 0;
     if (n <= 0) return 0;
     int *sizes = malloc(n * sizeof(int));
 
