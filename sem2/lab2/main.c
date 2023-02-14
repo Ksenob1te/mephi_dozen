@@ -7,5 +7,8 @@ int main(void) {
     Passenger ** array = input_array(&len);
     for (int i = 0; i < len; ++i) {
         printf("%d: %s, %d, %d\n", i + 1, array[i]->name, array[i]->arriving, array[i]->waiting);
+        free(array[i]->name);
+        free(array[i]);
     }
+    free(array);
 }

@@ -19,7 +19,6 @@ typedef struct List {
     } List;
 
 void remove(List *list, Node *element);
-void add(List *list, Node *element);
 void add_next(List *list, Node *base, Node *element);
 void add_prev(List *list, Node *base, Node *element);
 Node * createNode(void *data, size_t sizeOfData);

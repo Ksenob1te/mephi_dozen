@@ -92,7 +92,9 @@ Passenger ** input_array(int *array_size) {
         size_t i_time, i_wait;
         if (isInt(time) && isInt(wait)){
             i_time = strToInt(time);
+            free(time);
             i_wait = strToInt(wait);
+            free(wait);
         } else {
             free(name); free(time); free(wait);
             sp = strtok(NULL, " ");
