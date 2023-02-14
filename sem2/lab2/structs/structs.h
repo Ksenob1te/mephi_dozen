@@ -12,7 +12,7 @@ typedef struct Stack {
 } Stack;
 
 Stack* createStack();
-Node * get_top_stack (struct Stack *stack);
+Node * get_top_stack (Stack *stack);
 void push_stack(Stack *stack, Node *node);
 Node* pop_stack(Stack *stack);
 // ===============================
@@ -28,7 +28,7 @@ typedef struct Queue {
 } Queue;
 
 Queue* createQueue();
-Node * get_top_queue (struct Queue *queue);
+Node * get_top_queue (Queue *queue);
 void push_queue(Queue *queue, Node *node);
 Node * pop_queue(Queue *queue);
 // ===============================
@@ -47,8 +47,8 @@ typedef struct Deque {
 } Deque;
 
 Deque* createDeque();
-Node * get_top_deque (struct Deque *deque);
-Node * get_bottom_deque (struct Deque *deque);
+Node * get_top_deque (Deque *deque);
+Node * get_bottom_deque (Deque *deque);
 void push_back_deque(Deque *deque, Node *node);
 void push_front_deque(Deque *deque, Node *node);
 Node * pop_front_deque(Deque *deque);

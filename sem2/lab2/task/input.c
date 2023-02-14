@@ -106,7 +106,6 @@ Queue * input_array() {
         p->arriving = i_time;
         p->waiting = i_wait;
 
-
         queue->push(queue, createNode(p, sizeof(Passenger)));
         sp = strtok(NULL, " ");
     }

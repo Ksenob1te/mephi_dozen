@@ -82,7 +82,7 @@ Node * get_bottom_deque(Deque *deque) {
 
 void push_back_deque(Deque *deque, Node *node) {
     List *list = deque->list;
-    list->add_prev(list, list->tail, node);
+    list->add_next(list, list->tail, node);
 }
 
 void push_front_deque(Deque *deque, Node *node) {

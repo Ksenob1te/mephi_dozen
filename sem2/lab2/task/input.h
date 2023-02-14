@@ -1,13 +1,8 @@
 #ifndef SEM1_LAB4_INPUT_H
 #define SEM1_LAB4_INPUT_H
-#include "stdlib.h"
-#include "../structs/structs.h"
+#include "../structs/task.h"
 
-typedef struct Passenger {
-    char *name;
-    size_t arriving;
-    size_t waiting;
-} Passenger;
-
+int isInt(const char *s);
+size_t strToInt(const char *s);
 Queue * input_array();
 #endif //SEM1_LAB4_INPUT_H
