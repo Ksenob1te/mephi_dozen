@@ -4,7 +4,8 @@
 
 #include "list.h"
 
-void remove(List *list, Node *element) {
+void remove_selected(List *list, Node *element) {
+    if (!element) return;
     if (list->head == element) list->head = element->next;
     if (list->tail == element) list->tail = element->prev;
 
@@ -14,7 +15,18 @@ void remove(List *list, Node *element) {
     element->next = NULL;
 }
 
+void add_tail(List *list, Node *element) {
+    if (!list->head) list->head = element;
+    if (list->tail) {
+        list->tail->next = element;
+        element->prev = list->tail;
+    }
+    list->tail = element;
+    element->next = NULL;
+}
+
 void add_next(List *list, Node *base, Node *element) {
+    if (!base)  {add_tail(list, element); return;}
     if (list->tail == base) list->tail = element;
     element->prev = base;
     element->next = base->next;
@@ -23,9 +35,10 @@ void add_next(List *list, Node *base, Node *element) {
 }
 
 void add_prev(List *list, Node *base, Node *element) {
+    if (!base)  {add_tail(list, element); return;}
     if (list->head == base) list->head = element;
-    element->prev = base;
-    element->next = base->next;
+    element->next = base;
+    element->prev = base->prev;
     if (base->prev) base->prev->next = element;
     base->prev = element;
 }
@@ -43,7 +56,7 @@ List * createList() {
     List *list = malloc(sizeof(struct List));
     list->head = NULL;
     list->tail = NULL;
-    list->remove = remove;
+    list->remove = remove_selected;
     list->add_next = add_next;
     list->add_prev = add_prev;
     return list;

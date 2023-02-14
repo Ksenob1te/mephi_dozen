@@ -46,7 +46,7 @@ Node * get_top_queue(Queue *queue) {
 
 void push_queue(Queue *queue, Node *node) {
     List *list = queue->list;
-    list->add_prev(list, list->tail, node);
+    list->add_next(list, list->tail, node);
 }
 
 Node * pop_queue(Queue *queue) {

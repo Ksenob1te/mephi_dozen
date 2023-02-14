@@ -41,9 +41,9 @@ size_t strToInt(const char *s) {
     return result;
 }
 
-Passenger ** input_array(int *array_size) {
+Queue * input_array() {
     int i;
-    struct Passenger **array = malloc(0);
+    Queue *queue = createQueue();
 
     char *s = readline();
     char *sp = strtok(s, " ");
@@ -106,11 +106,10 @@ Passenger ** input_array(int *array_size) {
         p->arriving = i_time;
         p->waiting = i_wait;
 
-        array = realloc(array, ++(*array_size) * sizeof(struct Passenger *));
 
-        array[*array_size - 1] = p;
+        queue->push(queue, createNode(p, sizeof(Passenger)));
         sp = strtok(NULL, " ");
     }
     free(s);
-    return array;
+    return queue;
 }
