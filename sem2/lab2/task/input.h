@@ -8,5 +8,5 @@ typedef struct Passenger {
     size_t waiting;
 } Passenger;
 
-void input_array();
+Passenger ** input_array(int *array_sizes);
 #endif //SEM1_LAB4_INPUT_H

@@ -1,11 +1,12 @@
 #include "input.h"
 #include "stdio.h"
 #include "string.h"
+#include "ctype.h"
 
-char *readline(int *len) {
+char *readline() {
     char *ptr = (char *) malloc(sizeof(char));
     char buf[81];
-    int n, bufLen;
+    int n, bufLen, len = 0;
     *ptr = '\0';
     do {
         n = scanf("%80[^\n]%n", buf, &bufLen);
@@ -18,17 +19,33 @@ char *readline(int *len) {
             scanf("%*c");
         else {
             len += bufLen;
-            ptr = (char *) realloc(ptr, *len + 1);
+            ptr = (char *) realloc(ptr, len + 1);
             strcat(ptr, buf);
         }
     } while (n > 0);
-    *len += 1;
     return ptr;
 }
 
-void input_array() {
-    int len, i;
-    char *s = readline(&len);
+int isInt(const char *s) {
+    for (int i = 0; s[i]; ++i)
+        if (!isdigit(s[i])) return 0;
+    return 1;
+}
+
+size_t strToInt(const char *s) {
+    size_t result = 0;
+    for (int i = 0; s[i]; ++i) {
+        result *= 10;
+        result += (size_t)(s[i] - '0');
+    }
+    return result;
+}
+
+Passenger ** input_array(int *array_size) {
+    int i;
+    struct Passenger **array = malloc(0);
+
+    char *s = readline();
     char *sp = strtok(s, " ");
     while (sp) {
         size_t len_part = strlen(sp);
@@ -40,6 +57,7 @@ void input_array() {
             name[i] = sp[i];
         if (!sp[i]) {
             free(name);
+            sp = strtok(NULL, " ");
             continue;
         }
         name = realloc(name, (i + 1) * sizeof(char));
@@ -54,6 +72,7 @@ void input_array() {
             time[time_counter++] = sp[i];
         if (!sp[i]) {
             free(name); free(time);
+            sp = strtok(NULL, " ");
             continue;
         }
         time = realloc(time, (time_counter + 1) * sizeof(char));
@@ -66,20 +85,30 @@ void input_array() {
         int wait_counter = 0;
         for (i++; sp[i] && sp[i] != ' '; ++i)
             wait[wait_counter++] = sp[i];
-        if (!sp[i]) {
-            free(name); free(time);
-            continue;
-        }
-        time = realloc(time, (time_counter + 1) * sizeof(char));
-        time[time_counter] = '\0';
+        wait = realloc(wait, (wait_counter + 1) * sizeof(char));
+        wait[wait_counter] = '\0';
         // ===============================
 
-        for (i = 0; sp[i] && sp[i] != '/'; ++i)
-            name[i] = sp[i];
-        if (!sp[i]) {
-            free(p); free(name);
+        size_t i_time, i_wait;
+        if (isInt(time) && isInt(wait)){
+            i_time = strToInt(time);
+            i_wait = strToInt(wait);
+        } else {
+            free(name); free(time); free(wait);
+            sp = strtok(NULL, " ");
             continue;
         }
-        char *sp = strtok(NULL, " ");
+
+        Passenger *p = malloc(sizeof(Passenger));
+        p->name = name;
+        p->arriving = i_time;
+        p->waiting = i_wait;
+
+        array = realloc(array, ++(*array_size) * sizeof(struct Passenger *));
+
+        array[*array_size - 1] = p;
+        sp = strtok(NULL, " ");
     }
+    free(s);
+    return array;
 }
