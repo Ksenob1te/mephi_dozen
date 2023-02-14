@@ -14,5 +14,6 @@ int main(void) {
         free(cur);
         free(last);
     }
+    free(queue->list);
     free(queue);
 }
