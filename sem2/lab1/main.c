@@ -87,6 +87,9 @@ int main(void) {
     int *sizes = malloc(n * sizeof(int));
 
     status = inIntArray(sizes, n);
+    int *s = sizes;
+    for (int i = 0; i < n; ++i, ++s)
+        if (*s < 0) *s = 0;
     if (status) {free(sizes); return 1;}
 
     int ** array = inputPtrArray(sizes, n);

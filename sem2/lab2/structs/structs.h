@@ -22,7 +22,7 @@ Node* pop_stack(Stack *stack);
 // ===============================
 typedef struct Queue {
     List *list;
-    Node * (*get_top) (struct Queue *queue);
+    Node * (*get_top)(struct Queue *queue);
     void (*push)(struct Queue *queue, Node *node);
     Node * (*pop)(struct Queue *queue);
 } Queue;

@@ -53,7 +53,7 @@ Node * createNode(void *data, size_t sizeOfData) {
 }
 
 List * createList() {
-    List *list = malloc(sizeof(struct List));
+    List *list = malloc(sizeof(List));
     list->head = NULL;
     list->tail = NULL;
     list->remove = remove_selected;
