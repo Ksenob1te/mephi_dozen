@@ -21,6 +21,10 @@ int main(void) {
     }
 
     int checker = 1;
+    printf("Time: 0\n=------------------=\n");
+    printStatus(array, n);
+    printf("=------------------=\n\n");
+
     while (checker) {
         Node *top = queue->get_top(queue);
         size_t min_time;
@@ -36,23 +40,28 @@ int main(void) {
             if (min_time > (*arr_ptr)->next_event && (*arr_ptr)->next_event > 0) min_time = (*arr_ptr)->next_event;
 
         arr_ptr = array;
-        for (int i = 0; i < n; ++i, ++arr_ptr)
-            if (min_time == (*arr_ptr)->next_event) leaveTerminal(*arr_ptr);
-
-        if (top && min_time == current->arriving) {
-            Node *top_node = queue->pop(queue);
-            joinTerminal(selectTerminal(array, n), top_node);
-        }
-        printf("Time: %d\n=========\n", min_time);
-        printStatus(array, n);
-        printf("=========\n");
-
-        arr_ptr = array;
         checker = 0;
         for (int i = 0; i < n; ++i, ++arr_ptr)
             if ((*arr_ptr)->next_event != -1) checker = 1;
-    }
+        if (!checker) continue;
 
+        arr_ptr = array;
+        for (int i = 0; i < n; ++i, ++arr_ptr)
+            if (min_time == (*arr_ptr)->next_event) leaveTerminal(*arr_ptr);
+
+        for (int i = 0; top && ((Passenger*)top->data)->arriving == min_time; ++i) {
+            Node *top_node = queue->pop(queue);
+            joinTerminal(selectTerminal(array, n), top_node);
+            top = queue->get_top(queue);
+        }
+
+        printf("Time: %d\n=------------------=\n", min_time);
+        printStatus(array, n);
+        printf("=------------------=\n\n");
+
+
+    }
+    return 0;
 //    for (int i = 0;; ++i) {
 //        Node *last = queue->pop(queue);
 //        if (!last) break;

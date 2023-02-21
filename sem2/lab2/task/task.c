@@ -13,8 +13,8 @@ void joinTerminal(Terminal *terminal, Node *node) {
 Node * leaveTerminal(Terminal *terminal) {
     Queue *queue = terminal->queue;
     Node *node = queue->pop(queue);
-    Passenger *p = (Passenger *) queue->get_top(queue)->data;
-    if (p) terminal->next_event += p->waiting; else terminal->next_event = -1;
+    Node *top = queue->get_top(queue);
+    if (top) terminal->next_event += ((Passenger *) top->data)->waiting; else terminal->next_event = -1;
     return node;
 }
 
