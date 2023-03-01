@@ -2,7 +2,7 @@
 #define SEM1_LAB4_TASK_H_1
 
 #include "stdlib.h"
-#include "structs.h"
+#include "cycleQueue.h"
 
 typedef struct Passenger {
     char *name;

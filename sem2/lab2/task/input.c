@@ -43,7 +43,7 @@ size_t strToInt(const char *s) {
 
 Queue * input_array() {
     int i;
-    Queue *queue = createQueue();
+    Queue *queue = ccreateQueue();
 
     char *s = readline();
     char *sp = strtok(s, " ");
@@ -106,7 +106,7 @@ Queue * input_array() {
         p->arriving = i_time;
         p->waiting = i_wait;
 
-        queue->push(queue, createNode(p, sizeof(Passenger)));
+        queue->push(queue, ccreateNode(p, sizeof(Passenger)));
         sp = strtok(NULL, " ");
     }
     free(s);
