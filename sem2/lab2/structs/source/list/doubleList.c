@@ -1,8 +1,43 @@
-//
-// Created by Ksenob1te on 14.02.2023.
-//
+#include "../../list.h"
+#include "doubleList.h"
 
-#include "list.h"
+
+Node * get_head(List *list) {
+    if (!list) return NULL;
+    return list->head;
+}
+
+Node * get_tail(List *list) {
+    if (!list) return NULL;
+    return list->tail;
+}
+
+
+Node * get_next(Node *node) {
+    if (!node) return NULL;
+    return node->next;
+}
+
+void * get_data(Node *node) {
+    if (!node) return NULL;
+    return node->data;
+}
+
+void set_next(Node *start, Node *node) {
+    if (!start) return;
+    start->next = node;
+}
+
+void set_tail(List *list, Node *node) {
+    if (!list) return;
+    list->tail = node;
+}
+
+int is_last(List *list, Node *node) {
+    if (!list) return 0;
+    if (list->tail == node) return 1;
+    return 0;
+}
 
 void remove_selected(List *list, Node *element) {
     if (!element) return;

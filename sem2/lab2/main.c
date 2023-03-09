@@ -1,6 +1,5 @@
 #include "task/input.h"
 #include "stdio.h"
-//#include "structs/structs.h"
 #include "task/task.h"
 
 int main(void) {

@@ -2,7 +2,7 @@
 #include "stdio.h"
 
 void joinTerminal(Terminal *terminal, Node *node) {
-    Passenger *p = (Passenger *) node->data;
+    Passenger *p = (Passenger *) get_data(node);
     if (terminal->current_time <= 0) terminal->current_time += p->arriving;
     terminal->current_time += p->waiting;
     Queue *queue = terminal->queue;
@@ -14,7 +14,7 @@ Node * leaveTerminal(Terminal *terminal) {
     Queue *queue = terminal->queue;
     Node *node = queue->pop(queue);
     Node *top = queue->get_top(queue);
-    if (top) terminal->next_event += ((Passenger *) top->data)->waiting; else terminal->next_event = -1;
+    if (top) terminal->next_event += ((Passenger *) get_data(top))->waiting; else terminal->next_event = -1;
     return node;
 }
 
@@ -38,8 +38,10 @@ void printStatus(Terminal **array, int len) {
     for (int i = 0; i < len; ++i, ++t) {
         List *list = array[i]->queue->list;
         printf("T%d: ", i + 1);
-        for (Node *tracker = list->; tracker; tracker = tracker->next)
-            printf("%s ", ((Passenger *) tracker->data)->name);
+        for (Node *tracker = get_head(list); tracker; tracker = get_next(tracker)) {
+            printf("%s ", ((Passenger *) get_data(tracker))->name);
+            if (is_last(list, tracker)) break;
+        }
         printf("\n");
     }
 }
@@ -50,7 +52,7 @@ Terminal ** initTerminals(int n) {
         Terminal *t = malloc(sizeof(Terminal));
         t->next_event = -1;
         t->current_time = 0;
-        t->queue = ccreateQueue();
+        t->queue = createQueue();
         array[i] = t;
     }
     return array;
@@ -61,7 +63,7 @@ int handleTask(Queue* queue, Terminal **array, int n) {
     size_t min_time;
     Passenger *current = NULL;
     if (top) {
-        current = (Passenger *)(top->data);
+        current = (Passenger *)(get_data(top));
         min_time = current->arriving;
     } else {
         min_time = (int)1e9;
@@ -80,7 +82,7 @@ int handleTask(Queue* queue, Terminal **array, int n) {
     for (int i = 0; i < n; ++i, ++arr_ptr)
         if (min_time == (*arr_ptr)->next_event) leaveTerminal(*arr_ptr);
 
-    for (int i = 0; top && ((Passenger*)top->data)->arriving == min_time; ++i) {
+    for (int i = 0; top && ((Passenger*) get_data(top))->arriving == min_time; ++i) {
         Node *top_node = queue->pop(queue);
         joinTerminal(selectTerminal(array, n), top_node);
         top = queue->get_top(queue);

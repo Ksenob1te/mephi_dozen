@@ -1,4 +1,4 @@
-#include "structs.h"
+#include "../../structs.h"
 
 // Stack struct methods
 // ===============================
@@ -12,18 +12,18 @@ Stack* createStack() {
 }
 
 Node * get_top_stack (Stack *stack) {
-    return stack->list->head;
+    return get_head(stack->list);
 }
 
 void push_stack(Stack *stack, Node *node) {
     List *list = stack->list;
-    list->add_prev(list, list->head, node);
+    add_prev(list, get_head(list), node);
 }
 
 Node * pop_stack(Stack *stack) {
     List *list = stack->list;
-    Node *node = list->head;
-    list->remove(list, node);
+    Node *node = get_head(list);
+    remove_selected(list, node);
     return node;
 }
 // ===============================
@@ -37,22 +37,27 @@ Queue * createQueue() {
     queue->get_top = get_top_queue;
     queue->pop = pop_queue;
     queue->push = push_queue;
+    queue->is_full = is_full_queue;
     return queue;
 }
 
+int is_full_queue(Queue *queue) {
+    return 0;
+}
+
 Node * get_top_queue(Queue *queue) {
-    return queue->list->head;
+    return get_head(queue->list);
 }
 
 void push_queue(Queue *queue, Node *node) {
     List *list = queue->list;
-    list->add_next(list, list->tail, node);
+    add_next(list, get_tail(list), node);
 }
 
 Node * pop_queue(Queue *queue) {
     List *list = queue->list;
-    Node *node = list->head;
-    list->remove(list, node);
+    Node *node = get_head(list);
+    remove_selected(list, node);
     return node;
 }
 // ===============================
@@ -73,34 +78,34 @@ Deque * createDeque() {
 }
 
 Node * get_top_deque(Deque *deque) {
-    return deque->list->head;
+    return get_head(deque->list);
 }
 
 Node * get_bottom_deque(Deque *deque) {
-    return deque->list->tail;
+    return get_tail(deque->list);
 }
 
 void push_back_deque(Deque *deque, Node *node) {
     List *list = deque->list;
-    list->add_next(list, list->tail, node);
+    add_next(list, get_tail(list), node);
 }
 
 void push_front_deque(Deque *deque, Node *node) {
     List *list = deque->list;
-    list->add_prev(list, list->head, node);
+    add_prev(list, get_head(list), node);
 }
 
 Node * pop_back_deque(Deque *deque) {
     List *list = deque->list;
-    Node *node = list->tail;
-    list->remove(list, node);
+    Node *node = get_tail(list);
+    remove_selected(list, node);
     return node;
 }
 
 Node * pop_front_deque(Deque *deque) {
     List *list = deque->list;
-    Node *node = list->head;
-    list->remove(list, node);
+    Node *node = get_head(list);
+    remove_selected(list, node);
     return node;
 }
 // ===============================
