@@ -23,15 +23,13 @@ Node* pop_stack(Stack *stack);
 typedef struct Queue {
     List *list;
     Node * (*get_top)(struct Queue *queue);
-    void (*push)(struct Queue *queue, Node *node);
+    int (*push)(struct Queue *queue, Node *node);
     Node * (*pop)(struct Queue *queue);
-    int (*is_full)(struct Queue *queue);
 } Queue;
 
-Queue* createQueue();
-int is_full_queue(Queue *queue);
+Queue* createQueue(size_t size);
 Node * get_top_queue (Queue *queue);
-void push_queue(Queue *queue, Node *node);
+int push_queue(Queue *queue, Node *node);
 Node * pop_queue(Queue *queue);
 // ===============================
 

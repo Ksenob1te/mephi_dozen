@@ -1,6 +1,7 @@
 #include "task/input.h"
 #include "stdio.h"
 #include "task/task.h"
+#define SIZE_OF_QUEUE 10
 
 int main(void) {
     int n = 0, status;
@@ -8,9 +9,9 @@ int main(void) {
     status = scanN(&n);
     if (status == 0) { printf("Try again\n"); scanf("%*[^\n]*c"); goto start;}
     if (status == EOF) return 0;
-    Queue *queue = input_array();
+    Queue *queue = input_array(SIZE_OF_QUEUE);
 
-    Terminal ** array = initTerminals(n);
+    Terminal ** array = initTerminals(n, SIZE_OF_QUEUE);
 
     printf("Time: 0\n=------------------=\n");
     printStatus(array, n);

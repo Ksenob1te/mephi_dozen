@@ -1,50 +1,51 @@
 #include "../../structs.h"
+#include "../list/cycleList.h"
 
 
 // Queue struct methods
 // ===============================
-Queue * createQueue() {
+Queue * createQueue(size_t size) {
     Queue *queue = malloc(sizeof(Queue));
-    queue->list = createList();
+    queue->list = createList(size);
     queue->get_top = get_top_queue;
     queue->pop = pop_queue;
     queue->push = push_queue;
-    queue->is_full = is_full_queue;
     return queue;
 }
 
-int is_full_queue(Queue *queue) {
-    return 0;
-}
-
 Node * get_top_queue(Queue *queue) {
-    Node *tail = get_tail(queue->list);
-    if (tail) return get_next(get_tail(queue->list));
+    List *list = queue->list;
+    if (!list) return NULL;
+    Node *tail = list->tail;
+    if (tail) return tail->next;
     return tail;
 }
 
-void push_queue(Queue *queue, Node *node) {
+int push_queue(Queue *queue, Node *node) {
     List *list = queue->list;
-    Node *tail = get_tail(list);
+    if (!list) return 0;
+    Node *tail = list->tail;
     if (!tail) {
-        set_tail(list, node);
-        set_next(node, node);
+        list->tail = node;
+        node->next = node;
     } else {
-        set_next(node, get_next(tail));
-        set_next(tail, node);
-        set_tail(list, node);
+        node->next = tail->next;
+        tail->next = node;
+        list->tail = node;
     }
+    return 1;
 }
 
 Node * pop_queue(Queue *queue) {
     List *list = queue->list;
-    Node *tail = get_tail(list);
+    if (!list) return NULL;
+    Node *tail = list->tail;
     if (!tail) return NULL;
 
-    Node *head = get_next(tail);
-    if (head == tail) { set_tail(list, NULL); return tail;}
+    Node *head = tail->next;
+    if (head == tail) {list->tail = NULL; return tail;}
 
-    set_next(tail, get_next(head));
+    tail->next = head->next;
     return head;
 }
 // ===============================

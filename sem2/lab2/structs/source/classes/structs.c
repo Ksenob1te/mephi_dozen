@@ -1,10 +1,11 @@
 #include "../../structs.h"
+#include "../list/doubleList.h"
 
 // Stack struct methods
 // ===============================
 Stack* createStack() {
     Stack *stack = malloc(sizeof(Stack));
-    stack->list = createList();
+    stack->list = createList(0);
     stack->get_top = get_top_stack;
     stack->pop = pop_stack;
     stack->push = push_stack;
@@ -12,18 +13,19 @@ Stack* createStack() {
 }
 
 Node * get_top_stack (Stack *stack) {
-    return get_head(stack->list);
+    if (!stack->list) return NULL;
+    return stack->list->head;
 }
 
 void push_stack(Stack *stack, Node *node) {
     List *list = stack->list;
-    add_prev(list, get_head(list), node);
+    add_prev(list, list->head, node);
 }
 
 Node * pop_stack(Stack *stack) {
     List *list = stack->list;
-    Node *node = get_head(list);
-    remove_selected(list, node);
+    Node *node = list->head;
+    list->remove(list, node);
     return node;
 }
 // ===============================
@@ -31,33 +33,30 @@ Node * pop_stack(Stack *stack) {
 
 // Queue struct methods
 // ===============================
-Queue * createQueue() {
+Queue * createQueue(size_t size) {
     Queue *queue = malloc(sizeof(Queue));
-    queue->list = createList();
+    queue->list = createList(size);
     queue->get_top = get_top_queue;
     queue->pop = pop_queue;
     queue->push = push_queue;
-    queue->is_full = is_full_queue;
     return queue;
 }
 
-int is_full_queue(Queue *queue) {
-    return 0;
-}
-
 Node * get_top_queue(Queue *queue) {
-    return get_head(queue->list);
+    if (!queue->list) return NULL;
+    return queue->list->head;
 }
 
-void push_queue(Queue *queue, Node *node) {
+int push_queue(Queue *queue, Node *node) {
     List *list = queue->list;
-    add_next(list, get_tail(list), node);
+    list->add_next(list, list->tail, node);
+    return 1;
 }
 
 Node * pop_queue(Queue *queue) {
     List *list = queue->list;
-    Node *node = get_head(list);
-    remove_selected(list, node);
+    Node *node = list->head;
+    list->remove(list, node);
     return node;
 }
 // ===============================
@@ -67,7 +66,7 @@ Node * pop_queue(Queue *queue) {
 // ===============================
 Deque * createDeque() {
     Deque *deque = malloc(sizeof(Deque));
-    deque->list = createList();
+    deque->list = createList(0);
     deque->get_top = get_top_deque;
     deque->get_bottom = get_bottom_deque;
     deque->push_back = push_back_deque;
@@ -78,34 +77,36 @@ Deque * createDeque() {
 }
 
 Node * get_top_deque(Deque *deque) {
-    return get_head(deque->list);
+    if (!deque->list) return NULL;
+    return deque->list->head;
 }
 
 Node * get_bottom_deque(Deque *deque) {
-    return get_tail(deque->list);
+    if (!deque->list) return NULL;
+    return deque->list->tail;
 }
 
 void push_back_deque(Deque *deque, Node *node) {
     List *list = deque->list;
-    add_next(list, get_tail(list), node);
+    add_next(list, list->tail, node);
 }
 
 void push_front_deque(Deque *deque, Node *node) {
     List *list = deque->list;
-    add_prev(list, get_head(list), node);
+    add_prev(list, list->head, node);
 }
 
 Node * pop_back_deque(Deque *deque) {
     List *list = deque->list;
-    Node *node = get_tail(list);
-    remove_selected(list, node);
+    Node *node = list->tail;
+    list->remove(list, node);
     return node;
 }
 
 Node * pop_front_deque(Deque *deque) {
     List *list = deque->list;
-    Node *node = get_head(list);
-    remove_selected(list, node);
+    Node *node = list->head;
+    list->remove(list, node);
     return node;
 }
 // ===============================

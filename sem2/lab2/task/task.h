@@ -8,6 +8,6 @@ Terminal * selectTerminal(Terminal **array, int len);
 void printStatus(Terminal **array, int len);
 int scanN(int *n);
 int handleTask(Queue* queue, Terminal **array, int n);
-Terminal ** initTerminals(int n);
+Terminal ** initTerminals(int n, size_t sizeOfQueue);
 
 #endif //SEM1_LAB4_TASK_H

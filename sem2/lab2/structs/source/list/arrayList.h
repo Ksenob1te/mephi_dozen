@@ -9,8 +9,8 @@ struct Node {
 
 struct List {
     struct Node **array;
+    size_t start, end;
     size_t max_size;
-    size_t current_size;
 };
 
 

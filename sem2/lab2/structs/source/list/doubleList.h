@@ -1,5 +1,6 @@
 #ifndef MEPHI_DOZEN_DOUBLELIST_H
 #define MEPHI_DOZEN_DOUBLELIST_H
+#include "stdlib.h"
 
 struct Node {
     void *data;
@@ -9,12 +10,12 @@ struct Node {
 };
 
 struct List {
-    Node *head;
-    Node *tail;
+    struct Node *head;
+    struct Node *tail;
 
-    void (*remove) (struct List *list, Node *element);
-    void (*add_next)(struct List *list, Node *base, Node *element);
-    void (*add_prev)(struct List *list, Node *base, Node *element);
+    void (*remove) (struct List *list, struct Node *element);
+    void (*add_next)(struct List *list, struct Node *base, struct Node *element);
+    void (*add_prev)(struct List *list, struct Node *base, struct Node *element);
 };
 
 #endif //MEPHI_DOZEN_DOUBLELIST_H

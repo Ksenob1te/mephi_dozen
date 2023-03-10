@@ -2,35 +2,9 @@
 #include "doubleList.h"
 
 
-Node * get_head(List *list) {
-    if (!list) return NULL;
-    return list->head;
-}
-
-Node * get_tail(List *list) {
-    if (!list) return NULL;
-    return list->tail;
-}
-
-
-Node * get_next(Node *node) {
-    if (!node) return NULL;
-    return node->next;
-}
-
 void * get_data(Node *node) {
     if (!node) return NULL;
     return node->data;
-}
-
-void set_next(Node *start, Node *node) {
-    if (!start) return;
-    start->next = node;
-}
-
-void set_tail(List *list, Node *node) {
-    if (!list) return;
-    list->tail = node;
 }
 
 int is_last(List *list, Node *node) {
@@ -78,6 +52,14 @@ void add_prev(List *list, Node *base, Node *element) {
     base->prev = element;
 }
 
+void printList(List *list, void (*printData)(void *)) {
+    if (!list) return;
+    for (Node *tracker = list->head; tracker; tracker = tracker->next) {
+        printData(tracker->data);
+        if (is_last(list, tracker)) break;
+    }
+}
+
 Node * createNode(void *data, size_t sizeOfData) {
     Node *node = malloc(sizeof(struct Node));
     node->next = NULL;
@@ -87,7 +69,7 @@ Node * createNode(void *data, size_t sizeOfData) {
     return node;
 }
 
-List * createList() {
+List * createList(size_t size) {
     List *list = malloc(sizeof(List));
     list->head = NULL;
     list->tail = NULL;

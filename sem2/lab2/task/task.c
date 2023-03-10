@@ -33,26 +33,27 @@ int scanN(int *n) {
     else return 0;
 }
 
+void printData(void *data) {
+    printf("%s ", ((Passenger *) data)->name);
+}
+
 void printStatus(Terminal **array, int len) {
     Terminal *t = *array;
     for (int i = 0; i < len; ++i, ++t) {
         List *list = array[i]->queue->list;
         printf("T%d: ", i + 1);
-        for (Node *tracker = get_head(list); tracker; tracker = get_next(tracker)) {
-            printf("%s ", ((Passenger *) get_data(tracker))->name);
-            if (is_last(list, tracker)) break;
-        }
+        printList(list, printData);
         printf("\n");
     }
 }
 
-Terminal ** initTerminals(int n) {
+Terminal ** initTerminals(int n, size_t sizeOfQueue) {
     Terminal **array = malloc(n * sizeof(Terminal*));
     for (int i = 0; i < n; ++i) {
         Terminal *t = malloc(sizeof(Terminal));
         t->next_event = -1;
         t->current_time = 0;
-        t->queue = createQueue();
+        t->queue = createQueue(sizeOfQueue);
         array[i] = t;
     }
     return array;

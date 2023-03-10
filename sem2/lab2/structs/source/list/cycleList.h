@@ -8,7 +8,6 @@ struct Node {
     struct Node *next;
 };
 
-
 struct List {
     struct Node *tail;
 };

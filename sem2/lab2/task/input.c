@@ -41,9 +41,9 @@ size_t strToInt(const char *s) {
     return result;
 }
 
-Queue * input_array() {
+Queue * input_array(size_t size) {
     int i;
-    Queue *queue = createQueue();
+    Queue *queue = createQueue(size);
 
     char *s = readline();
     char *sp = strtok(s, " ");
