@@ -7,7 +7,12 @@ void joinTerminal(Terminal *terminal, Node *node) {
     terminal->current_time += p->waiting;
     Queue *queue = terminal->queue;
     int status = queue->push(queue, node);
-    if (!status) printf("Queue is overflowing passenger is ded (suddenly disparaged)\n");
+    if (!status) {
+        printf("Queue is overflowing passenger '%s' is ded (suddenly disparaged)\n", p->name);
+        free(p->name);
+        free(get_data(node));
+        free(node);
+    }
     if (queue->get_top(queue) == node) terminal->next_event = p->arriving + p->waiting;
 }
 

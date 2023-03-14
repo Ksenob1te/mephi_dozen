@@ -106,8 +106,14 @@ Queue * input_array(size_t size) {
         p->arriving = i_time;
         p->waiting = i_wait;
 
-        int status = queue->push(queue, createNode(p, sizeof(Passenger)));
-        if (!status) printf("Queue is overflowing passenger '%s' is ded (suddenly disappeared)\n", name);
+        Node *node = createNode(p, sizeof(Passenger));
+        int status = queue->push(queue, node);
+        if (!status) {
+            printf("Queue is overflowing passenger '%s' is ded (suddenly disappeared)\n", name);
+            free(name);
+            free(get_data(node));
+            free(node);
+        }
         sp = strtok(NULL, " ");
     }
     free(s);
