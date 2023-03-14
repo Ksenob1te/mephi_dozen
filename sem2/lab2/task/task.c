@@ -31,6 +31,7 @@ Terminal * selectTerminal(Terminal **array, int len) {
 int scanN(int *n) {
     int status = scanf("%d", n);
     if (status && *n >= 0) return 1;
+    if (status == EOF) return EOF;
     else return 0;
 }
 
