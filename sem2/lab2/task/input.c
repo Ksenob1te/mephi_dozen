@@ -32,11 +32,11 @@ int isInt(const char *s) {
     return 1;
 }
 
-size_t strToInt(const char *s) {
-    size_t result = 0;
+long strToInt(const char *s) {
+    long result = 0;
     for (int i = 0; s[i]; ++i) {
         result *= 10;
-        result += (size_t)(s[i] - '0');
+        result += (long)(s[i] - '0');
     }
     return result;
 }
@@ -89,7 +89,7 @@ Queue * input_array(size_t size) {
         wait[wait_counter] = '\0';
         // ===============================
 
-        size_t i_time, i_wait;
+        long i_time, i_wait;
         if (isInt(time) && isInt(wait)){
             i_time = strToInt(time);
             free(time);
@@ -106,7 +106,8 @@ Queue * input_array(size_t size) {
         p->arriving = i_time;
         p->waiting = i_wait;
 
-        queue->push(queue, createNode(p, sizeof(Passenger)));
+        int status = queue->push(queue, createNode(p, sizeof(Passenger)));
+        if (!status) printf("Queue is overflowing passenger '%s' is ded (suddenly disappeared)\n", name);
         sp = strtok(NULL, " ");
     }
     free(s);

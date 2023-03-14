@@ -6,7 +6,8 @@ void joinTerminal(Terminal *terminal, Node *node) {
     if (terminal->current_time <= 0) terminal->current_time += p->arriving;
     terminal->current_time += p->waiting;
     Queue *queue = terminal->queue;
-    queue->push(queue, node);
+    int status = queue->push(queue, node);
+    if (!status) printf("Queue is overflowing passenger is ded (suddenly disparaged)\n");
     if (queue->get_top(queue) == node) terminal->next_event = p->arriving + p->waiting;
 }
 
@@ -81,7 +82,11 @@ int handleTask(Queue* queue, Terminal **array, int n) {
 
     arr_ptr = array;
     for (int i = 0; i < n; ++i, ++arr_ptr)
-        if (min_time == (*arr_ptr)->next_event) leaveTerminal(*arr_ptr);
+        if (min_time == (*arr_ptr)->next_event) {
+            Node *node = leaveTerminal(*arr_ptr);
+            free(((Passenger*)get_data(node))->name);
+            free(get_data(node));
+        }
 
     for (int i = 0; top && ((Passenger*) get_data(top))->arriving == min_time; ++i) {
         Node *top_node = queue->pop(queue);

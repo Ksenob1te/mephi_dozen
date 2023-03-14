@@ -6,14 +6,14 @@
 
 typedef struct Passenger {
     char *name;
-    size_t arriving;
-    size_t waiting;
+    long arriving;
+    long waiting;
 } Passenger;
 
 typedef struct Terminal {
     Queue *queue;
     size_t current_time;
-    size_t next_event;
+    long long int next_event;
 } Terminal;
 
 #endif //SEM1_LAB4_TASK_H_1

@@ -18,16 +18,16 @@ int main(void) {
     printf("=------------------=\n\n");
     while (handleTask(queue, array, n));
 
+    clearList(queue->list);
+    free(queue);
+
+    for (int i = 0; i < n; i++) {
+        Terminal *cur = array[i];
+        clearList(cur->queue->list);
+        free(cur->queue);
+        free(cur);
+    }
+    free(array);
+
     return 0;
-//    for (int i = 0;; ++i) {
-//        Node *last = queue->pop(queue);
-//        if (!last) break;
-//        Passenger *cur = (Passenger *)last->data;
-//        printf("%d: %s, %d, %d\n", i + 1, cur->name, cur->arriving, cur->waiting);
-//        free(cur->name);
-//        free(cur);
-//        free(last);
-//    }
-//    free(queue->list);
-//    free(queue);
 }

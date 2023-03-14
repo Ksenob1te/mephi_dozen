@@ -15,5 +15,5 @@ void add_next(List *list, Node *base, Node *element);
 void add_prev(List *list, Node *base, Node *element);
 Node * createNode(void *data, size_t sizeOfData);
 List * createList(size_t size);
-
+void clearList(List *list);
 #endif //MEPHI_DOZEN_LIST_H

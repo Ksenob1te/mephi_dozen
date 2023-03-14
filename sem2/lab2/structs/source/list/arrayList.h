@@ -9,7 +9,7 @@ struct Node {
 
 struct List {
     struct Node **array;
-    size_t start, end;
+    size_t start, counter;
     size_t max_size;
 };
 

@@ -4,7 +4,7 @@
 
 Node * get_tail(List *list) {
     if (!is_empty(list))
-        return (list->array)[(list->end + list->max_size - 1) % list->max_size];
+        return (list->array)[(list->start + list->counter - 1) % list->max_size];
     return NULL;
 }
 
@@ -18,20 +18,19 @@ int is_last(List *list, Node *node) {
 }
 
 int is_full(List *list) {
-    if (list->start == list->end) {return 1;}
+    if (list->counter >= list->max_size) return 1;
     return 0;
 }
 
 int is_empty(List *list) {
-    if (list->start + 1 == list->end) {return 1;}
+    if (list->counter == 0) return 1;
     return 0;
 }
 
 void printList(List *list, void (*printData)(void *)) {
-    if (!is_empty(list)) return;
-    for (Node **tracker = list->array; *tracker; ++tracker) {
-        printData((*tracker)->data);
-        if (is_last(list, (*tracker))) break;
+    if (is_empty(list)) return;
+    for (size_t i = list->start; i < (list->counter + list->start); ++i) {
+        printData((list->array)[i % list->max_size]->data);
     }
 }
 
@@ -47,6 +46,11 @@ List * createList(size_t size) {
     list->array = malloc(sizeof(Node *) * size);
     list->max_size = size;
     list->start = 0;
-    list->end = 1;
+    list->counter = 0;
     return list;
+}
+
+void clearList(List *list) {
+    free(list->array);
+    free(list);
 }

@@ -78,3 +78,7 @@ List * createList(size_t size) {
     list->add_prev = add_prev;
     return list;
 }
+
+void clearList(List *list) {
+    free(list);
+}
