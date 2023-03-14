@@ -86,6 +86,7 @@ int handleTask(Queue* queue, Terminal **array, int n) {
             Node *node = leaveTerminal(*arr_ptr);
             free(((Passenger*)get_data(node))->name);
             free(get_data(node));
+            free(node);
         }
 
     for (int i = 0; top && ((Passenger*) get_data(top))->arriving == min_time; ++i) {
