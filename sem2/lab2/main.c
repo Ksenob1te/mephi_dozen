@@ -9,7 +9,7 @@ int main(void) {
     status = scanN(&n);
     if (status == 0) { printf("Try again\n"); scanf("%*[^\n]*c"); goto start;}
     if (status == EOF) return 0;
-    Queue *queue = input_array(SIZE_OF_QUEUE);
+    Queue *queue = input_array(SIZE_OF_QUEUE * 4);
 
     Terminal ** array = initTerminals(n, SIZE_OF_QUEUE);
 
