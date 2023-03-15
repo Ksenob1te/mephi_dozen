@@ -1,7 +1,7 @@
 #include "task/input.h"
 #include "stdio.h"
 #include "task/task.h"
-#define SIZE_OF_QUEUE 10
+#define SIZE_OF_QUEUE 4
 
 int main(void) {
     int n = 0, status;
