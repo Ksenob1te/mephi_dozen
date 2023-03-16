@@ -1,113 +1,50 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <unistd.h>
+#include <conio.h>
 
-// LXSoft
-// mod: cui/menu_021
-// stdarg.h  -> used for variable list of arguments (va_list, va_start ...)
-// windows.h -> used for Sleep function, for *nix use unistd.h
-
-typedef unsigned short int usint_t;
-// Menu function prototype
-int menu(char* name, char* prefix, char* cursor, usint_t orientation,
-         usint_t padding, usint_t start_pos, usint_t delay,
-         usint_t num_childs, ...);
+#define UP 72
+#define DOWN 80
+#define LEFT 75
+#define RIGHT 77
 
 int main()
 {
-    int response = menu("OPTIONS","[*]","->",1,3,3,0,5,
-                        "PROFILES","ACTIVITY","VIDEO","SOUND","GAMEPLAY");
-    switch(response)
-    {
-        case 1:
-            // doSomethingFoo1();
-            break;
-        case 2:
-            //doSomethingFoo2();
-            break;
-            /*
-             * .
-             * .
-             * .
-             * case n:
-             * break;
-             */
-    }
-    printf("\nYour choice is: %d", response);
-    return 0;
-}
+    int option = 1; // текущий выбранный вариант
+    int key; // код нажатой клавиши
+    char *menu[4] = {"Option 1", "Option 2", "Option 3", "Option 4"}; // массив строк с названиями вариантов
 
-// Menu implementation
-int menu
-        (
-                char *name,        // Menu name (eg.: OPTIONS)
-                char *prefix,      // Menu prefix (eg.: [*])
-                char *cursor,      // Menu cursor (eg.: ->)
-                usint_t orient,    /*
-                        * Menu orientation vertical or horzontal.
-                        * 0 or false for horizontal
-                        * 1 or true for vertical
-                        */
-                usint_t padding,   // Menu childrens padding (eg.: 3)
-                usint_t start_pos, // Menu set active child (eg.: 1)
-                usint_t delay,     // Menu children switch delay
-                usint_t childs,    // Number of childrens
-                ...                /*
-                        * Variable list of arguments char* type.
-                        * Name of the childrens.
-                        */
-        )
-{
-    va_list args;
-    int tmp=0,pos;
-    char chr;
-    usint_t opt=start_pos;
-    char* format=malloc
-            (
-                    (
-                            strlen(name)+strlen(prefix)+strlen(cursor)+
-                            3+ /* menu suffix (1 byte) and backspace (2 bytes) */
-                            (2*childs)+ /* newline (2 bytes) times childs */
-                            (padding*childs)+ /* number of spaces times childs */
-                            childs*15 /* children name maxlen (15 bytes) times childs*/
-                    )*sizeof(char)
-            );
-    do
-    {
-        if(tmp!=0)chr=getch();
-        if(chr==0x48||chr==0x4B)
-            (opt>1&&opt!=1)?opt--:(opt=childs);
-        else if(chr==0x50||chr==0x4D)
-            (opt>=1&&opt!=childs)?opt++:(opt=1);
-        else {/* do nothing at this time*/}
-        strcpy(format,"");
-        strcat(format,prefix);
-        strcat(format,name);
-        strcat(format,":");
-        va_start(args,childs);
-        for (tmp=1;tmp<=childs;tmp++)
-        {
-            (orient)?strcat(format,"\n"):0;
-            pos=padding;
-            while((pos--)>0) strcat(format," ");
-            if(tmp==opt)
-            {
-                strcat(format,"\b");
-                strcat(format,cursor);
+    do {
+        system("cls"); // очистить экран
+
+        for (int i = 0; i < 4; i++) {
+            if (i == option - 1) {
+                printf("> %s\n", menu[i]); // вывести выбранный вариант с символом >
+            } else {
+                printf(" %s\n", menu[i]); // вывести остальные варианты без символа >
             }
-            strcat(format,va_arg(args,char*));
         }
-        /*if(tmp!=childs)
-        {
-            fprintf(stderr,"%s: recieved NULL pointer argument,"
-                           " child not named", __func__);
-            return -1;
-        }*/
-        Sleep(delay);
-        system("cls");
-        printf(format);
-        va_end(args);
-    }while((chr=getch())!=0x0D);
-    return opt;
+
+        key = getch(); // получить код нажатой клавиши
+
+        if (key == 224 || key == 0) { // если это специальная клавиша
+            key = getch(); // получить следующий код
+
+            switch (key) { // обработать коды стрелок
+                case UP:
+                    option--; // перейти к предыдущему варианту
+                    if (option < 1) option = 4; // если вышли за границу меню, вернуться к последнему варианту
+                    break;
+                case DOWN:
+                    option++; // перейти к следующему варианту
+                    if (option > 4) option = 1; // если вышли за границу меню, вернуться к первому варианту
+                    break;
+                case LEFT:
+                case RIGHT:
+                    printf("\nYou selected %s\n", menu[option - 1]); // вывести выбранный вариант на экран
+                    break;
+            }
+        }
+
+    } while (key != '\r'); // повторять цикл до тех пор, пока не будет нажата клавиша Enter
+
+    return 0;
 }
