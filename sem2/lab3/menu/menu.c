@@ -8,11 +8,11 @@ void set_raw_input_mode()
     char c;
 
     // Установить терминал в канонический режим
-    tcgetattr(STDIN_FILENO, &tattr);
+    tcgetattr(0, &tattr);
     tattr.c_lflag &= ~(ICANON | ECHO); // Отключить канонический режим и эхо
     tattr.c_cc[VMIN] = 1; // Минимальное количество символов для чтения
     tattr.c_cc[VTIME] = 0; // Максимальное время ожидания между символами
-    tcsetattr(STDIN_FILENO, TCSAFLUSH, &tattr);
+    tcsetattr(0, TCSAFLUSH, &tattr);
 }
 
 // Функция для отображения меню и выделения текущего пункта
