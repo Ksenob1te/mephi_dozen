@@ -1,50 +1,111 @@
 #include <stdio.h>
-#include <conio.h>
+#include <termios.h>
 
-#define UP 72
-#define DOWN 80
-#define LEFT 75
-#define RIGHT 77
+// Функция для установки режима небуферизованного ввода
+void set_raw_input_mode()
+{
+    struct termios tattr;
+    char c;
+
+    // Установить терминал в канонический режим
+    tcgetattr(STDIN_FILENO, &tattr);
+    tattr.c_lflag &= ~(ICANON | ECHO); // Отключить канонический режим и эхо
+    tattr.c_cc[VMIN] = 1; // Минимальное количество символов для чтения
+    tattr.c_cc[VTIME] = 0; // Максимальное время ожидания между символами
+    tcsetattr(STDIN_FILENO, TCSAFLUSH, &tattr);
+}
+
+// Функция для отображения меню и выделения текущего пункта
+void display_menu(int current)
+{
+    char *menu[] = {"Пункт 1", "Пункт 2", "Пункт 3", "Выход"};
+    int size = sizeof(menu) / sizeof(menu[0]);
+
+    printf("\033[H\033[J"); // Очистить экран
+    printf("Выберите пункт меню:\n");
+
+    for (int i = 0; i < size; i++)
+    {
+        if (i == current) // Если текущий пункт - выделить его цветом
+        {
+            printf("\033[30;47m%s\033[0m\n", menu[i]); // Черный текст на белом фоне
+        }
+        else // Иначе - обычный текст
+        {
+            printf("%s\n", menu[i]);
+        }
+
+    }
+}
+
+// Функция для обработки выбора пользователя
+void handle_choice(int choice)
+{
+    switch (choice)
+    {
+        case 0:
+            printf("Вы выбрали пункт 1\n");
+            break;
+        case 1:
+            printf("Вы выбрали пункт 2\n");
+            break;
+        case 2:
+            printf("Вы выбрали пункт 3\n");
+            break;
+        case 3:
+            printf("Вы выбрали выход\n");
+            break;
+        default:
+            printf("Неверный выбор\n");
+            break;
+    }
+}
 
 int main()
 {
-    int option = 1; // текущий выбранный вариант
-    int key; // код нажатой клавиши
-    char *menu[4] = {"Option 1", "Option 2", "Option 3", "Option 4"}; // массив строк с названиями вариантов
+    int current = 0; // Текущий выбранный пункт меню
+    int done = 0; // Флаг завершения программы
+    char c; // Символ для чтения ввода
 
-    do {
-        system("cls"); // очистить экран
+    set_raw_input_mode(); // Установить режим небуферизованного ввода
 
-        for (int i = 0; i < 4; i++) {
-            if (i == option - 1) {
-                printf("> %s\n", menu[i]); // вывести выбранный вариант с символом >
-            } else {
-                printf(" %s\n", menu[i]); // вывести остальные варианты без символа >
-            }
-        }
+    display_menu(current); // Отобразить меню
 
-        key = getch(); // получить код нажатой клавиши
+    while (!done) // Пока не завершено
+    {
+        c = getchar(); // Прочитать символ
 
-        if (key == 224 || key == 0) { // если это специальная клавиша
-            key = getch(); // получить следующий код
+        if (c == '\033') // Если символ - escape
+        {
+            getchar(); // Пропустить следующий символ '['
+            c = getchar(); // Прочитать код клавиши со стрелкой
 
-            switch (key) { // обработать коды стрелок
-                case UP:
-                    option--; // перейти к предыдущему варианту
-                    if (option < 1) option = 4; // если вышли за границу меню, вернуться к последнему варианту
+            switch (c)
+            {
+                case 'A': // Если вверх
+                    current--; // Уменьшить текущий выбор на 1
+                    if (current < 0) current = 0; // Не выходить за границы меню
                     break;
-                case DOWN:
-                    option++; // перейти к следующему варианту
-                    if (option > 4) option = 1; // если вышли за границу меню, вернуться к первому варианту
+                case 'B': // Если вниз
+                    current++; // Увеличить текущий выбор на 1
+                    if (current > 3) current = 3; // Не выходить за границы меню
                     break;
-                case LEFT:
-                case RIGHT:
-                    printf("\nYou selected %s\n", menu[option - 1]); // вывести выбранный вариант на экран
+                default:
                     break;
             }
+
+            display_menu(current); // Отобразить меню с новым выбором
+
+        }
+        else if (c == '\n') // Если символ - enter
+        {
+            handle_choice(current); // Обработать выбор пользователя
+
+            if (current == 3) done = 1; // Если выбран выход - завершить программу
+
         }
 
-    } while (key != '\r'); // повторять цикл до тех пор, пока не будет нажата клавиша Enter
+    }
 
     return 0;
 }
