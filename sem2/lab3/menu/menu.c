@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
-#include <windows.h>
+#include <unistd.h>
 
 // LXSoft
 // mod: cui/menu_021
