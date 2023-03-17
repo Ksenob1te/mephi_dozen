@@ -83,6 +83,7 @@ int main() {
     display_menu(current);
 
     while (!done) {
+        printf("RESTART DONE\n");
         c = getchar();
         if (c == '\033') {
             getchar();
