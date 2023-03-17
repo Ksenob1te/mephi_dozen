@@ -55,10 +55,8 @@ void display_menu(int current) {
 void handle_choice(int choice) {
     switch (choice) {
         case 0:
-            reset_input_mode();
             int data;
             scanf("%d", &data);
-            set_input_mode();
             display_menu(choice);
             printf("Выполнение пункта 1, дата: %d\n", data);
             break;
@@ -108,8 +106,10 @@ int main() {
             display_menu(current);
 
         } else if (c == '\n') {
+            reset_input_mode();
             handle_choice(current);
             if (current == 3) done = 1;
+            set_input_mode();
         }
     }
     reset_input_mode();
