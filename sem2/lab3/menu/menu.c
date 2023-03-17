@@ -6,24 +6,31 @@ struct termios saved_attributes;
 
 void reset_input_mode (void)
 {
-    tcsetattr(STDIN_FILENO, TCSANOW, &saved_attributes);
+    tcsetattr (STDIN_FILENO, TCSANOW, &saved_attributes);
 }
 
-// Функция для установки режима небуферизованного ввода
-void set_raw_input_mode()
+void set_input_mode (void)
 {
     struct termios tattr;
-    char c;
 
-    // Установить терминал в канонический режим
-    tcgetattr(0, &tattr);
+    /* Make sure stdin is a terminal. */
+    if (!isatty (STDIN_FILENO))
+    {
+        fprintf (stderr, "Not a terminal.\n");
+        exit (EXIT_FAILURE);
+    }
+
+    /* Save the terminal attributes so we can restore them later. */
+    tcgetattr (STDIN_FILENO, &saved_attributes);
     atexit (reset_input_mode);
-    tattr.c_lflag &= ~(ICANON | ECHO); // Отключить канонический режим и эхо
-    tattr.c_cc[VMIN] = 1; // Минимальное количество символов для чтения
-    tattr.c_cc[VTIME] = 0; // Максимальное время ожидания между символами
+
+    /* Set the funny terminal modes. */
+    tcgetattr (STDIN_FILENO, &tattr);
+    tattr.c_lflag &= ~(ICANON|ECHO); /* Clear ICANON and ECHO. */
+    tattr.c_cc[VMIN] = 1;
+    tattr.c_cc[VTIME] = 0;
     tcsetattr (STDIN_FILENO, TCSAFLUSH, &tattr);
 }
-
 
 // Функция для отображения меню и выделения текущего пункта
 void display_menu(int current)
@@ -77,7 +84,7 @@ int main()
     int done = 0; // Флаг завершения программы
     char c; // Символ для чтения ввода
 
-    set_raw_input_mode(); // Установить режим небуферизованного ввода
+    set_input_mode(); // Установить режим небуферизованного ввода
 
     display_menu(current); // Отобразить меню
 
