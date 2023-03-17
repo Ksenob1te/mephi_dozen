@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <termios.h>
+#include <unistd.h>
 
 struct termios saved_attributes;
 
