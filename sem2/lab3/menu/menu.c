@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <termios.h>
 
+struct termios saved_attributes;
+
 // Функция для установки режима небуферизованного ввода
 void set_raw_input_mode()
 {
@@ -9,10 +11,16 @@ void set_raw_input_mode()
 
     // Установить терминал в канонический режим
     tcgetattr(0, &tattr);
+    atexit (reset_input_mode);
     tattr.c_lflag &= ~(ICANON | ECHO); // Отключить канонический режим и эхо
     tattr.c_cc[VMIN] = 1; // Минимальное количество символов для чтения
     tattr.c_cc[VTIME] = 0; // Максимальное время ожидания между символами
-    tcsetattr(0, TCSAFLUSH, &tattr);
+    tcsetattr (STDIN_FILENO, TCSAFLUSH, &tattr);
+}
+
+void reset_input_mode (void)
+{
+    tcsetattr(STDIN_FILENO, TCSANOW, &saved_attributes);
 }
 
 // Функция для отображения меню и выделения текущего пункта
@@ -106,6 +114,7 @@ int main()
         }
 
     }
+    reset_input_mode ();
 
     return 0;
 }
