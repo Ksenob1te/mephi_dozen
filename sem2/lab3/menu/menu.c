@@ -55,8 +55,10 @@ void display_menu(int current) {
 void handle_choice(int choice) {
     switch (choice) {
         case 0:
+            reset_input_mode();
             scanf("%*d");
             printf("Вы выбрали пункт 1\n");
+            set_input_mode();
             break;
         case 1:
             printf("Вы выбрали пункт 2\n");
