@@ -4,6 +4,11 @@
 
 struct termios saved_attributes;
 
+void reset_input_mode (void)
+{
+    tcsetattr(STDIN_FILENO, TCSANOW, &saved_attributes);
+}
+
 // Функция для установки режима небуферизованного ввода
 void set_raw_input_mode()
 {
@@ -19,10 +24,6 @@ void set_raw_input_mode()
     tcsetattr (STDIN_FILENO, TCSAFLUSH, &tattr);
 }
 
-void reset_input_mode (void)
-{
-    tcsetattr(STDIN_FILENO, TCSANOW, &saved_attributes);
-}
 
 // Функция для отображения меню и выделения текущего пункта
 void display_menu(int current)
