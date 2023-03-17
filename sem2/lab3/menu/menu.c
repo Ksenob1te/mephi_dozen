@@ -108,7 +108,7 @@ int main() {
             handle_choice(current);
             if (current == 3) {done = 1;}
             set_input_mode();
-            scanf("%*[\n]");
+            scanf("%*[^\n]%*[\n]");
         }
     }
     reset_input_mode();
