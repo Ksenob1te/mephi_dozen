@@ -53,9 +53,9 @@ void display_menu(int current) {
 }
 
 void handle_choice(int choice) {
+    int data;
     switch (choice) {
         case 0:
-            int data;
             scanf("%d", &data);
             display_menu(choice);
             printf("Выполнение пункта 1, дата: %d\n", data);
