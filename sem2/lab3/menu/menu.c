@@ -56,9 +56,11 @@ void handle_choice(int choice) {
     switch (choice) {
         case 0:
             reset_input_mode();
-            scanf("%*d");
-            printf("Вы выбрали пункт 1\n");
+            int data;
+            scanf("%d", &data);
             set_input_mode();
+            display_menu(choice);
+            printf("Выполнение пункта 1, дата: %d\n", data);
             break;
         case 1:
             printf("Вы выбрали пункт 2\n");
@@ -92,12 +94,10 @@ int main() {
 
             switch (c) {
                 case 'A':
-                    display_menu(current);
                     current--;
                     if (current < 0) current = 0;
                     break;
                 case 'B':
-                    display_menu(current);
                     current++;
                     if (current > 3) current = 3;
                     break;
