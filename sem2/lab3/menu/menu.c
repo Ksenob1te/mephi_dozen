@@ -85,7 +85,6 @@ int main() {
 
     while (!done) {
         c = getchar();
-        printf("'%c'", c);
         if (c == '\033') {
             getchar();
             c = getchar();
@@ -110,7 +109,6 @@ int main() {
             handle_choice(current);
             if (current == 3) done = 1;
             set_input_mode();
-            printf("EXIT MENU OPTION\n");
             scanf("%*[\n]");
         }
     }
