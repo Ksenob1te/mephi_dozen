@@ -30,10 +30,10 @@ typedef struct KeySpace {
     int (*remove) (struct KeySpace *key);
 } KeySpace;
 
-int add_node_keyspace (struct KeySpace *key, Node *node);
-Node * find_node_keyspace (struct KeySpace *key, ull release);
-int remove_node_keyspace (struct KeySpace *key, Node *node);
-int remove_keyspace (struct KeySpace *key);
+int add_node_keyspace (KeySpace *key, Node *node);
+Node * find_node_keyspace (KeySpace *key, ull release);
+int remove_node_keyspace (KeySpace *key, Node *node);
+int remove_keyspace (KeySpace *key);
 KeySpace * create_keyspace(ull key);
 // >-=============================-<
 
@@ -43,15 +43,19 @@ KeySpace * create_keyspace(ull key);
 typedef struct Table {
     KeySpace *head;
 
-    int (*add_key) (struct Table *table, KeySpace key);
-    KeySpace (*find_key) (struct Table *table, ull key);
+    int (*add_key) (struct Table *table, KeySpace *key);
+    KeySpace * (*find_key) (struct Table *table, ull key);
+    struct Table * (*find_key_range) (struct Table *table, ull start, ull end);
     int (*remove_key) (struct Table *table, ull key);
+    int (*remove) (struct Table *table);
 } Table;
 
-int add_key_table (struct Table *table, KeySpace key);
-KeySpace find_key_table (struct Table *table, ull key);
-int remove_key_table (struct Table *table, ull key);
-Table * createTable();
+int add_key_table (Table *table, KeySpace *key);
+KeySpace * find_key_table (Table *table, ull key);
+struct Table * find_key_range (Table *table, ull start, ull end);
+int remove_key_table (Table *table, ull key);
+int remove_table (Table *table);
+Table * create_table();
 // >-=============================-<
 
 

@@ -81,4 +81,69 @@ KeySpace * create_keyspace(ull key) {
 // Table struct
 // >-=============================-<
 
+KeySpace * find_key_table (struct Table *table, ull key) {
+    if (!table) return NULL;
+    KeySpace *current = table->head;
+    for (; current && current->key != key; current = current->link);
+    return current; // it'll return null if we reach end of array
+}
 
+int add_key_table (struct Table *table, KeySpace *key) {
+    if (find_key_table(table, key->key)) return 0;
+    key->link = table->head;
+    table->head = key;
+    return 1;
+}
+
+
+int remove_key_table (struct Table *table, ull key) {
+    if (!table) return 0;
+    KeySpace *prev_ptr = table->head;
+    if (prev_ptr->key == key) {
+        KeySpace *temp_ptr = prev_ptr->link;
+        prev_ptr->remove(prev_ptr);
+        table->head = temp_ptr;
+        return 1;
+    }
+    for (; prev_ptr->link && prev_ptr->link->key != key; prev_ptr = prev_ptr->link);
+    if (!prev_ptr->link) return 0;
+
+    KeySpace *temp_ptr = (prev_ptr->link)->link;
+    (prev_ptr->link)->remove(prev_ptr->link);
+    prev_ptr->link = temp_ptr;
+    return 1;
+}
+
+int remove_table(Table *table) {
+    if (!table) return 0;
+    KeySpace *ptr = table->head, *temp;
+    for (;ptr; ptr = temp) {
+        temp = ptr->link;
+        ptr->remove(ptr);
+    }
+    free(table);
+    return 1;
+}
+
+Table * find_key_range_table(Table *table, ull start, ull end) {
+    Table * result = create_table();
+    if (!table) return NULL;
+    KeySpace *current = table->head;
+    for (; current; current = current->link)
+        if (current->key >= start && current->key <= end)
+            result->add_key(result, current);
+    return result;
+}
+
+Table * create_table() {
+    Table *table = malloc(sizeof(Table));
+    table->head = NULL;
+
+    table->add_key = add_key_table;
+    table->find_key = find_key_table;
+    table->remove_key = remove_key_table;
+    table->remove = remove_table;
+    return table;
+}
+
+// >-=============================-<
