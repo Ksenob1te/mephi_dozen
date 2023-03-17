@@ -83,7 +83,6 @@ int main() {
     display_menu(current);
 
     while (!done) {
-        scanf("%c", &c);
         c = getchar();
         if (c == '\033') {
             getchar();
