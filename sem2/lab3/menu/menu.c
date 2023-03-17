@@ -108,9 +108,10 @@ int main() {
         } else if (c == '\n') {
             reset_input_mode();
             handle_choice(current);
-            if (current == 3) {done = 1; continue;}
+            if (current == 3) {done = 1;}
             set_input_mode();
-            scanf("%*[\n]");
+            scanf("%[\n]", &c);
+            printf("'%c'", c);
         }
     }
     reset_input_mode();
