@@ -85,10 +85,10 @@ int main() {
 
     while (!done) {
         scanf("%c", &c);
-        printf("'%c'", c);
+        c = getchar();
         if (c == '\033') {
-            scanf("%*c");
-            scanf("%c", &c);
+            getchar();
+            c = getchar();
 
             switch (c) {
                 case 'A':
