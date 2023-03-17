@@ -84,11 +84,11 @@ int main() {
     display_menu(current);
 
     while (!done) {
-        c = getchar();
+        scanf("%c", &c);
         printf("'%c'", c);
         if (c == '\033') {
-            getchar();
-            c = getchar();
+            scanf("%*c");
+            scanf("%c", &c);
 
             switch (c) {
                 case 'A':
@@ -110,8 +110,7 @@ int main() {
             handle_choice(current);
             if (current == 3) {done = 1;}
             set_input_mode();
-            scanf("%[\n]", &c);
-            printf("'%c'", c);
+            scanf("%*[^\n]%*[\n]");
         }
     }
     reset_input_mode();
