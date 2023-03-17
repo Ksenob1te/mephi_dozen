@@ -92,10 +92,12 @@ int main() {
 
             switch (c) {
                 case 'A':
+                    display_menu(current);
                     current--;
                     if (current < 0) current = 0;
                     break;
                 case 'B':
+                    display_menu(current);
                     current++;
                     if (current > 3) current = 3;
                     break;
