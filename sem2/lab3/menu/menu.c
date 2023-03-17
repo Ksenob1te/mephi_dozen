@@ -111,6 +111,7 @@ int main() {
             if (current == 3) done = 1;
             set_input_mode();
             printf("EXIT MENU OPTION\n");
+            scanf("%*[^\n]");
         }
     }
     reset_input_mode();
