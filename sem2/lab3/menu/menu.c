@@ -67,7 +67,7 @@ void handle_choice(int choice) {
             printf("Вы выбрали пункт 3\n");
             break;
         case 3:
-            printf("Вы выбрали выход\n");
+//            printf("Вы выбрали выход\n");
             break;
         default:
             printf("Неверный выбор\n");
