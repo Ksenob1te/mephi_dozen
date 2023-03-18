@@ -12,7 +12,7 @@ void reset_input_mode(void) {
     tcsetattr(STDIN_FILENO, TCSANOW, &saved_started);
 }
 void set_input_mode(void) {
-    tcsetattr(STDIN_FILENO, TCSAFLUSH, &tattr);
+    tcsetattr(STDIN_FILENO, TCSANOW, &tattr);
 }
 
 void init_input(void) {
