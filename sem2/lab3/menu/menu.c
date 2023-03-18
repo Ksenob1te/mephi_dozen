@@ -6,15 +6,16 @@
 
 // IDK how it works but it works
 // >-=============================-<
-struct termios saved_attributes;
+struct termios saved_started, tattr;
 
 void reset_input_mode(void) {
-    tcsetattr(STDIN_FILENO, TCSANOW, &saved_attributes);
+    tcsetattr(STDIN_FILENO, TCSANOW, &saved_started);
+}
+void set_input_mode(void) {
+    tcsetattr(STDIN_FILENO, TCSAFLUSH, &tattr);
 }
 
-void set_input_mode(void) {
-    struct termios tattr;
-
+void init_input(void) {
     /* Make sure stdin is a terminal. */
     if (!isatty(STDIN_FILENO)) {
         fprintf(stderr, "Not a terminal.\n");
@@ -22,7 +23,7 @@ void set_input_mode(void) {
     }
 
     /* Save the terminal attributes so we can restore them later. */
-    tcgetattr(STDIN_FILENO, &saved_attributes);
+    tcgetattr(STDIN_FILENO, &saved_started);
     atexit(reset_input_mode);
 
     /* Set the funny terminal modes. */
@@ -79,7 +80,7 @@ int main() {
     int done = 0;
     char c;
 
-    set_input_mode();
+    init_input();
     display_menu(current);
 
     while (!done) {
