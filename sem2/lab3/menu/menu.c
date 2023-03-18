@@ -54,10 +54,11 @@ void display_menu(int current) {
 }
 
 void handle_choice(int choice) {
-    int data;
+    int data, status;
     switch (choice) {
         case 0:
-            scanf("%d", &data);
+            status = scanf("%d", &data);
+            if (status <= 0) scanf("%*[^\n]");
             printf("Выполнение пункта 1, дата: %d\n", data);
             break;
         case 1:
