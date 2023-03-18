@@ -87,6 +87,7 @@ int main() {
     while (!done) {
         printf("RESTART DONE\n");
         c = getchar();
+        printf("GOT CHAR: '%c'", c);
         if (c == '\033') {
             getchar();
             c = getchar();
