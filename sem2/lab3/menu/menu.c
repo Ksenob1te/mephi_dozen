@@ -58,7 +58,7 @@ void handle_choice(int choice) {
     switch (choice) {
         case 0:
             status = scanf("%d", &data);
-            if (status <= 0) scanf("%*[^\n]");
+//            if (status <= 0) scanf("%*[^\n]");
             printf("Выполнение пункта 1, дата: %d\n", data);
             break;
         case 1:
