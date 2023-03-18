@@ -59,7 +59,7 @@ void handle_choice(int choice) {
         case 0:
             status = scanf("%d", &data);
 //            if (status <= 0) scanf("%*[^\n]");
-            printf("Выполнение пункта 1, дата: %d\n", data);
+            printf("Выполнение пункта 1, дата: %d, статус: %d", data, status);
             break;
         case 1:
             printf("Вы выбрали пункт 2\n");
