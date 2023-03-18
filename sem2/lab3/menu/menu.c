@@ -109,7 +109,7 @@ int main() {
             reset_input_mode();
             handle_choice(current);
             if (current == 3) {done = 1;}
-            scanf("\n");
+//            scanf("\n");
             set_input_mode();
         }
     }
