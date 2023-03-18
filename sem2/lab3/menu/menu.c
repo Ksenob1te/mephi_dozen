@@ -82,6 +82,7 @@ int main() {
 
     init_input();
     display_menu(current);
+    printf("%d\n", tattr.c_cc[VMIN]);
 
     while (!done) {
         printf("RESTART DONE\n");
