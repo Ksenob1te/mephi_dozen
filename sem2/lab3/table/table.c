@@ -11,7 +11,7 @@ int removeNode(Node *node) {
 
 Node * create_node(ull info) {
     Node *node = malloc(sizeof(Node));
-    node->release = -1;
+    node->release = 0;
     node->info = info;
     node->next = NULL;
 
@@ -30,6 +30,7 @@ int add_node_keyspace (struct KeySpace *key, Node *node) {
     Node *last_node;
     for (last_node = key->node; last_node->next; last_node = last_node->next);
     last_node->next = node;
+    node->release = last_node->release + 1;
     return 1;
 }
 
@@ -56,7 +57,7 @@ int remove_keyspace (struct KeySpace *key) {
     Node *temp;
     for (Node *node = key->node; node; node = temp) {
         temp = node->next;
-        removeNode(node);
+        node->remove(node);
     }
     free(key);
     return 1;
