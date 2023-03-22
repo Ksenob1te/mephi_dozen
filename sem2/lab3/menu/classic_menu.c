@@ -2,7 +2,7 @@
 #include "../table/table.h"
 
 void send_command_menu() {
-    printf("____________________________________\n");
+    printf("\033[0;33____________________________________\n");
     printf("__________Here's your menu__________\n");
     printf("____Select one option from below____\n");
     printf("[1] Print table\n");
@@ -14,7 +14,7 @@ void send_command_menu() {
     printf("[7] Delete key\n");
     printf("[8] Delete element\n");
     printf("[0] Exit\n");
-    printf("____________________________________\n");
+    printf("____________________________________\033[0m\n");
 }
 
 void menu() {
