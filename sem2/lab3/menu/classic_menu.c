@@ -22,9 +22,10 @@ void menu(Table *mainTable) {
     void (*func[8])(Table *) = {print_table, add_key, add_element_key, search_interval,
                                 search_key, search_element_version, delete_key, delete_element_version};
 //    memory_worker(&mainList, 10);
+    printf("\033[H\033[J");
     send_command_menu();
     while (1) {
-        printf("\033[1;90mType command (number [0-8]) or [-1] for command menu:\033[0;0m\n");
+        printf("\033[1;90mType command (number [0-8]):\033[0;0m\n");
         int command = 0;
         int x = scanf("%d", &command);
         if (x == EOF) {
@@ -38,6 +39,8 @@ void menu(Table *mainTable) {
             scanf("%*[^\n]*c");
             continue;
         }
+        printf("\033[H\033[J");
+        send_command_menu();
         switch (command) {
             case 1 ... 8:
                 (*func[command - 1])(mainTable);
@@ -45,9 +48,6 @@ void menu(Table *mainTable) {
             case 0:
                 mainTable->remove(mainTable);
                 return;
-            case -1:
-                send_command_menu();
-                break;
             default:
                 break;
         }
