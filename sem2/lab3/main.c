@@ -1,6 +1,15 @@
 #include "methods.h"
+#include "menu/classic_menu.h"
+#include "stdio.h"
+#ifdef _WIN32
+#define OS_WIN 1
+#include <windows.h>
+#elif
+#define OS_WIN 0
+#endif
 
 int main(void) {
+    if (OS_WIN) SetConsoleOutputCP(CP_UTF8);
     Table *table = create_table();
     KeySpace *key1 = create_keyspace(1);
     KeySpace *key2 = create_keyspace(2);
@@ -15,5 +24,5 @@ int main(void) {
         Node *node = create_node(i);
         key2->add_node(key2, node);
     }
-    print_table(table);
+    menu(table);
 }

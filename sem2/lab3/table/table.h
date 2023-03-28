@@ -23,6 +23,7 @@ typedef struct KeySpace {
     ull key;
     Node *node;
     struct KeySpace *link;
+    ull last_release;
 
     int (*add_node) (struct KeySpace *key, Node *node);
     Node * (*find_node) (struct KeySpace *key, ull release);

@@ -1,5 +1,6 @@
 #include "stdio.h"
 #include "../table/table.h"
+#include "../methods.h"
 
 void send_command_menu() {
     printf("\033[0;33____________________________________\n");
@@ -17,8 +18,9 @@ void send_command_menu() {
     printf("____________________________________\033[0m\n");
 }
 
-void menu() {
-    Table *mainTable = create_table();
+void menu(Table *mainTable) {
+    void (*func[8])(Table *) = {print_table, add_key, add_element_key, search_interval,
+                                search_key, search_element_version, delete_key, delete_element_version};
 //    memory_worker(&mainList, 10);
     send_command_menu();
     while (1) {
@@ -37,59 +39,11 @@ void menu() {
             continue;
         }
         switch (command) {
-            case 1:
-                mainList.fill(&mainList);
-                break;
-            case 2:
-                printf("Type index and then number:\n");
-                int index = 0;
-                char* number = malloc(35 * sizeof(char));
-                x = scanf("%d%34s", &index, number);
-                if (x == EOF) {
-                    scanf("%*[^\n]*c");
-                    break;
-                }
-                if (x <= 1) {
-                    printf("Incorrect input, try again\n");
-                    printf("Or [-1] for command menu\n");
-                    scanf("%*[^\n]*c");
-                    break;
-                }
-                mainList.add_index(&mainList, index, number);
-                break;
-            case 3:
-                printf("Type index:\n");
-                index = 0;
-                x = scanf("%d", &index);
-                if (x == EOF) {
-                    scanf("%*[^\n]*c");
-                    break;
-                }
-                if (x <= 0) {
-                    printf("Incorrect input, try again\n");
-                    printf("Or [-1] for command menu\n");
-                    scanf("%*[^\n]*c");
-                    break;
-                }
-                mainList.remove_index(&mainList, index);
-                break;
-            case 4:
-                ansList.free_array(&ansList);
-                ansList = mainList.process(&mainList);
-                printf("Result array: ");
-                ansList.print(&ansList);
-                break;
-            case 5:
-                printf("Your main array is: ");
-                mainList.print(&mainList);
-                break;
-            case 6:
-                printf("Your result array is: ");
-                ansList.print(&ansList);
+            case 1 ... 8:
+                (*func[command - 1])(mainTable);
                 break;
             case 0:
-                mainList.free_array(&mainList);
-                ansList.free_array(&ansList);
+                mainTable->remove(mainTable);
                 return;
             case -1:
                 send_command_menu();

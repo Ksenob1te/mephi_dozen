@@ -27,10 +27,13 @@ int add_node_keyspace (struct KeySpace *key, Node *node) {
     if (!key || !node) return 0;
     if (!key->node) {key->node = node; return 1;}
 
-    Node *last_node;
-    for (last_node = key->node; last_node->next; last_node = last_node->next);
-    last_node->next = node;
-    node->release = last_node->release + 1;
+//    Node *last_node;
+//    for (last_node = key->node; last_node->next; last_node = last_node->next);
+//    last_node->next = node;
+    node->next = key->node;
+    key->node = node;
+    (key->last_release)++;
+    node->release = key->last_release;
     return 1;
 }
 
@@ -44,6 +47,11 @@ Node * find_node_keyspace (struct KeySpace *key, ull release) {
 int remove_node_keyspace (struct KeySpace *key, Node *node) {
     if (!key || !node) return 0;
     Node *find_node;
+    if (key->node == node) {
+        key->node = node->next;
+        removeNode(node);
+        return 1;
+    }
     for (find_node = key->node; find_node && find_node->next != node; find_node = find_node->next);
 
     if (!find_node) return 0;
@@ -68,6 +76,7 @@ KeySpace * create_keyspace(ull key) {
     keyspace->key = key;
     keyspace->node = NULL;
     keyspace->link = NULL;
+    keyspace->last_release = 0;
 
     keyspace->add_node = add_node_keyspace;
     keyspace->find_node = find_node_keyspace;
@@ -126,13 +135,23 @@ int remove_table(Table *table) {
     return 1;
 }
 
+KeySpace * copy_keyspace(KeySpace *key) {
+    KeySpace *key_cpy = create_keyspace(key->key);
+    for (Node *find_node = key->node; find_node; find_node = find_node->next) {
+        Node *node = create_node(find_node->info);
+        key_cpy->add_node(key_cpy, node);
+    }
+    return key_cpy;
+}
+
 Table * find_key_range_table(Table *table, ull start, ull end) {
     Table * result = create_table();
     if (!table) return NULL;
     KeySpace *current = table->head;
     for (; current; current = current->link)
-        if (current->key >= start && current->key <= end)
-            result->add_key(result, current);
+        if (current->key >= start && current->key <= end) {
+            result->add_key(result, copy_keyspace(current));
+        }
     return result;
 }
 
@@ -142,6 +161,7 @@ Table * create_table() {
 
     table->add_key = add_key_table;
     table->find_key = find_key_table;
+    table->find_key_range = find_key_range_table;
     table->remove_key = remove_key_table;
     table->remove = remove_table;
     return table;
