@@ -3,13 +3,13 @@
 #include "stdio.h"
 #ifdef _WIN32
     #include "windows.h"
-    #define select_settings() SetConsoleOutputCP(CP_UTF8);
+    #define select_settings() SetConsoleOutputCP(CP_UTF8)
 #else
     #define select_settings()
 #endif
 
 int main(void) {
-    select_settings()
+    select_settings();
     Table *table = create_table();
     KeySpace *key1 = create_keyspace(1);
     KeySpace *key2 = create_keyspace(2);
