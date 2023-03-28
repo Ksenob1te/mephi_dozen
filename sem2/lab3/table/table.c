@@ -137,9 +137,15 @@ int remove_table(Table *table) {
 
 KeySpace * copy_keyspace(KeySpace *key) {
     KeySpace *key_cpy = create_keyspace(key->key);
+    Node *last_node = NULL;
+    ull release = key->last_release;
     for (Node *find_node = key->node; find_node; find_node = find_node->next) {
         Node *node = create_node(find_node->info);
-        key_cpy->add_node(key_cpy, node);
+        if (!key_cpy->node) key_cpy->node = node;
+        if (last_node) last_node->next = node;
+        last_node = node;
+        node->release = release;
+        release--;
     }
     return key_cpy;
 }

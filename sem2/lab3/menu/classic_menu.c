@@ -3,7 +3,7 @@
 #include "../methods.h"
 
 void send_command_menu() {
-    printf("\033[0;33____________________________________\n");
+    printf("\033[0;33m____________________________________\n");
     printf("__________Here's your menu__________\n");
     printf("____Select one option from below____\n");
     printf("[1] Print table\n");
@@ -24,7 +24,7 @@ void menu(Table *mainTable) {
 //    memory_worker(&mainList, 10);
     send_command_menu();
     while (1) {
-        printf("Type command (number [0-8]) or [-1] for command menu:\n");
+        printf("\033[1;90mType command (number [0-8]) or [-1] for command menu:\033[0;0m\n");
         int command = 0;
         int x = scanf("%d", &command);
         if (x == EOF) {
