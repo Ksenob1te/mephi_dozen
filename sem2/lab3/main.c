@@ -9,7 +9,7 @@
 #endif
 
 int main(void) {
-    if (OS_WIN) SetConsoleOutputCP(CP_UTF8);
+    if (OS_WIN) SetConsoleOutputCP(65001);
     Table *table = create_table();
     KeySpace *key1 = create_keyspace(1);
     KeySpace *key2 = create_keyspace(2);
