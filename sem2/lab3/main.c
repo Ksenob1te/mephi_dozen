@@ -7,6 +7,7 @@
 #else
     #define select_settings()
 #endif
+#include "file_worker/manager.h"
 
 int main(void) {
     select_settings();
@@ -24,5 +25,15 @@ int main(void) {
         Node *node = create_node(i);
         key2->add_node(key2, node);
     }
+
+//    FILE *file = fopen("keyspaces", "w");
+//    write_table(file, table);
+//    fclose(file);
+//
+//    file = fopen("keyspaces", "r");
+//    read_table(file, table);
+//    fclose(file);
+//    print_table(table);
+//    scanf("\n");
     menu(table);
 }

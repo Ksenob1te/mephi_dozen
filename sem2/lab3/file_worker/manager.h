@@ -2,7 +2,10 @@
 #define SEM1_LAB4_MANAGER_H
 
 #include "stdlib.h"
-//void write(FIL)
+#include "stdio.h"
+#include "../table/table.h"
 
+void write_table(FILE *file, Table *table);
+void read_table(FILE *file, Table *table);
 
 #endif //SEM1_LAB4_MANAGER_H
