@@ -2,10 +2,10 @@
 #include "menu/classic_menu.h"
 #include "stdio.h"
 #ifdef _WIN32
-#define OS_WIN 1
-#include <windows.h>
-#elif
-#define OS_WIN 0
+    #define OS_WIN 1
+    #include <windows.h>
+#else
+    #define OS_WIN 0
 #endif
 
 int main(void) {
