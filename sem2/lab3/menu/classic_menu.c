@@ -6,24 +6,23 @@ void send_command_menu() {
     printf("\033[0;33m____________________________________\n");
     printf("__________Here's your menu__________\n");
     printf("____Select one option from below____\n");
-    printf("[1] Print table\n");
-    printf("[2] Add new key\n");
-    printf("[3] Add element by key\n");
-    printf("[4] Search by key interval\n");
-    printf("[5] Search by key\n");
-    printf("[6] Search by version\n");
-    printf("[7] Delete key\n");
-    printf("[8] Delete element\n");
+    printf("[1] Add new key\n");
+    printf("[2] Add element by key\n");
+    printf("[3] Delete key\n");
+    printf("[4] Delete element\n");
+    printf("[5] Search by key interval\n");
+    printf("[6] Search by key\n");
+    printf("[7] Search by version\n");
     printf("[0] Exit\n");
     printf("____________________________________\033[0m\n");
 }
 
 void menu(Table *mainTable) {
-    void (*func[8])(Table *) = {print_table, add_key, add_element_key, search_interval,
-                                search_key, search_element_version, delete_key, delete_element_version};
-//    memory_worker(&mainList, 10);
+    void (*func[8])(Table *) = {add_key, add_element_key, delete_key, delete_element_version, search_interval,
+                                search_key, search_element_version};
     printf("\033[H\033[J");
     send_command_menu();
+    print_table(mainTable);
     while (1) {
         printf("\033[1;90mType command (number [0-8]):\033[0;0m\n");
         int command = 0;
@@ -35,14 +34,22 @@ void menu(Table *mainTable) {
         }
         if (x == 0) {
             printf("Incorrect input, try again\n");
-            printf("Or [-1] for command menu\n");
             scanf("%*[^\n]*c");
             continue;
         }
-        printf("\033[H\033[J");
-        send_command_menu();
         switch (command) {
-            case 1 ... 8:
+            case 1 ... 4:
+                printf("\033[H\033[J");
+                print_table(mainTable);
+                (*func[command - 1])(mainTable);
+                printf("\033[H\033[J");
+                send_command_menu();
+                print_table(mainTable);
+                break;
+            case 5 ... 7:
+//                printf("\033[H\033[J");
+//                send_command_menu();
+//                print_table(mainTable);
                 (*func[command - 1])(mainTable);
                 break;
             case 0:
