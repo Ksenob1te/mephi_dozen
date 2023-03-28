@@ -56,6 +56,7 @@ int remove_node_keyspace (struct KeySpace *key, Node *node) {
 
     if (!find_node) return 0;
     find_node->next = node->next;
+    (key->last_release)--;
     removeNode(node);
     return 1;
 }
