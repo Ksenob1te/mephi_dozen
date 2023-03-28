@@ -2,14 +2,14 @@
 #include "menu/classic_menu.h"
 #include "stdio.h"
 #ifdef _WIN32
-    #define OS_WIN 1
-    #include <windows.h>
+    #include "windows.h"
+    #define select_settings() SetConsoleOutputCP(CP_UTF8);
 #else
-    #define OS_WIN 0
+    #define select_settings()
 #endif
 
 int main(void) {
-    if (OS_WIN) SetConsoleOutputCP(65001);
+    select_settings()
     Table *table = create_table();
     KeySpace *key1 = create_keyspace(1);
     KeySpace *key2 = create_keyspace(2);
