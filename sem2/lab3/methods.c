@@ -38,7 +38,12 @@ void add_key(Table *table) {
     ull key = input_ull();
     if (key == -1) return;
     KeySpace *keyspace = create_keyspace(key);
-    table->add_key(table, keyspace);
+    int status = table->add_key(table, keyspace);
+    if (!status) {
+        fprintf(stderr, "\033[0;31mThis keyspace already exists\033[0m\n");
+        keyspace->remove(keyspace);
+        return;
+    }
     printf("Done!\n");
 }
 
