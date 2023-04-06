@@ -47,9 +47,6 @@ void menu(Table *mainTable) {
                 print_table(mainTable);
                 break;
             case 5 ... 7:
-//                printf("\033[H\033[J");
-//                send_command_menu();
-//                print_table(mainTable);
                 (*func[command - 1])(mainTable);
                 break;
             case 0:
