@@ -15,8 +15,7 @@ static ull input_ull() {
     return key;
 }
 
-static char *readline(char *prompt) {
-    printf("%s", prompt);
+static char *readline() {
     char *ptr = (char *) malloc(sizeof(char));
     char buf[81];
     int n, len = 0, bufLen;
@@ -58,7 +57,8 @@ void print_table (Table *table) {
 
 void add_key(Table *table) {
     printf("Type in key value (string): ");
-    char *key = readline("> ");
+    scanf("\n");
+    char *key = readline();
     if (!key) return;
     printf("Type in item value (int): ");
     ull value = input_ull();
@@ -76,7 +76,8 @@ void add_key(Table *table) {
 
 void search_key(Table *table) {
     printf("Type in key value (string): ");
-    char *key = readline("> ");
+    scanf("\n");
+    char *key = readline();
     if (!key) return;
     KeySpace *keyspace = find_element(table, key);
     if (!keyspace) {
@@ -88,7 +89,8 @@ void search_key(Table *table) {
 
 void delete_key(Table *table) {
     printf("Type in key value (string): ");
-    char *key = readline("> ");
+    scanf("\n");
+    char *key = readline();
     if (!key) return;
     int status = remove_element(table, key);
     if (status)

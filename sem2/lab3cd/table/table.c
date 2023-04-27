@@ -3,6 +3,7 @@
 //
 
 #include "table.h"
+#include "string.h"
 
 Table * create_table(ull msize) {
     Table *table = malloc(sizeof(Table));
@@ -32,12 +33,13 @@ int insert_element(Table *table, char *key, ull info) {
     ull field_hash = str_linear_hash(key, table->msize);
     KeySpace *keys = table->keys;
     ull counter = 0;
-    while (keys[field_hash].busy > 0 && counter < table->msize && keys[field_hash].key != key) {
+    while (keys[field_hash].busy > 0 && counter < table->msize) {
+        if (strcmp(keys[field_hash].key, key) == 0) return 2;
         field_hash = (field_hash + MIXING_STEP) % table->msize;
         counter++;
     }
-    if (keys[field_hash].key == key) return 2;
     if (counter < table->msize) {
+        if (keys[field_hash].busy == -1) free(keys[field_hash].key);
         keys[field_hash].busy = 1;
         keys[field_hash].key = key;
         keys[field_hash].info = info;
@@ -51,7 +53,7 @@ KeySpace * find_element(Table *table, const char *key) {
     KeySpace *keys = table->keys;
     ull counter = 0;
     while (abs(keys[field_hash].busy) != 0 && counter < table->msize) {
-        if (keys[field_hash].busy == 1 && keys[field_hash].key == key)
+        if (keys[field_hash].busy == 1 && strcmp(keys[field_hash].key, key) == 0)
             return (keys + field_hash);
         field_hash = (field_hash + MIXING_STEP) % table->msize;
         counter++;
@@ -63,7 +65,6 @@ int remove_element(Table *table, const char *key) {
     KeySpace *keyspace = find_element(table, key);
     if (keyspace) {
         keyspace->busy = -1;
-        free(keyspace->key);
         return 0;
     }
     return 1;
