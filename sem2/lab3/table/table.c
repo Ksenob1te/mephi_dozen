@@ -1,11 +1,12 @@
 #include "table.h"
 #include "stdlib.h"
 #include "../file_worker/manager.h"
+#include "string.h"
 
 
 // Node struct
 // >-=============================-<
-int removeNode(Node *node) {
+static int removeNode(Node *node) {
     free(node);
     return 1;
 }
@@ -24,41 +25,44 @@ Node * create_node(ull info) {
 
 // KeySpace struct
 // >-=============================-<
-//int add_node_keyspace (char *input, struct KeySpace *key, Node *node) {
-//    if (!key || !node) return 0;
-//    FILE *file = fopen(input, "r+b");
-//    if (key->first_offset == -1) {
-//        long offset = write_node(file, key, node);
-//        key->first_offset = offset;
-//        return 2;
-//    }
-//
-//    node->next = key->node;
-//    key->node = node;
-//    (key->last_release)++;
-//    node->release = key->last_release;
-//    return 1;
-//}
+KeySpace * create_keyspace(ull key) {
+    KeySpace *keyspace = malloc(sizeof(KeySpace));
+    keyspace->key = key;
+    keyspace->link_offset = -1;
+    keyspace->first_offset = -1;
+    keyspace->last_release = -1;
 
-int find_node_keyspace(const char *input, const KeySpace *key, Node *node, ull release) {
+    keyspace->add_node = write_node;
+    keyspace->find_node = find_node_keyspace;
+    keyspace->remove_node = remove_node_keyspace;
+    keyspace->remove = remove_keyspace;
+
+    return keyspace;
+}
+
+void select_funcs(KeySpace *key) {
+    key->add_node = write_node;
+    key->find_node = find_node_keyspace;
+    key->remove_node = remove_node_keyspace;
+    key->remove = remove_keyspace;
+}
+
+static int find_node_keyspace(FILE *file, const KeySpace *key, Node *node, ull release) {
     if (!key) return 1;
-    FILE *file = fopen(input, "rb");
     int status;
     for (
             status = read_node(file, key->first_offset, node);
             !status && node->release != release;
             status = read_node(file, node->next_offset, node)
             );
-    fclose(file);
     return status;
 }
 
-int remove_node_keyspace (const char *input, struct KeySpace *key, ull release) {
+static int remove_node_keyspace (FILE *file, struct KeySpace *key, ull release) {
     if (!key) return 0;
-    FILE *file = fopen(input, "r+b");
     Node find_node;
     Node prev_node;
-    ull prev_block = key->first_offset;
+    long prev_block = key->first_offset;
     read_node(file, key->first_offset, &find_node);
     if (find_node.release == release) {
         remove_block(key->first_offset);
@@ -79,9 +83,8 @@ int remove_node_keyspace (const char *input, struct KeySpace *key, ull release) 
     return 1;
 }
 
-int remove_keyspace (const char *input, long key_offset, struct KeySpace *key) {
+static int remove_keyspace (FILE *file, long key_offset, KeySpace const *key) {
     if (!key) return 0;
-    FILE *file = fopen(input, "rb");
     int status;
     Node node;
     remove_block(key->first_offset);
@@ -93,41 +96,40 @@ int remove_keyspace (const char *input, long key_offset, struct KeySpace *key) {
         remove_block(node.next_offset);
     }
     remove_block(key_offset);
-    fclose(file);
     return 1;
-}
-
-KeySpace * create_keyspace(ull key) {
-    KeySpace *keyspace = malloc(sizeof(KeySpace));
-    keyspace->key = key;
-    keyspace->first_offset = -1;
-    keyspace->last_release = -1;
-    keyspace->link_offset = -1;
-
-//    keyspace->add_node = add_node_keyspace;
-//    keyspace->find_node = find_node_keyspace;
-//    keyspace->remove_node = remove_node_keyspace;
-//    keyspace->remove = remove_keyspace;
-
-    return keyspace;
 }
 // >-=============================-<
 
 
 // Table struct
 // >-=============================-<
-int find_key_table(const char *input, const struct Table *table, KeySpace *keyspace, const ull key) {
-    if (!table) return 0;
-    FILE *file = fopen(input, "rb");
+static int find_key_table(FILE *file, const struct Table *table, KeySpace *keyspace, ull key) {
+    if (!table) return 1;
     int status;
     for (
             status = read_keyspace(file, table->key_offset, keyspace);
             !status && keyspace->key != key;
             status = read_keyspace(file, keyspace->link_offset, keyspace)
             );
-    fclose(file);
-    return 1;
+    return status;
 }
+
+long find_key_address(FILE *file, Table *table, KeySpace const *key) {
+    if (!table) return 1;
+    long result = -1;
+    KeySpace keyspace;
+    int status = read_keyspace(file, table->key_offset, &keyspace);
+    if (keyspace.key == key->key) return table->key_offset;
+    for (;
+            !status && keyspace.key != key->key;
+            status = read_keyspace(file, keyspace.link_offset, &keyspace)
+            ) {
+        result = keyspace.link_offset;
+    }
+    if (status) return -1;
+    return result;
+}
+
 
 //int add_key_table (const char *input, struct Table *table, KeySpace *key) {
 //    if (find_key_table(input, table, key->key)) return 0;
@@ -137,15 +139,14 @@ int find_key_table(const char *input, const struct Table *table, KeySpace *keysp
 //}
 
 
-int remove_key_table (const char *input, struct Table *table, ull key) {
+static int remove_key_table (FILE *file, struct Table *table, ull key) {
     if (!key) return 0;
-    FILE *file = fopen(input, "r+b");
     KeySpace find_key;
     KeySpace prev_key;
-    ull prev_block = table->key_offset;
+    long prev_block = table->key_offset;
     read_keyspace(file, table->key_offset, &find_key);
     if (find_key.key == key) {
-        remove_block(table->key_offset);
+        remove_keyspace(file, table->key_offset, &find_key);
         table->key_offset = find_key.link_offset;
         return 2;
     }
@@ -157,19 +158,19 @@ int remove_key_table (const char *input, struct Table *table, ull key) {
         status = read_keyspace(file, find_key.link_offset, &find_key);
     }
     if (status) return 0;
-    remove_block(prev_key.link_offset);
+    remove_keyspace(file, prev_key.link_offset, &find_key);
     prev_key.link_offset = find_key.link_offset;
     update_keyspace(file, prev_block, &prev_key);
     return 1;
 }
 
-int remove_table(const char *input, Table *table) {
+static int remove_table(const char *input, Table *table) {
     if (!table) return 0;
     FILE *file = fopen(input, "rb");
     KeySpace key;
     int status = read_keyspace(file, table->key_offset, &key);
     remove_block(table->key_offset);
-    for (;status; status = read_keyspace(file, key.link_offset, &key)) {
+    for (;!status; status = read_keyspace(file, key.link_offset, &key)) {
         int status_key;
         Node node;
         remove_block(key.first_offset);
@@ -201,27 +202,64 @@ int remove_table(const char *input, Table *table) {
 //    return key_cpy;
 //}
 //
-//Table * find_key_range_table(Table *table, ull start, ull end) {
-//    Table * result = create_table();
-//    if (!table) return NULL;
-//    KeySpace *current = table->head;
-//    for (; current; current = current->link)
-//        if (current->key >= start && current->key <= end) {
-//            result->add_key(result, copy_keyspace(current));
-//        }
-//    return result;
-//}
-//
-//Table * create_table() {
-//    Table *table = malloc(sizeof(Table));
-//    table->head = NULL;
-//
-//    table->add_key = add_key_table;
-//    table->find_key = find_key_table;
-//    table->find_key_range = find_key_range_table;
-//    table->remove_key = remove_key_table;
-//    table->remove = remove_table;
-//    return table;
-//}
+Table * find_key_range_table(FILE *file, const char *tmp_filename, Table *table, ull start, ull end) {
+    Table *result = create_table();
+    FILE *tmp_file = fopen(tmp_filename, "wb");
+    if (!table) return NULL;
+    KeySpace current;
+    int status = read_keyspace(file, table->key_offset, &current);
+    write_table(tmp_file, result);
+    long current_offset = 1;
+    for (; !status; status = read_keyspace(file, current.link_offset, &current))
+        if (current.key >= start && current.key <= end) {
+            Node node;
+            int status_node = read_node(file, current.first_offset, &node);
+
+            fseek(tmp_file, 0, SEEK_END);
+            long end_offset = ftell(tmp_file);
+            end_offset = (end_offset % BLOCK_SIZE != 0 ? BLOCK_SIZE : 0) +
+                    ((long) (end_offset / BLOCK_SIZE)) * BLOCK_SIZE;
+            fseek(tmp_file, end_offset, SEEK_SET);
+            current_offset = end_offset / BLOCK_SIZE;
+            current.link_offset = result->key_offset;
+            result->key_offset = end_offset / BLOCK_SIZE;
+            current.first_offset = -1;
+            current.last_release = -1;
+            fwrite(&(current.key), sizeof(ull), 1, tmp_file);
+            fwrite(&(current.first_offset), sizeof(long), 1, tmp_file);
+            fwrite(&(current.link_offset), sizeof(long), 1, tmp_file);
+            fwrite(&(current.last_release), sizeof(ull), 1, tmp_file);
+
+            for (;!status_node; status_node = read_node(file, node.next_offset, &node)) {
+                fseek(tmp_file, 0, SEEK_END);
+                end_offset = ftell(tmp_file);
+                end_offset = (end_offset % BLOCK_SIZE != 0 ? BLOCK_SIZE : 0) +
+                             ((long) (end_offset / BLOCK_SIZE)) * BLOCK_SIZE;
+                fseek(tmp_file, end_offset, SEEK_SET);
+                (current.last_release)++;
+                node.release = current.last_release;
+                fwrite(&(node.info), sizeof(ull), 1, tmp_file);
+                fwrite(&(current.first_offset), sizeof(long), 1, tmp_file);
+                fwrite(&(node.release), sizeof(ull), 1, tmp_file);
+                current.first_offset = end_offset / BLOCK_SIZE;
+            }
+            update_keyspace(tmp_file, current_offset, &current);
+        }
+    write_table(tmp_file, result);
+    fclose(tmp_file);
+    return result;
+}
+
+Table * create_table() {
+    Table *table = malloc(sizeof(Table));
+    table->key_offset = -1;
+
+    table->add_key = write_keyspace;
+    table->find_key = find_key_table;
+    table->find_key_range = find_key_range_table;
+    table->remove_key = remove_key_table;
+    table->remove = remove_table;
+    return table;
+}
 
 // >-=============================-<

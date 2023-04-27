@@ -1,5 +1,5 @@
 //#include "methods.h"
-//#include "menu/classic_menu.h"
+#include "menu/classic_menu.h"
 #include "stdio.h"
 #ifdef _WIN32
     #include "windows.h"
@@ -10,24 +10,6 @@
 #include "file_worker/manager.h"
 //#include "table/table.h"
 
-void print_table(const char *input, Table *table) {
-    FILE *file = fopen(input, "rb");
-    printf("\033[0;33m.\033[0m\n");
-    KeySpace current;
-    int status = read_keyspace(file, table->key_offset, &current);
-    for (; !status; status = read_keyspace(file, current.link_offset, &current)) {
-        if (current.link_offset != -1) printf("├"); else printf("└");
-        printf("── \033[0;33m%llu\033[0m\n", current.key);
-        Node node;
-        int status_node = read_node(file, current.first_offset, &node);
-        for (; !status_node; status_node = read_node(file, node.next_offset, &node)) {
-            if (current.link_offset != -1) printf("│"); else printf(" ");
-            printf("   ");
-            if (node.next_offset != -1) printf("├"); else printf("└");
-            printf("── \033[1;90m%llu:\033[0m%llu\n", node.release, node.info);
-        }
-    }
-}
 
 int main(void) {
 //    printf("%llu\n", sizeof(NodePointer));
@@ -48,28 +30,39 @@ int main(void) {
 //        key2->add_node(key2, node);
 //    }
 
-    FILE *file = fopen("keyspaces", "wb+");
-    Table table = {-1};
-    KeySpace key = {123, -1, -1, -1};
-    printf("%llu\n", sizeof(ull) * 2 + sizeof(long) * 2);
-    write_keyspace(file, &table, &key);
-    for (int i = 1; i < 5; i++) {
-        key.key = i;
-        write_keyspace(file, &table, &key);
-    }
-    read_keyspace(file, 0, &key);
-    Node node = {123, 0, -1};
-    write_node(file, &key, &node);
-    for (int i = 1; i < 5; i++) {
-        node.info = i;
-        write_node(file, &key, &node);
-    }
-    update_keyspace(file, 0, &key);
+    Table* table = create_table();
+    FILE *file = fopen("keyspaces", "rb+");
+    read_table(file, table);
     fclose(file);
-
-
-    print_table("keyspaces", &table);
-    scanf("\n");
+//    KeySpace key = {123, -1, -1, -1};
+//    printf("%llu\n", sizeof(ull) * 2 + sizeof(long) * 2);
+//    write_keyspace(file, table, &key);
+//    for (int i = 1; i < 5; i++) {
+//        key.key = i;
+//        write_keyspace(file, table, &key);
+//    }
+//    read_keyspace(file, 0, &key);
+//    Node node = {123, 0, -1};
+//    write_node(file, &key, &node);
+//    for (int i = 1; i < 5; i++) {
+//        node.info = i;
+//        write_node(file, &key, &node);
+//    }
+//    update_keyspace(file, 0, &key);
+//    fclose(file);
+//
+//    print_table("keyspaces", table);
+//    file = fopen("keyspaces", "rb+");
+//    read_keyspace(file, 1, &key);
+//
+//    table->remove_key(file, table, 123);
+//
+//    key.key = 98;
+//    table->add_key(file, table, &key);
+//    fclose(file);
+//    print_table("keyspaces", table);
+//
+//    scanf("\n");
 //    KeySpace key_test;
 //    Node node_test;
 
@@ -82,5 +75,6 @@ int main(void) {
 //    read_table(file, table);
 //    print_table(table);
 //    scanf("\n");
-//    menu(table);
+    menu(table);
+    return 0;
 }

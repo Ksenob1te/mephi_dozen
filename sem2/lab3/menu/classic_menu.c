@@ -1,6 +1,6 @@
 #include "stdio.h"
-#include "../table/table.h"
 #include "../methods.h"
+#include "stdlib.h"
 
 void send_command_menu() {
     printf("\033[0;33m____________________________________\n");
@@ -18,18 +18,23 @@ void send_command_menu() {
 }
 
 void menu(Table *mainTable) {
-    void (*func[8])(Table *) = {add_key, add_element_key, delete_key, delete_element_version, search_interval,
+    void (*func[8])(const char *, Table *) = {add_key, add_element_key, delete_key, delete_element_version, search_interval,
                                 search_key, search_element_version};
     printf("\033[H\033[J");
     send_command_menu();
-    print_table(mainTable);
+
+    const char *file_name = "keyspaces";
+//    FILE *file = fopen(file_name, "wb");
+//    fclose(file);
+
+    print_table(file_name, mainTable);
     while (1) {
         printf("\033[1;90mType command (number [0-8]):\033[0;0m\n");
         int command = 0;
         int x = scanf("%d", &command);
         if (x == EOF) {
             scanf("%*[^\n]*c");
-            mainTable->remove(mainTable);
+            mainTable->remove(file_name, mainTable);
             return;
         }
         if (x == 0) {
@@ -40,17 +45,18 @@ void menu(Table *mainTable) {
         switch (command) {
             case 1 ... 4:
                 printf("\033[H\033[J");
-                print_table(mainTable);
-                (*func[command - 1])(mainTable);
+                print_table(file_name, mainTable);
+                (*func[command - 1])(file_name, mainTable);
+                scanf("%*c%*[^\n]");
                 printf("\033[H\033[J");
                 send_command_menu();
-                print_table(mainTable);
+                print_table(file_name, mainTable);
                 break;
             case 5 ... 7:
-                (*func[command - 1])(mainTable);
+                (*func[command - 1])(file_name, mainTable);
                 break;
             case 0:
-                mainTable->remove(mainTable);
+                free(mainTable);
                 return;
             default:
                 break;

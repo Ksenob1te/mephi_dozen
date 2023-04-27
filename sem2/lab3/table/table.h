@@ -2,6 +2,7 @@
 #define MEPHI_DOZEN_TABLE_H
 
 #define ull unsigned long long int
+#include "stdio.h"
 
 // Node struct
 // >-=============================-<
@@ -12,7 +13,7 @@ typedef struct Node {
     int (*remove) (struct Node *node);
 } Node;
 
-//int removeNode (Node *node);
+static int removeNode (Node *node);
 Node * create_node(ull info);
 // >-=============================-<
 
@@ -25,16 +26,16 @@ typedef struct KeySpace {
     long link_offset;
     ull last_release;
 
-//    int (*add_node) (struct KeySpace *key, Node *node);
-//    Node * (*find_node) (struct KeySpace *key, ull release);
-//    int (*remove_node) (struct KeySpace *key, Node *node);
-//    int (*remove) (struct KeySpace *key);
+    long (*add_node) (FILE *file, struct KeySpace *key, Node *node);
+    int (*find_node) (FILE *file, const struct KeySpace *key, Node *node, ull release);
+    int (*remove_node) (FILE *file, struct KeySpace *key, ull release);
+    int (*remove) (FILE *file, long key_offset, struct KeySpace const *key);
 } KeySpace;
 
-//int add_node_keyspace (KeySpace *key, Node *node);
-int find_node_keyspace(const char *input, const KeySpace *key, Node *node, ull release);
-//int remove_node_keyspace (KeySpace *key, Node *node);
-//int remove_keyspace (KeySpace *key);
+static int find_node_keyspace(FILE *file, const KeySpace *key, Node *node, ull release);
+static int remove_node_keyspace (FILE *file, struct KeySpace *key, ull release);
+static int remove_keyspace (FILE *file, long key_offset, KeySpace const *key);
+void select_funcs(KeySpace *key);
 KeySpace * create_keyspace(ull key);
 // >-=============================-<
 
@@ -44,18 +45,18 @@ KeySpace * create_keyspace(ull key);
 typedef struct Table {
     long key_offset;
 
-    int (*add_key) (struct Table *table, KeySpace *key);
-    KeySpace * (*find_key) (struct Table *table, ull key);
-    struct Table * (*find_key_range) (struct Table *table, ull start, ull end);
-    int (*remove_key) (struct Table *table, ull key);
-    int (*remove) (struct Table *table);
+    long (*add_key) (FILE *file, struct Table *table, KeySpace *key);
+    int (*find_key) (FILE *file, const struct Table *table, KeySpace *keyspace, ull key);
+    struct Table * (*find_key_range) (FILE *file, const char *tmp_filename, struct Table *table, ull start, ull end);
+    int (*remove_key) (FILE *file, struct Table *table, ull key);
+    int (*remove) (const char *input, struct Table *table);
 } Table;
 
-//int add_key_table (Table *table, KeySpace *key);
-//KeySpace * find_key_table (Table *table, ull key);
-//Table * find_key_range_table(Table *table, ull start, ull end);
-//int remove_key_table (Table *table, ull key);
-//int remove_table (Table *table);
+static int find_key_table(FILE *file, const struct Table *table, KeySpace *keyspace, ull key);
+long find_key_address(FILE *file, Table *table, KeySpace const *key);
+Table * find_key_range_table(FILE *file, const char *tmp_filename, struct Table *table, ull start, ull end);
+static int remove_key_table (FILE *file, struct Table *table, ull key);
+static int remove_table(const char *input, Table *table);
 Table * create_table();
 // >-=============================-<
 

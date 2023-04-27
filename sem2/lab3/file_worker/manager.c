@@ -1,9 +1,17 @@
 #include "manager.h"
 #include "removal_list.h"
 
-#define BLOCK_SIZE 24
-
 static RemovalList removalList = {NULL};
+
+void read_table(FILE *file, Table *table) {
+    fseek(file, 0, SEEK_SET);
+    fread(&(table->key_offset), sizeof(long), 1, file);
+}
+
+void write_table(FILE *file, Table *table) {
+    fseek(file, 0, SEEK_SET);
+    fwrite(&(table->key_offset), sizeof(long), 1, file);
+}
 
 long write_keyspace(FILE *file, Table *table, KeySpace *key) {
     key->link_offset = table->key_offset;
@@ -18,6 +26,7 @@ long write_keyspace(FILE *file, Table *table, KeySpace *key) {
         removalList.head = removalList.head->next;
         free(node);
     }
+    if (end_offset == 0) end_offset += (GLOBAL_OFFSET * BLOCK_SIZE);
     fseek(file, end_offset, SEEK_SET);
     table->key_offset = end_offset / BLOCK_SIZE;
     fwrite(&(key->key), sizeof(ull), 1, file);
@@ -50,10 +59,12 @@ long write_node(FILE *file, KeySpace *key, Node *node) {
         removalList.head = removalList.head->next;
         free(removalNode);
     }
+    if (end_offset == 0) end_offset += (GLOBAL_OFFSET * BLOCK_SIZE);
     fseek(file, end_offset, SEEK_SET);
     key->first_offset = end_offset / BLOCK_SIZE;
     (key->last_release)++;
     node->release = key->last_release;
+//    update_node(file, )
     fwrite(&(node->info), sizeof(ull), 1, file);
     fwrite(&(node->next_offset), sizeof(long), 1, file);
     fwrite(&(node->release), sizeof(ull), 1, file);
@@ -82,6 +93,7 @@ int read_node(FILE *file, long block_offset, Node *node) {
 }
 
 void remove_block(long block_offset) {
+    if (block_offset < 0) return;
     RemovalNode *removalNode = malloc(sizeof(RemovalNode));
     removalNode->offset = block_offset;
     removalNode->next = removalList.head;
