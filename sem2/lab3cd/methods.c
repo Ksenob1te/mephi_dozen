@@ -80,6 +80,7 @@ void search_key(Table *table) {
     char *key = readline();
     if (!key) return;
     KeySpace *keyspace = find_element(table, key);
+    free(key);
     if (!keyspace) {
         fprintf(stderr, "\033[0;31mNo key has been found\033[0m\n");
         return;
@@ -93,6 +94,7 @@ void delete_key(Table *table) {
     char *key = readline();
     if (!key) return;
     int status = remove_element(table, key);
+    free(key);
     if (status)
         fprintf(stderr, "\033[0;31mNo key has been found\033[0m\n");
     else
