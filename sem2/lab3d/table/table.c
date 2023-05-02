@@ -107,6 +107,7 @@ long find_element(Table *table, const char *key, KeySpace* result) {
     while (abs((*result).busy) != 0 && counter < table->msize) {
         char *current_key = read_key((*result).key_offset, file_keys);
         if ((*result).busy == 1 && strcmp(current_key, key) == 0) {
+            free(current_key);
             fclose(file);
             fclose(file_keys);
             return field_hash;

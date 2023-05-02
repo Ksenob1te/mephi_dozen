@@ -100,6 +100,7 @@ void search_key(Table *table) {
     long offset = find_element(table, key, &keyspace);
     if (offset == -1) {
         fprintf(stderr, "\033[0;31mNo key has been found\033[0m\n");
+        free(key);
         return;
     }
     printf("%s: %llu\n", key, keyspace.info);
