@@ -67,6 +67,8 @@ void print_table (Table *table) {
             printf("(%d) EMPTY\n", i);
     }
     printf("\033[0m");
+    fclose(file);
+    fclose(file_keys);
 }
 
 void add_key(Table *table) {
