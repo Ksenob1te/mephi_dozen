@@ -1,8 +1,9 @@
 *
 !*/
-!*.*
+/*.*
 /cmake-build-debug/
 /CMakeLists.txt
 /.idea
 /sem2/lab3/tmp/
 /sem2/lab3d/tmp/*
+!.gitkeep
