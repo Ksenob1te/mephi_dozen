@@ -62,6 +62,7 @@ void print_table (Table *table) {
             else
                 s = "DEAD";
             printf("(%d) %s - %s: %llu\n", i, current_key, s, current.info);
+            free(current_key);
         } else
             printf("(%d) EMPTY\n", i);
     }
