@@ -106,13 +106,18 @@ long find_element(Table *table, const char *key, KeySpace* result) {
     long counter = 0;
     while (abs((*result).busy) != 0 && counter < table->msize) {
         char *current_key = read_key((*result).key_offset, file_keys);
-        if ((*result).busy == 1 && strcmp(current_key, key) == 0)
+        if ((*result).busy == 1 && strcmp(current_key, key) == 0) {
+            fclose(file);
+            fclose(file_keys);
             return field_hash;
+        }
         field_hash = (field_hash + MIXING_STEP) % table->msize;
         counter++;
         (*result) = read_keyspace(field_hash, file);
         free(current_key);
     }
+    fclose(file);
+    fclose(file_keys);
     return -1;
 }
 

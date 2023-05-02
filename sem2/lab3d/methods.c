@@ -79,6 +79,7 @@ void add_key(Table *table) {
     printf("Type in item value (int): ");
     ull value = input_ull();
     int status = insert_element(table, key, value);
+    free(key);
     if (status == 2) {
         fprintf(stderr, "\033[0;31mThis key already exists\033[0m\n");
         return;
