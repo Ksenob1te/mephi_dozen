@@ -30,7 +30,8 @@ Table * create_table(char *file_name) {
     char full_keyspace_name[1000] = "tmp/";
     strcat(full_keyspace_name, file_name);
     strcat(full_keyspace_name, "_keys.tmp");
-    fopen(full_keyspace_name, "a+b");
+    FILE *file_keys = fopen(full_keyspace_name, "a+b");
+    fclose(file_keys);
 
     long msize;
     ull status = fread(&msize, sizeof(long), 1, file);
