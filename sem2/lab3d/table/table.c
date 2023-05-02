@@ -66,6 +66,7 @@ int insert_element(Table *table, char *key, ull info) {
     while (keyspace.busy > 0 && counter < table->msize) {
         char *current_key = read_key(keyspace.key_offset, file_keys);
         if (strcmp(current_key, key) == 0)  {
+            free(current_key);
             fclose(file);
             fclose(file_keys);
             return 2;
