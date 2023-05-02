@@ -72,8 +72,8 @@ int insert_element(Table *table, char *key, ull info) {
         }
         field_hash = (field_hash + MIXING_STEP) % table->msize;
         counter++;
-        keyspace = read_keyspace(field_hash, file);
         free(current_key);
+        keyspace = read_keyspace(field_hash, file);
     }
     if (counter < table->msize) {
         keyspace.busy = 1;
@@ -134,12 +134,8 @@ int remove_element(Table *table, const char *key) {
     return 1;
 }
 
-//void clear_table(Table *table) {
-//    for (int i = 0; i < table->msize; i++) {
-//        KeySpace current = (table->keys)[i];
-//        free(current.key);
-//    }
-//    free(table->keys);
-//    free(table);
-//}
+void clear_table(Table *table) {
+    free(table->file_name);
+    free(table);
+}
 

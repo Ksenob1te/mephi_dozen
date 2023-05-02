@@ -29,7 +29,7 @@ void menu(Table *mainTable) {
         int x = scanf("%d", &command);
         if (x == EOF) {
             scanf("%*[^\n]*c");
-//            clear_table(mainTable);
+            clear_table(mainTable);
             return;
         }
         if (x == 0) {
@@ -51,7 +51,7 @@ void menu(Table *mainTable) {
                 (*func[command - 1])(mainTable);
                 break;
             case 0:
-//                clear_table(mainTable);
+                clear_table(mainTable);
                 return;
             default:
                 break;
