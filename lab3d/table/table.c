@@ -137,7 +137,7 @@ int remove_element(Table *table, const char *key) {
     FILE *file = fopen(full_table_name, "r+b");
     KeySpace keyspace;
     int offset = find_element(table, key, &keyspace);
-    if (keyspace.key_offset > 0) {
+    if (offset >= 0) {
         keyspace.busy = -1;
         write_keyspace(keyspace, offset, file);
         fclose(file);
