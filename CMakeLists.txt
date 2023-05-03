@@ -6,13 +6,13 @@ set(CMAKE_C_STANDARD 11)
 
 add_executable(test test/file.c )
 # semestr 1
-#add_executable(sem1.lab3 sem1/lab3/list_class.c sem1/lab3/main.c)
-#add_executable(sem1.lab2 sem1/lab2/file1.c)
-#add_executable(sem1.lab1 sem1/lab1/file.c)
-#add_executable(sem1.lab4 sem1/lab4/main.c sem1/lab4/methods.c)
-#add_executable(sem1.lab5 sem1/lab5/main.c sem1/lab5/voter.h sem1/lab5/voter.c)
-#add_executable(sem1.lab5_2 sem1/lab5/main2.c sem1/lab5/voter.h sem1/lab5/voter.c sem1/lab5/methods.c sem1/lab5/methods.h)
-#add_executable(sem1.lab6 sem1/lab6/main.c sem1/lab6/struct.c sem1/lab6/struct.h)
+add_executable(sem1.lab3 sem1/lab3/list_class.c sem1/lab3/main.c)
+add_executable(sem1.lab2 sem1/lab2/file1.c)
+add_executable(sem1.lab1 sem1/lab1/file.c)
+add_executable(sem1.lab4 sem1/lab4/main.c sem1/lab4/methods.c)
+add_executable(sem1.lab5 sem1/lab5/main.c sem1/lab5/voter.h sem1/lab5/voter.c)
+add_executable(sem1.lab5_2 sem1/lab5/main2.c sem1/lab5/voter.h sem1/lab5/voter.c sem1/lab5/methods.c sem1/lab5/methods.h)
+add_executable(sem1.lab6 sem1/lab6/main.c sem1/lab6/struct.c sem1/lab6/struct.h)
 
 # semestr 2
 add_executable(sem2.lab1
