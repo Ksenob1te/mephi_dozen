@@ -95,6 +95,6 @@ add_executable(lab3d
 add_executable(lab4a
         lab4a/main.c
 
-        )
+        lab4a/tree/tree.c lab4a/tree/tree.h)
 
 #target_link_libraries(lab4 readline)
