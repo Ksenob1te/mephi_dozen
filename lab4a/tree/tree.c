@@ -187,7 +187,11 @@ void print_root(char *indent, Node *node, short last) {
         printf("├── ");
         strcat(indent, "│   ");
     }
-    printf("\033[1;90m%llu\033[0m\n", node->key);
+    printf("\033[1;97m%llu\033[0m: \033[1;90m", node->key);
+    for (int i = 0; i < node->info_size; i++) {
+        printf("\"%s\" ", (node->info)[i]);
+    }
+    printf("\n");
 
     char s[1000];
     strcpy(s, indent);
