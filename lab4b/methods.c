@@ -4,7 +4,7 @@
 
 #include "methods.h"
 
-void print_tree(Tree *tree) {
+void print_tree(Node *nul, Tree *tree) {
     char x[1000] = "";
-    print_root(x, tree->root, 1);
+    print_root(nul, x, tree->root, 1);
 }

@@ -163,8 +163,8 @@ void add_node(Node *nul, Tree *tree, Node* process_node) {
 //    printf("\n");
 //}
 //
-void print_root(char *indent, Node *node, short last) {
-    if (!node) {
+void print_root(Node *nul, char *indent, Node *node, short last) {
+    if (node == nul) {
         printf("\033[1;97m(EMPTY)\033[0m\n");
         return;
     }
@@ -180,13 +180,13 @@ void print_root(char *indent, Node *node, short last) {
     if (node->color == 0) {
         printf("\033[1;97m%llu\033[0m: \033[1;90m", node->key);
         for (Item *i = node->info; i; i = i->next) {
-            printf("\"%s\" ", node->info);
+            printf("\"%s\" ", i->info);
         }
         printf("\033[0m\n");
     } else {
         printf("\033[91m%llu\033[0m: \033[31m", node->key);
         for (Item *i = node->info; i; i = i->next) {
-            printf("\"%s\" ", node->info);
+            printf("\"%s\" ", i->info);
         }
         printf("\033[0m\n");
     }
@@ -194,8 +194,8 @@ void print_root(char *indent, Node *node, short last) {
 
     char s[1000];
     strcpy(s, indent);
-    if (node->left) print_root(indent, node->left, node->right ? 0 : 1);
-    if (node->right) print_root(s, node->right, 1);
+    if (node->right != nul) print_root(nul, indent, node->right, node->left != nul ? 0 : 1);
+    if (node->left != nul) print_root(nul, s, node->left, 1);
 }
 //
 //Node * search_node(Tree *tree, ull key) {

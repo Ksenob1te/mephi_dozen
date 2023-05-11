@@ -45,7 +45,8 @@ int main(void) {
 //    char x[1000] = "";
 //    print_root(x, tree->root, 1);
 //    menu(tree);
-    print_tree(tree);
+    print_tree(&nul, tree);
+    scanf("\n");
 
     return 0;
 }

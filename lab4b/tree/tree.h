@@ -30,6 +30,6 @@ void add_node(Node *nul, Tree *tree, Node* process_node);
 //int remove_item(Node *node, int index);
 //Node * search_node(Tree *tree, ull key);
 //void tree_traversal(Tree *tree, ull limit);
-void print_root(char *indent, Node *node, short last);
+void print_root(Node *nul, char *indent, Node *node, short last);
 
 #endif //SEM1_LAB4_TREE_H
