@@ -92,4 +92,9 @@ add_executable(lab3d
         lab3d/menu/classic_menu.h
         lab3d/menu/classic_menu.c)
 
+add_executable(lab4a
+        lab4a/main.c
+
+        )
+
 #target_link_libraries(lab4 readline)
