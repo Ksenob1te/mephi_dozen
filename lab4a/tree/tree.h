@@ -25,6 +25,8 @@ typedef struct Tree {
 Tree * create_tree();
 void add_node(Tree *tree, Node* process_node);
 void remove_node(Tree *tree, Node *process_node);
+int remove_item(Node *node, int index);
+Node * search_node(Tree *tree, ull key);
 void tree_traversal(Tree *tree, ull limit);
 void print_root(char *indent, Node *node, short last);
 

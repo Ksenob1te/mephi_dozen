@@ -21,9 +21,9 @@ Node * create_node(ull key, char *info) {
 }
 
 void clear_node(Node *node) {
-//    for (int i = 0; i < node->info_size; i++) {
-//        free((node->info)[i]);
-//    }
+    for (int i = 0; i < node->info_size; i++) {
+        free((node->info)[i]);
+    }
     free(node->info);
     free(node);
 }
@@ -141,8 +141,8 @@ void remove_node(Tree *tree, Node *process_node) {
         Node *removal = get_min_subtree(process_node->right);
 
         process_node->key = removal->key;
-//        for (int i = 0; i < process_node->info_size; i++)
-//            free((process_node->info)[i]);
+        for (int i = 0; i < process_node->info_size; i++)
+            free((process_node->info)[i]);
         free(process_node->info);
         process_node->info = removal->info;
         process_node->info_size = removal->info_size;
@@ -168,16 +168,32 @@ void remove_node(Tree *tree, Node *process_node) {
     }
 }
 
+int remove_item(Node *node, int index) {
+    if (index >= node->info_size || index < 0) return 0;
+    free((node->info)[index]);
+    (node->info)[index] = (node->info)[node->info_size - 1];
+    (node->info_size)--;
+    return 1;
+}
+
 void tree_traversal(Tree *tree, ull limit) {
     Node *max = get_max_subtree(tree->root);
     while (max && max->key > limit) {
-        printf("%llu ", max->key);
+        printf("\033[1;97m%llu\033[0m: \033[1;90m", max->key);
+        for (int i = 0; i < max->info_size; i++) {
+            printf("\"%s\" ", (max->info)[i]);
+        }
+        printf("\033[0m\n");
         max = max->previous;
     }
     printf("\n");
 }
 
 void print_root(char *indent, Node *node, short last) {
+    if (!node) {
+        printf("\033[1;97m(EMPTY)\033[0m\n");
+        return;
+    }
     printf("\033[0;33m%s", indent);
     if (last) {
         printf("└── ");
@@ -191,12 +207,26 @@ void print_root(char *indent, Node *node, short last) {
     for (int i = 0; i < node->info_size; i++) {
         printf("\"%s\" ", (node->info)[i]);
     }
-    printf("\n");
+    printf("\033[0m\n");
 
     char s[1000];
     strcpy(s, indent);
     if (node->left) print_root(indent, node->left, node->right ? 0 : 1);
     if (node->right) print_root(s, node->right, 1);
+}
+
+Node * search_node(Tree *tree, ull key) {
+    Node *current_root = tree->root;
+    while (current_root != NULL) {
+        if (key > current_root->key) {
+            current_root = current_root->right;
+        } else if (key < current_root->key) {
+            current_root = current_root->left;
+        } else if (key == current_root->key) {
+            return current_root;
+        }
+    }
+    return NULL;
 }
 
 Tree * create_tree() {
