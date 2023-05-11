@@ -2,7 +2,15 @@
 #include "stdlib.h"
 #include "stdio.h"
 
+#ifdef _WIN32
+#include "windows.h"
+#define select_settings() SetConsoleOutputCP(CP_UTF8)
+#else
+#define select_settings()
+#endif
+
 int main(void) {
+    select_settings();
     Tree *tree = create_tree();
     Node *node = create_node(15, "123");
     add_node(tree, node);
@@ -19,7 +27,7 @@ int main(void) {
     node = create_node(13, "123");
     add_node(tree, node);
 
-    remove_node(tree, node1);
+//    remove_node(tree, node1);
 
     tree_traversal(tree, 8);
     char x[1000] = "";

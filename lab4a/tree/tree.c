@@ -178,16 +178,16 @@ void tree_traversal(Tree *tree, ull limit) {
 }
 
 void print_root(char *indent, Node *node, short last) {
-    printf("%s", indent);
+    printf("\033[0;33m%s", indent);
     if (last) {
-        printf("└──");
-        strcat(indent, "   ");
+        printf("└── ");
+        strcat(indent, "    ");
     }
     else {
-        printf("├──");
-        strcat(indent, "│  ");
+        printf("├── ");
+        strcat(indent, "│   ");
     }
-    printf("\"%llu\"\n", node->key);
+    printf("\033[1;90m%llu\033[0m\n", node->key);
 
     char s[1000];
     strcpy(s, indent);
