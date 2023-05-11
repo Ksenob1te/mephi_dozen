@@ -94,7 +94,7 @@ void remove_node_tree(Tree *tree) {
         printf("\033[0m\n");
         printf("There is more than 1 item, select which one u wanna delete (1 - %d): ", node->info_size);
         ull index = input_ull();
-        remove_item(node, (int) index);
+        remove_item(node, (int) index - 1);
     } else {
         remove_node(tree, node);
     }
