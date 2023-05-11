@@ -52,7 +52,7 @@ void menu(Tree *tree) {
                 (*func[command - 1])(tree);
                 break;
             case 0:
-//                clear_table(mainTable);
+                clear_tree(tree->root);
                 return;
             default:
                 break;

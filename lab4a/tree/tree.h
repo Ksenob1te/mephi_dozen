@@ -23,6 +23,7 @@ typedef struct Tree {
 } Tree;
 
 Tree * create_tree();
+void clear_tree(Node *node);
 void add_node(Tree *tree, Node* process_node);
 void remove_node(Tree *tree, Node *process_node);
 int remove_item(Node *node, int index);

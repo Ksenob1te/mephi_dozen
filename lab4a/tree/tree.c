@@ -141,8 +141,8 @@ void remove_node(Tree *tree, Node *process_node) {
         Node *removal = get_min_subtree(process_node->right);
 
         process_node->key = removal->key;
-//        for (int i = 0; i < process_node->info_size; i++)
-//            free((process_node->info)[i]);
+        for (int i = 0; i < process_node->info_size; i++)
+            free((process_node->info)[i]);
         free(process_node->info);
         process_node->info = removal->info;
         process_node->info_size = removal->info_size;
@@ -236,4 +236,13 @@ Tree * create_tree() {
     Tree *tree = malloc(sizeof(Tree));
     tree->root = NULL;
     return tree;
+}
+
+void clear_tree(Node *node) {
+    if (!node) return;
+    Node *left = node->left;
+    Node *right = node->right;
+    clear_node(node);
+    clear_tree(left);
+    clear_tree(right);
 }
