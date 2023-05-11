@@ -1,5 +1,6 @@
 #include "stdio.h"
 #include "../methods.h"
+#include "stdlib.h"
 
 void send_command_menu() {
     printf("\033[0;33m____________________________________\n");
@@ -31,6 +32,8 @@ void menu(Tree *tree) {
         if (x == EOF) {
             scanf("%*[^\n]*c");
             print_tree(tree);
+            clear_tree(tree->root);
+            free(tree);
             return;
         }
         if (x == 0) {
@@ -53,6 +56,7 @@ void menu(Tree *tree) {
                 break;
             case 0:
                 clear_tree(tree->root);
+                free(tree);
                 return;
             default:
                 break;
