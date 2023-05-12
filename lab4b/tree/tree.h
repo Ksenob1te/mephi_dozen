@@ -13,6 +13,7 @@ typedef struct Node {
     int color;
     struct Node *left;
     struct Node *right;
+    struct Node *parent;
 
     Item *info;
 } Node;

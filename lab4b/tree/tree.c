@@ -14,6 +14,7 @@ Node * create_node(Node *nul, ull key, char *info) {
 
     node->left = nul;
     node->right = nul;
+    node->parent = nul;
 
     return node;
 }
@@ -38,16 +39,28 @@ static Node * move_item(Node *dst, Node *tmp) {
 
 static Node *lst(Node *parent, Node *child) {
     child->color = parent->color;
+    child->parent = parent->parent;
+    if (parent->parent->left == parent) parent->parent->left = child;
+    else if (parent->parent->right == parent) parent->parent->right = child;
     parent->color = 1;
+    parent->parent = child;
+
     parent->right = child->left;
+    if (child->left->parent != NULL) child->left->parent = parent;
     child->left = parent;
     return child;
 }
 
 static Node *rst(Node *child, Node *parent) {
     child->color = parent->color;
+    child->parent = parent->parent;
+    if (parent->parent->left == parent) parent->parent->left = child;
+    else if (parent->parent->right == parent) parent->parent->right = child;
     parent->color = 1;
+    parent->parent = child;
+
     parent->left = child->right;
+    if (child->right->parent != NULL) child->right->parent = parent;
     child->right = parent;
     return child;
 }
@@ -61,8 +74,14 @@ static Node *swap(Node *nul, Node *dst) {
 
 static Node *insert_node(Node *nul, Node *dst, Node *tmp) {
     if (dst == nul) return tmp;
-    else if (tmp->key < dst->key) dst->left = insert_node(nul, dst->left, tmp);
-    else if (tmp->key > dst->key) dst->right = insert_node(nul, dst->right, tmp);
+    else if (tmp->key < dst->key) {
+        if (dst->left == nul) tmp->parent = dst;
+        dst->left = insert_node(nul, dst->left, tmp);
+    }
+    else if (tmp->key > dst->key){
+        if (dst->right == nul) tmp->parent = dst;
+        dst->right = insert_node(nul, dst->right, tmp);
+    }
 
     if (dst->right->color == 1 && dst->left->color == 0)
         dst = lst(dst, dst->right);
@@ -85,9 +104,7 @@ void add_node(Node *nul, Tree *tree, Node* process_node) {
     tree->root = current_root;
 }
 
-
-
-//void remove_node(Tree *tree, Node *process_node) {
+//void remove_node(Node *nul, Tree *tree, Node *process_node) {
 //    if (process_node->left == NULL || process_node->right == NULL) {
 //        Node *branch = process_node->left != NULL ? process_node->left : process_node->right;
 //        if (tree->root == process_node) {
@@ -108,6 +125,145 @@ void add_node(Node *nul, Tree *tree, Node* process_node) {
 //
 //        clear_node(process_node);
 //        return;
+//}
+
+static Node * get_min_subtree (Node *nul, Node *current_root) {
+    if (current_root == nul)
+        return nul;
+    while (current_root->left != nul)
+        current_root = current_root->left;
+    return current_root;
+}
+
+void balance_node(Node *parent_node, Node *brother_node, Node* nul) {
+    if (parent_node == nul) return;
+    if (
+            parent_node->color == 1 &&
+            brother_node->color == 0 &&
+            brother_node->left->color == 0 &&
+            brother_node->right->color == 0
+            ) {
+        parent_node->color = 0;
+        brother_node->color = 1;
+        return;
+    }
+    if (
+            parent_node->color == 1 &&
+            brother_node->color == 0 &&
+            brother_node->left->color == 1
+            ) {
+        if (parent_node->parent != nul && parent_node->parent->left == parent_node)
+            parent_node->parent->left = rst(brother_node, parent_node);
+        else if (parent_node->parent != nul && parent_node->parent->right == parent_node)
+            parent_node->parent->right = rst(brother_node, parent_node);
+        return;
+    }
+    if (
+            parent_node->color == 0 &&
+            brother_node->color == 1 &&
+            brother_node->right != nul &&
+            brother_node->right->right->color == 0 &&
+            brother_node->right->left->color == 0
+            ) {
+        if (parent_node->parent != nul && parent_node->parent->left == parent_node)
+            parent_node->parent->left = rst(brother_node, parent_node);
+        else if (parent_node->parent != nul && parent_node->parent->right == parent_node)
+            parent_node->parent->right = rst(brother_node, parent_node);
+        return;
+    }
+    if (
+            parent_node->color == 0 &&
+            brother_node->color == 1 &&
+            brother_node->right != nul &&
+            brother_node->right->left->color == 1
+            ) {
+        if (parent_node->left == brother_node)
+            parent_node->left = lst(brother_node, brother_node->right);
+        if (parent_node->right == brother_node)
+            parent_node->right = lst(brother_node, brother_node->right);
+
+        if (parent_node->parent != nul && parent_node->parent->left == parent_node)
+            parent_node->parent->left = rst(brother_node, parent_node);
+        else if (parent_node->parent != nul && parent_node->parent->right == parent_node)
+            parent_node->parent->right = rst(brother_node, parent_node);
+        return;
+    }
+    if (
+            parent_node->color == 0 &&
+            brother_node->color == 0 &&
+            brother_node->right->color == 1
+            ) {
+        brother_node->right->color = 0;
+        if (parent_node->left == brother_node)
+            parent_node->left = lst(brother_node, brother_node->right);
+        if (parent_node->right == brother_node)
+            parent_node->right = lst(brother_node, brother_node->right);
+
+        if (parent_node->parent != nul && parent_node->parent->left == parent_node)
+            parent_node->parent->left = rst(brother_node, parent_node);
+        else if (parent_node->parent != nul && parent_node->parent->right == parent_node)
+            parent_node->parent->right = rst(brother_node, parent_node);
+        return;
+    }
+    if (
+            parent_node->color == 0 &&
+            brother_node->color == 0 &&
+            brother_node->right->color == 0 &&
+            brother_node->left->color == 0
+            ) {
+        brother_node->color = 1;
+        if (parent_node->parent != nul && parent_node->parent->left == parent_node)
+            balance_node(parent_node->parent, parent_node->parent->right, nul);
+        else if (parent_node->parent != nul && parent_node->parent->right == parent_node)
+            balance_node(parent_node->parent, parent_node->parent->left, nul);
+        return;
+    }
+}
+
+void remove_node(Node *nul, Tree *tree, Node *process_node) {
+    if (process_node->left != nul && process_node->right != nul) {
+        Node *find = get_min_subtree(nul, process_node->right);
+        process_node->key = find->key;
+        process_node->info = find->info;
+        process_node = find;
+    }
+    if ((process_node->right == nul) + (process_node->left == nul) == 1) {
+        if (process_node->right == nul) {
+            process_node->key = process_node->left->key;
+            process_node->info = process_node->left->info;
+            process_node = process_node->left;
+        } else {
+            process_node->key = process_node->right->key;
+            process_node->info = process_node->right->info;
+            process_node = process_node->right;
+        }
+    }
+    if (process_node->color == 1) {
+        if (process_node->parent->right == process_node) process_node->parent->right = nul;
+        else if (process_node->parent->left == process_node) process_node->parent->left = nul;
+        clear_node(process_node);
+        return;
+    }
+    if (process_node->color == 0) {
+        if (process_node == tree->root) {
+            tree->root = nul;
+            clear_node(process_node);
+        }
+        Node *parent_node = process_node->parent;
+        Node *brother_node = NULL;
+        if (parent_node->right == process_node)  {
+            parent_node->right = nul;
+            brother_node = parent_node->left;
+        }
+        else if (parent_node->left == process_node) {
+            parent_node->left = nul;
+            brother_node = parent_node->right;
+        }
+        clear_node(process_node);
+        balance_node(parent_node, brother_node);
+
+    }
+}
 //    } else {
 //        Node *removal = get_min_subtree(process_node->right);
 //
