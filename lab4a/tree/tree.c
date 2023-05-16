@@ -121,7 +121,7 @@ void remove_node(Tree *tree, Node *process_node) {
         Node *branch = process_node->left != NULL ? process_node->left : process_node->right;
         if (tree->root == process_node) {
             tree->root = branch;
-            clear_node(process_node);
+//            clear_node(process_node);
             return;
         }
         Node *parent = process_node->parent;
@@ -141,8 +141,8 @@ void remove_node(Tree *tree, Node *process_node) {
         Node *removal = get_min_subtree(process_node->right);
 
         process_node->key = removal->key;
-        for (int i = 0; i < process_node->info_size; i++)
-            free((process_node->info)[i]);
+//        for (int i = 0; i < process_node->info_size; i++)
+//            free((process_node->info)[i]);
         free(process_node->info);
         process_node->info = removal->info;
         process_node->info_size = removal->info_size;

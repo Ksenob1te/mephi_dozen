@@ -25,12 +25,13 @@ typedef struct Tree {
 } Tree;
 
 Tree * create_tree(Node *nul);
-//void clear_tree(Node *node);
+void clear_tree(Node *nul, Node *node);
 void add_node(Node *nul, Tree *tree, Node* process_node);
-//void remove_node(Tree *tree, Node *process_node);
-//int remove_item(Node *node, int index);
-//Node * search_node(Tree *tree, ull key);
-//void tree_traversal(Tree *tree, ull limit);
+void remove_node(Node *nul, Tree *tree, Node *process_node);
+int remove_item(Node *node, int index);
+Node * search_node(Node *nul, Tree *tree, ull key);
+void preorder_traversal(Node *nul, Node *root, int limit);
+Node * find_min_limit (Node *nul, Tree *tree, ull limit);
 void print_root(Node *nul, char *indent, Node *node, short last);
 
 #endif //SEM1_LAB4_TREE_H
