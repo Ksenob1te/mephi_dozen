@@ -23,7 +23,7 @@ void clear_node(Node *node) {
     Item *k;
     for (Item *i = node->info; i; i = k) {
         k = i->next;
-        free(i->info);
+//        free(i->info);
         free(i);
     }
     free(node);
@@ -82,6 +82,9 @@ static Node *insert_node(Node *nul, Node *dst, Node *tmp) {
         if (dst->right == nul) tmp->parent = dst;
         dst->right = insert_node(nul, dst->right, tmp);
     }
+    else if (tmp->key == dst->key) {
+        dst = move_item(dst, tmp);
+    }
 
     if (dst->right->color == 1 && dst->left->color == 0)
         dst = lst(dst, dst->right);
@@ -104,29 +107,6 @@ void add_node(Node *nul, Tree *tree, Node* process_node) {
     tree->root = current_root;
 }
 
-//void remove_node(Node *nul, Tree *tree, Node *process_node) {
-//    if (process_node->left == NULL || process_node->right == NULL) {
-//        Node *branch = process_node->left != NULL ? process_node->left : process_node->right;
-//        if (tree->root == process_node) {
-//            tree->root = branch;
-//            clear_node(process_node);
-//            return;
-//        }
-//        Node *parent = process_node->parent;
-//        if (parent->left == process_node)
-//            parent->left = branch;
-//        else
-//            parent->right = branch;
-//
-//        if (branch) branch->parent = parent;
-//
-//        if (process_node->next) process_node->next->previous = process_node->previous;
-//        if (process_node->previous) process_node->previous->next = process_node->next;
-//
-//        clear_node(process_node);
-//        return;
-//}
-
 static Node * get_min_subtree (Node *nul, Node *current_root) {
     if (current_root == nul)
         return nul;
@@ -135,7 +115,7 @@ static Node * get_min_subtree (Node *nul, Node *current_root) {
     return current_root;
 }
 
-void balance_node(Node *parent_node, Node *brother_node, Node* nul) {
+void balance_node(Node* nul, Node *parent_node, Node *brother_node, Tree *tree) {
     if (parent_node == nul) return;
     if (
             parent_node->color == 1 &&
@@ -156,6 +136,12 @@ void balance_node(Node *parent_node, Node *brother_node, Node* nul) {
             parent_node->parent->left = rst(brother_node, parent_node);
         else if (parent_node->parent != nul && parent_node->parent->right == parent_node)
             parent_node->parent->right = rst(brother_node, parent_node);
+        else if (parent_node == tree->root)
+            tree->root = rst(brother_node, parent_node);
+        parent_node->color = 0;
+
+//        if (brother_node->left->color == 1 && brother_node->right->color == 1)
+//            swap(nul, brother_node);
         return;
     }
     if (
@@ -169,6 +155,12 @@ void balance_node(Node *parent_node, Node *brother_node, Node* nul) {
             parent_node->parent->left = rst(brother_node, parent_node);
         else if (parent_node->parent != nul && parent_node->parent->right == parent_node)
             parent_node->parent->right = rst(brother_node, parent_node);
+        else if (parent_node == tree->root)
+            tree->root = rst(brother_node, parent_node);
+
+        parent_node->color = 0;
+//        if (brother_node->left->color == 1 && brother_node->right->color == 1)
+//             swap(nul, parent_node);
         return;
     }
     if (
@@ -177,6 +169,7 @@ void balance_node(Node *parent_node, Node *brother_node, Node* nul) {
             brother_node->right != nul &&
             brother_node->right->left->color == 1
             ) {
+        brother_node->right->left->color = 0;
         if (parent_node->left == brother_node)
             parent_node->left = lst(brother_node, brother_node->right);
         if (parent_node->right == brother_node)
@@ -186,6 +179,11 @@ void balance_node(Node *parent_node, Node *brother_node, Node* nul) {
             parent_node->parent->left = rst(brother_node, parent_node);
         else if (parent_node->parent != nul && parent_node->parent->right == parent_node)
             parent_node->parent->right = rst(brother_node, parent_node);
+        else if (parent_node == tree->root)
+            tree->root = rst(brother_node, parent_node);
+        parent_node->color = 0;
+//        if (brother_node->left->color == 1 && brother_node->right->color == 1)
+//            swap(nul, brother_node);
         return;
     }
     if (
@@ -196,13 +194,16 @@ void balance_node(Node *parent_node, Node *brother_node, Node* nul) {
         brother_node->right->color = 0;
         if (parent_node->left == brother_node)
             parent_node->left = lst(brother_node, brother_node->right);
-        if (parent_node->right == brother_node)
+        else if (parent_node->right == brother_node)
             parent_node->right = lst(brother_node, brother_node->right);
 
         if (parent_node->parent != nul && parent_node->parent->left == parent_node)
             parent_node->parent->left = rst(brother_node, parent_node);
         else if (parent_node->parent != nul && parent_node->parent->right == parent_node)
             parent_node->parent->right = rst(brother_node, parent_node);
+        else if (parent_node == tree->root)
+            tree->root = rst(brother_node, parent_node);
+        swap(nul, brother_node);
         return;
     }
     if (
@@ -213,9 +214,9 @@ void balance_node(Node *parent_node, Node *brother_node, Node* nul) {
             ) {
         brother_node->color = 1;
         if (parent_node->parent != nul && parent_node->parent->left == parent_node)
-            balance_node(parent_node->parent, parent_node->parent->right, nul);
+            balance_node(nul, parent_node->parent, parent_node->parent->right, tree);
         else if (parent_node->parent != nul && parent_node->parent->right == parent_node)
-            balance_node(parent_node->parent, parent_node->parent->left, nul);
+            balance_node(nul, parent_node->parent, parent_node->parent->left, tree);
         return;
     }
 }
@@ -259,66 +260,30 @@ void remove_node(Node *nul, Tree *tree, Node *process_node) {
             parent_node->left = nul;
             brother_node = parent_node->right;
         }
-        clear_node(process_node);
-        balance_node(parent_node, brother_node);
+        free(process_node);
+        balance_node(nul, parent_node, brother_node, tree);
 
     }
 }
-//    } else {
-//        Node *removal = get_min_subtree(process_node->right);
-//
-//        process_node->key = removal->key;
-//        for (int i = 0; i < process_node->info_size; i++)
-//            free((process_node->info)[i]);
-//        free(process_node->info);
-//        process_node->info = removal->info;
-//        process_node->info_size = removal->info_size;
-//
-//        if (removal->next != process_node) {
-//            process_node->next = removal->next;
-//            if (removal->next) removal->next->previous = process_node;
-//        }
-//        if (removal->previous != process_node)  {
-//            process_node->previous = removal->previous;
-//            if (removal->previous) removal->previous->next = process_node;
-//        }
-//
-//        if (removal->right == NULL) {
-//            if (removal->parent->right == removal)
-//                removal->parent->right = NULL;
-//            else
-//                removal->parent->left = NULL;
-//            free(removal);
-//        } else {
-//            Node *branch = removal->right;
-//            branch->parent = removal->parent;
-//            removal->parent->right = branch;
-//            free(removal);
-//        }
-//    }
-//}
-//
-//int remove_item(Node *node, int index) {
-//    if (index >= node->info_size || index < 0) return 0;
-//    free((node->info)[index]);
-//    (node->info)[index] = (node->info)[node->info_size - 1];
-//    (node->info_size)--;
-//    return 1;
-//}
-//
-//void tree_traversal(Tree *tree, ull limit) {
-//    Node *max = get_max_subtree(tree->root);
-//    while (max && max->key > limit) {
-//        printf("\033[1;97m%llu\033[0m: \033[1;90m", max->key);
-//        for (int i = 0; i < max->info_size; i++) {
-//            printf("\"%s\" ", (max->info)[i]);
-//        }
-//        printf("\033[0m\n");
-//        max = max->previous;
-//    }
-//    printf("\n");
-//}
-//
+
+int remove_item(Node *node, int index) {
+    Item *insert_prev, *tmp;
+    int search = 1;
+    if (index == 0) {
+        tmp = node->info->next;
+        free(node->info);
+        node->info = tmp;
+    }
+    for (insert_prev = node->info; insert_prev->next && search != index; insert_prev = insert_prev->next, search++);
+
+    if (!insert_prev->next) return 0;
+//    free(insert_prev->next->info);
+    tmp = insert_prev->next->next;
+    free(insert_prev->next);
+    insert_prev->next = tmp;
+    return 1;
+}
+
 void print_root(Node *nul, char *indent, Node *node, short last) {
     if (node == nul) {
         printf("\033[1;97m(EMPTY)\033[0m\n");
@@ -353,32 +318,81 @@ void print_root(Node *nul, char *indent, Node *node, short last) {
     if (node->right != nul) print_root(nul, indent, node->right, node->left != nul ? 0 : 1);
     if (node->left != nul) print_root(nul, s, node->left, 1);
 }
-//
-//Node * search_node(Tree *tree, ull key) {
-//    Node *current_root = tree->root;
-//    while (current_root != NULL) {
-//        if (key > current_root->key) {
-//            current_root = current_root->right;
-//        } else if (key < current_root->key) {
-//            current_root = current_root->left;
-//        } else if (key == current_root->key) {
-//            return current_root;
-//        }
-//    }
-//    return NULL;
-//}
-//
+
+static int count_decimals(ull data) {
+    int result = 0;
+    while (data > 0) {
+        data /= 10;
+        result += 1;
+    }
+    return result;
+}
+
+void preorder_traversal(Node *nul, Node *root, int limit) {
+    if (root != nul) {
+        int deci = count_decimals(root->key);
+        if (deci == limit) {
+            if (root->color == 0) {
+                printf("\033[1;97m%llu\033[0m: \033[1;90m", root->key);
+                for (Item *i = root->info; i; i = i->next) {
+                    printf("\"%s\" ", i->info);
+                }
+                printf("\033[0m\n");
+            } else {
+                printf("\033[91m%llu\033[0m: \033[31m", root->key);
+                for (Item *i = root->info; i; i = i->next) {
+                    printf("\"%s\" ", i->info);
+                }
+                printf("\033[0m\n");
+            }
+        }
+        if (deci >= limit)
+            preorder_traversal(nul, root->left, limit);
+        if (deci <= limit)
+            preorder_traversal(nul, root->right, limit);
+    }
+}
+
+Node * find_min_limit (Node *nul, Tree *tree, ull limit) {
+    Node *current_root = tree->root;
+    Node *last_root = nul;
+    while (current_root != nul) {
+        if (limit < current_root->key) {
+            last_root = current_root;
+            current_root = current_root->left;
+        } else if (limit >= current_root->key) {
+            current_root = current_root->right;
+        }
+    }
+    if (last_root == nul) return NULL;
+    return last_root;
+}
+
+Node * search_node(Node *nul, Tree *tree, ull key) {
+    Node *current_root = tree->root;
+    while (current_root != nul) {
+        if (key > current_root->key) {
+            current_root = current_root->right;
+        } else if (key < current_root->key) {
+            current_root = current_root->left;
+        } else if (key == current_root->key) {
+            return current_root;
+        }
+    }
+    return NULL;
+}
+
 Tree * create_tree(Node *nul) {
     Tree *tree = malloc(sizeof(Tree));
     tree->root = nul;
     return tree;
 }
-//
-//void clear_tree(Node *node) {
-//    if (!node) return;
-//    Node *left = node->left;
-//    Node *right = node->right;
-//    clear_node(node);
-//    clear_tree(left);
-//    clear_tree(right);
-//}
+
+void clear_tree(Node *nul, Node *node) {
+    if (node == nul) return;
+    Node *left = node->left;
+    Node *right = node->right;
+    clear_node(node);
+    clear_tree(nul, left);
+    clear_tree(nul, right);
+}
