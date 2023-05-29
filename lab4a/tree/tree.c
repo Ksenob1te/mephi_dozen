@@ -117,11 +117,12 @@ void add_node(Tree *tree, Node* process_node) {
 }
 
 void remove_node(Tree *tree, Node *process_node) {
+    if (!process_node) return;
     if (process_node->left == NULL || process_node->right == NULL) {
         Node *branch = process_node->left != NULL ? process_node->left : process_node->right;
         if (tree->root == process_node) {
             tree->root = branch;
-//            clear_node(process_node);
+            clear_node(process_node);
             return;
         }
         Node *parent = process_node->parent;
@@ -165,7 +166,10 @@ void remove_node(Tree *tree, Node *process_node) {
         } else {
             Node *branch = removal->right;
             branch->parent = removal->parent;
-            removal->parent->right = branch;
+            if (removal->parent->right == removal)
+                removal->parent->right = branch;
+            else
+                removal->parent->left = branch;
             free(removal);
         }
     }
@@ -214,8 +218,8 @@ void print_root(char *indent, Node *node, short last) {
 
     char s[1000];
     strcpy(s, indent);
-    if (node->left) print_root(indent, node->left, node->right ? 0 : 1);
-    if (node->right) print_root(s, node->right, 1);
+    if (node->right) print_root(s, node->right, node->left ? 0 : 1);
+    if (node->left) print_root(indent, node->left, 1);
 }
 
 Node * search_node(Tree *tree, ull key) {

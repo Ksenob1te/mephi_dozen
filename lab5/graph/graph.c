@@ -9,13 +9,15 @@
 Edge *create_edge(ull delay) {
     Edge *edge = malloc(sizeof(Edge));
     edge->ports = malloc(sizeof(ull) * BLOCK_SIZE);
+    edge->first = NULL;
+    edge->second = NULL;
     edge->current_size = 0;
     edge->ports_size = 4;
     edge->delay = delay;
     return edge;
 }
 
-void add_port(Graph *graph, Edge * edge, ull port) {
+void add_port(Edge * edge, ull port) {
     if (!edge) return;
     if (edge->current_size == edge->ports_size) {
         edge->ports = realloc(edge->ports, edge->current_size + BLOCK_SIZE);
@@ -24,18 +26,9 @@ void add_port(Graph *graph, Edge * edge, ull port) {
 
     for (ull i = 0; i < edge->current_size; i++) if ((edge->ports)[i] == port) return;
     (edge->ports)[(edge->current_size)++] = port;
-
-    if (graph->current_size == 0) return;
-    for (ull i = 0; i < graph->current_size; i++) {
-        Vertex *vertex = (graph->vertexes)[i];
-        if (vertex->port == port) {
-            Node *temp = create_node(edge);
-            add_node(vertex->edges, temp);
-        }
-    }
 }
 
-void remove_port(Graph *graph, Edge *edge, ull port) {
+void remove_port(Edge *edge, ull port) {
     if (!edge || edge->current_size == 0) return;
 
     ull index = 0;
@@ -43,16 +36,6 @@ void remove_port(Graph *graph, Edge *edge, ull port) {
     if (index == edge->current_size) return;
 
     (edge->ports)[index] = (edge->ports)[--(edge->current_size)];
-
-    if (graph->current_size == 0) return;
-    for (ull i = 0; i < graph->current_size; i++) {
-        Vertex *vertex = (graph->vertexes)[i];
-        if (vertex->port == port) {
-            Node *temp = find_node(vertex->edges, edge);
-            remove_node(vertex->edges, temp);
-            // clear temp here
-        }
-    }
 }
 // -------------------------------------------------
 
@@ -100,6 +83,49 @@ void remove_node(List *list, Node *node) {
 // -------------------------------------------------
 
 
+// -------------------------------------------------
+// VERTEX SECTION
+// -------------------------------------------------
+Vertex * create_vertex(char *name, ull port) {
+    Vertex *vertex = malloc(sizeof(Vertex));
+    vertex->current_id = 0;
+    vertex->port = port;
+    vertex->name = name;
+    vertex->edges = create_list();
+    return vertex;
+}
+
+Vertex * find_vertex(char *name, Graph *graph) {
+    for (int i = 0; i < graph->current_size; i++) {
+        if (strcmp(name, (graph->vertexes)[i]->name) == 0)
+            return (graph->vertexes)[i];
+    }
+    return NULL;
+}
+
+void add_edge(Vertex *conn_1, Vertex *conn_2, Edge *edge) {
+    edge->first = conn_1;
+    edge->second = conn_2;
+
+    Node *first_node = create_node(edge);
+    Node *second_node = create_node(edge);
+    add_node(conn_1->edges, first_node);
+    add_node(conn_2->edges, second_node);
+}
+
+void remove_edge(Edge *edge) {
+    Vertex *first = edge->first;
+    Node *first_node = find_node(first->edges, edge);
+    remove_node(first->edges, first_node);
+
+    Vertex *second = edge->second;
+    Node *second_node = find_node(second->edges, edge);
+    remove_node(second->edges, second_node);
+}
+// -------------------------------------------------
+
+
+
 
 // -------------------------------------------------
 // GRAPH SECTION
@@ -112,38 +138,18 @@ Graph * create_graph() {
     return graph;
 }
 
-Vertex * create_vertex(char *name, ull port) {
-    Vertex *vertex = malloc(sizeof(Vertex));
-    vertex->port = port;
-    vertex->name = name;
-    vertex->edges = create_list();
-    return vertex;
-}
-
-static int check_edge(Edge *edge, ull port) {
-    ull index = 0;
-    for (; (edge->ports)[index] != port && index < edge->current_size; index++);
-    if (index == edge->current_size) return 0;
-    return 1;
-}
-
 void add_vertex(Graph *graph, Vertex *vertex) {
     if (!graph || !vertex) return;
     if (graph->current_size == graph->vertex_size) {
         graph->vertexes = realloc(graph->vertexes, graph->vertex_size + BLOCK_SIZE);
         graph->vertex_size += BLOCK_SIZE;
     }
-
-    // ТУТ ПЕРЕДЕЛАТЬ
-    for (ull i = 0; i < graph->current_size; i++) {
-        Vertex *tmp = (graph->vertexes)[i];
-        for (Node *node = tmp->edges->head; node; node = node->next)
-            if (check_edge(node->data, vertex->port))
-                add_node(vertex->edges, create_node(node->data));
-    }
-
-    (graph->vertexes)[(graph->current_size)++] = vertex;
-
+    ull index = 0;
+    for (; index < graph->current_size && strcmp((graph->vertexes)[index]->name, vertex->name) != 0; index++);
+    if (index != graph->current_size) return;
+    vertex->current_id = graph->current_size;
+    (graph->vertexes)[graph->current_size] = vertex;
+    (graph->current_size)++;
 }
 
 Vertex * remove_vertex(Graph *graph, char* name) {
@@ -155,6 +161,7 @@ Vertex * remove_vertex(Graph *graph, char* name) {
 
     Vertex *result = (graph->vertexes)[index];
     (graph->vertexes)[index] = (graph->vertexes)[--(graph->current_size)];
+    (graph->vertexes)[index]->current_id = index;
     return result;
 }
 // -------------------------------------------------
