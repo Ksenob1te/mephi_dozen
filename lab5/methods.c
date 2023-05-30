@@ -81,6 +81,7 @@ static char *readline() {
 
 void search_dfs(Graph *graph) {
     printf("Type in name of the starter PC(str): ");
+    scanf("\n");
     char *name = readline();
     Vertex *vertex = find_vertex(name, graph);
     if (!vertex) {
@@ -96,12 +97,15 @@ void search_dfs(Graph *graph) {
     }
     free(name);
     free(colors);
+    printf("Done!");
 }
 
 void search_bellman(Graph *graph) {
     printf("Type in name of the starter PC(str): ");
+    scanf("\n");
     char *name1 = readline();
     printf("Type in name of the end PC(str): ");
+    scanf("\n");
     char *name2 = readline();
     printf("Type in port u wanna use (int): ");
     ull port = input_ull();
@@ -126,6 +130,7 @@ void search_bellman(Graph *graph) {
     }
     free(parent);
     free(dist);
+    printf("Done!");
 }
 
 void methods_create_core(Graph *graph) {
@@ -134,10 +139,12 @@ void methods_create_core(Graph *graph) {
     Graph *core = create_core_tree(graph, port);
     write_edges(core);
     system("main.exe");
+    printf("Done!");
 }
 
 void methods_add_vertex(Graph *graph) {
     printf("Type in name of the PC(str): ");
+    scanf("\n");
     char *name = readline();
     printf("Type in port (int): ");
     ull port = input_ull();
@@ -148,12 +155,15 @@ void methods_add_vertex(Graph *graph) {
         free(name);
         free(vertex);
     }
+    printf("Done!");
 }
 
 void methods_add_edge(Graph *graph) {
     printf("Type in name of the starting PC(str): ");
+    scanf("\n");
     char *name1 = readline();
     printf("Type in name of the end PC(str): ");
+    scanf("\n");
     char *name2 = readline();
     printf("Type in delay for the edge (int): ");
     ull delay = input_ull();
@@ -167,10 +177,12 @@ void methods_add_edge(Graph *graph) {
     }
     Edge *edge = create_edge(delay);
     add_edge(vertex1, vertex2, edge);
+    printf("Done!");
 }
 
 void methods_remove_vertex(Graph *graph) {
     printf("Type in name of the PC(str): ");
+    scanf("\n");
     char *name = readline();
     Vertex *vertex = remove_vertex(graph, name);
     if (!vertex) {
@@ -179,12 +191,15 @@ void methods_remove_vertex(Graph *graph) {
     } else {
         free(vertex);
     }
+    printf("Done!");
 }
 
 void methods_remove_edge(Graph *graph) {
     printf("Type in name of the starting PC(str): ");
+    scanf("\n");
     char *name1 = readline();
     printf("Type in name of the end PC(str): ");
+    scanf("\n");
     char *name2 = readline();
 
     Vertex *vertex1 = find_vertex(name1, graph);
@@ -205,4 +220,41 @@ void methods_remove_edge(Graph *graph) {
         return;
     }
     remove_edge(edge);
+    printf("Done!");
+}
+
+void methods_add_port(Graph *graph) {
+    printf("Type in name of the starting PC(str): ");
+    scanf("\n");
+    char *name1 = readline();
+    printf("Type in name of the end PC(str): ");
+    scanf("\n");
+    char *name2 = readline();
+
+    Vertex *vertex1 = find_vertex(name1, graph);
+    Vertex *vertex2 = find_vertex(name2, graph);
+
+    if (!vertex1 || !vertex2) {
+        fprintf(stderr, "\033[0;31mNo vertex has been found\033[0m\n");
+        return;
+    }
+
+    Edge *edge = NULL;
+    for (Node *i = vertex1->edges->head; i; i = i->next) {
+        if (i->data->first == vertex2 || i->data->second == vertex2)
+            edge = i->data;
+    }
+    if (!edge) {
+        fprintf(stderr, "\033[0;31mNo edge has been found\033[0m\n");
+        return;
+    }
+    printf("Type in port (int): ");
+    ull port = input_ull();
+    add_port(edge, port);
+    printf("Done!");
+}
+
+void draw_graph(Graph *graph) {
+    write_edges(graph);
+    system("main.exe");
 }

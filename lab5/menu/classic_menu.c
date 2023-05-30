@@ -15,12 +15,14 @@ void send_command_menu() {
     printf("[7] DFS\n");
     printf("[8] Bellman Ford\n");
     printf("[9] Tree Core\n");
+    printf("[10] Draw Graph\n");
     printf("[0] Exit\n");
     printf("____________________________________\033[0m\n");
 }
 
-void menu(Tree *tree) {
-    void (*func[5])(Tree *) = {add_node_tree, remove_node_tree, traversal_limit_tree, search_node_tree, sp_search_node_tree};
+void menu(Graph *graph) {
+    void (*func[10])(Graph *) = {methods_add_vertex, methods_remove_vertex, methods_add_edge, methods_remove_edge,
+                                print_graph, methods_add_port, search_dfs, search_bellman, methods_create_core, draw_graph};
     printf("\033[H\033[J");
     send_command_menu();
 
@@ -28,16 +30,15 @@ void menu(Tree *tree) {
 //    FILE *file = fopen(file_name, "wb");
 //    fclose(file);
 
-    print_tree(tree);
+    print_graph(graph);
     while (1) {
         printf("\033[1;90mType command (number [0-5]):\033[0;0m\n");
         int command = 0;
         int x = scanf("%d", &command);
         if (x == EOF) {
             scanf("%*[^\n]*c");
-            print_tree(tree);
-            clear_tree(tree->root);
-            free(tree);
+            print_graph(graph);
+            free(graph);
             return;
         }
         if (x == 0) {
@@ -46,21 +47,20 @@ void menu(Tree *tree) {
             continue;
         }
         switch (command) {
-            case 1 ... 2:
+            case 1 ... 10:
                 printf("\033[H\033[J");
-                print_tree(tree);
-                (*func[command - 1])(tree);
+                print_graph(graph);
+                (*func[command - 1])(graph);
                 scanf("%*c%*[^\n]");
                 printf("\033[H\033[J");
                 send_command_menu();
-                print_tree(tree);
+                print_graph(graph);
                 break;
-            case 3 ... 5:
-                (*func[command - 1])(tree);
-                break;
+//            case 3 ... 5:
+//                (*func[command - 1])(graph);
+//                break;
             case 0:
-                clear_tree(tree->root);
-                free(tree);
+                free(graph);
                 return;
             default:
                 break;

@@ -107,6 +107,7 @@ add_executable(lab4b
 add_executable(lab5
         lab5/main.c
         lab5/graph/graph.c
-        lab5/graph/graph.h lab5/methods.c lab5/methods.h lab5/algorthm/search.c lab5/algorthm/search.h)
+        lab5/graph/graph.h lab5/methods.c lab5/methods.h lab5/algorthm/search.c lab5/algorthm/search.h
+        lab5/menu/classic_menu.c lab5/menu/classic_menu.h)
 
 #target_link_libraries(lab4 readline)

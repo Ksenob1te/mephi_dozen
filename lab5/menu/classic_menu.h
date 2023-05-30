@@ -1,7 +1,7 @@
 #ifndef SEM1_LAB4_CLASSIC_MENU_H
 #define SEM1_LAB4_CLASSIC_MENU_H
-#include "../tree/tree.h"
+#include "../graph/graph.h"
 
-void menu(Tree *tree);
+void menu(Graph *graph);
 
 #endif //SEM1_LAB4_CLASSIC_MENU_H
