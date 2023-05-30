@@ -113,6 +113,8 @@ void add_edge(Vertex *conn_1, Vertex *conn_2, Edge *edge) {
     add_node(conn_2->edges, second_node);
 }
 
+
+
 void remove_edge(Edge *edge) {
     Vertex *first = edge->first;
     Node *first_node = find_node(first->edges, edge);

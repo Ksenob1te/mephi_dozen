@@ -144,6 +144,7 @@ void methods_add_vertex(Graph *graph) {
     Vertex *vertex = create_vertex(name, port);
     int status = add_vertex(graph, vertex);
     if (status) {
+        fprintf(stderr, "\033[0;31mThis vertex already exists\033[0m\n");
         free(name);
         free(vertex);
     }
@@ -154,10 +155,54 @@ void methods_add_edge(Graph *graph) {
     char *name1 = readline();
     printf("Type in name of the end PC(str): ");
     char *name2 = readline();
+    printf("Type in delay for the edge (int): ");
+    ull delay = input_ull();
 
     Vertex *vertex1 = find_vertex(name1, graph);
     Vertex *vertex2 = find_vertex(name2, graph);
 
-
+    if (!vertex1 || !vertex2) {
+        fprintf(stderr, "\033[0;31mNo vertex has been found\033[0m\n");
+        return;
+    }
+    Edge *edge = create_edge(delay);
+    add_edge(vertex1, vertex2, edge);
 }
 
+void methods_remove_vertex(Graph *graph) {
+    printf("Type in name of the PC(str): ");
+    char *name = readline();
+    Vertex *vertex = remove_vertex(graph, name);
+    if (!vertex) {
+        fprintf(stderr, "\033[0;31mNo vertex has been found\033[0m\n");
+        return;
+    } else {
+        free(vertex);
+    }
+}
+
+void methods_remove_edge(Graph *graph) {
+    printf("Type in name of the starting PC(str): ");
+    char *name1 = readline();
+    printf("Type in name of the end PC(str): ");
+    char *name2 = readline();
+
+    Vertex *vertex1 = find_vertex(name1, graph);
+    Vertex *vertex2 = find_vertex(name2, graph);
+
+    if (!vertex1 || !vertex2) {
+        fprintf(stderr, "\033[0;31mNo vertex has been found\033[0m\n");
+        return;
+    }
+
+    Edge *edge = NULL;
+    for (Node *i = vertex1->edges->head; i; i = i->next) {
+        if (i->data->first == vertex2 || i->data->second == vertex2)
+            edge = i->data;
+    }
+    if (!edge) {
+        fprintf(stderr, "\033[0;31mNo edge has been found\033[0m\n");
+        return;
+    }
+    remove_edge(edge);
+}
