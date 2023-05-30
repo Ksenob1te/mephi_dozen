@@ -37,7 +37,7 @@ typedef struct Graph {
 
 Graph * create_graph();
 Vertex * create_vertex(char *name, ull port);
-void add_vertex(Graph *graph, Vertex *vertex);
+int add_vertex(Graph *graph, Vertex *vertex);
 Vertex * remove_vertex(Graph *graph, char* name);
 Vertex * find_vertex(char *name, Graph *graph);
 

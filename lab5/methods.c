@@ -136,3 +136,28 @@ void methods_create_core(Graph *graph) {
     system("main.exe");
 }
 
+void methods_add_vertex(Graph *graph) {
+    printf("Type in name of the PC(str): ");
+    char *name = readline();
+    printf("Type in port (int): ");
+    ull port = input_ull();
+    Vertex *vertex = create_vertex(name, port);
+    int status = add_vertex(graph, vertex);
+    if (status) {
+        free(name);
+        free(vertex);
+    }
+}
+
+void methods_add_edge(Graph *graph) {
+    printf("Type in name of the starting PC(str): ");
+    char *name1 = readline();
+    printf("Type in name of the end PC(str): ");
+    char *name2 = readline();
+
+    Vertex *vertex1 = find_vertex(name1, graph);
+    Vertex *vertex2 = find_vertex(name2, graph);
+
+
+}
+

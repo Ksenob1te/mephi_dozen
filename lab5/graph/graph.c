@@ -138,18 +138,19 @@ Graph * create_graph() {
     return graph;
 }
 
-void add_vertex(Graph *graph, Vertex *vertex) {
-    if (!graph || !vertex) return;
+int add_vertex(Graph *graph, Vertex *vertex) {
+    if (!graph || !vertex) return 1;
     if (graph->current_size == graph->vertex_size) {
         graph->vertexes = realloc(graph->vertexes, graph->vertex_size + BLOCK_SIZE);
         graph->vertex_size += BLOCK_SIZE;
     }
     ull index = 0;
     for (; index < graph->current_size && strcmp((graph->vertexes)[index]->name, vertex->name) != 0; index++);
-    if (index != graph->current_size) return;
+    if (index != graph->current_size) return 1;
     vertex->current_id = graph->current_size;
     (graph->vertexes)[graph->current_size] = vertex;
     (graph->current_size)++;
+    return 0;
 }
 
 Vertex * remove_vertex(Graph *graph, char* name) {
