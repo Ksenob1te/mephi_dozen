@@ -60,17 +60,26 @@ add_executable(lab2-array
 
 # lab 3
 
-add_executable(lab3
-        lab3/table/table.c
-        lab3/table/table.h
-        lab3/methods.c
-        lab3/methods.h
-        lab3/main.c
-        lab3/menu/classic_menu.h
-        lab3/menu/classic_menu.c
-        lab3/file_worker/manager.c
-        lab3/file_worker/manager.h
-        lab3/file_worker/removal_list.h)
+add_executable(lab3a
+        lab3a/table/table.c
+        lab3a/table/table.h
+        lab3a/methods.c
+        lab3a/methods.h
+        lab3a/main.c
+        lab3a/menu/classic_menu.h
+        lab3a/menu/classic_menu.c)
+
+add_executable(lab3b
+        lab3b/table/table.c
+        lab3b/table/table.h
+        lab3b/methods.c
+        lab3b/methods.h
+        lab3b/main.c
+        lab3b/menu/classic_menu.h
+        lab3b/menu/classic_menu.c
+        lab3b/file_worker/manager.c
+        lab3b/file_worker/manager.h
+        lab3b/file_worker/removal_list.h)
 
 add_executable(lab3c
         lab3с/main.c
