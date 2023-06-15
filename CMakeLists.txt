@@ -7,116 +7,116 @@ set(CMAKE_C_STANDARD 11)
 add_executable(test test/file.c )
 # semestr 1
 #add_executable(sem1.lab3 sem1/lab3/list_class.c sem1/lab3/main.c)
-#add_executable(sem1.lab2 sem1/lab2/file1.c)
-#add_executable(sem1.lab1 sem1/lab1/file.c)
+#add_executable(sem1.2a sem1/2a/file1.c)
+#add_executable(sem1.1 sem1/1/file.c)
 #add_executable(sem1.lab4 sem1/lab4/main.c sem1/lab4/methods.c)
-#add_executable(sem1.lab5 sem1/lab5/main.c sem1/lab5/voter.h sem1/lab5/voter.c)
-#add_executable(sem1.lab5_2 sem1/lab5/main2.c sem1/lab5/voter.h sem1/lab5/voter.c sem1/lab5/methods.c sem1/lab5/methods.h)
+#add_executable(sem1.5 sem1/5/main.c sem1/5/voter.h sem1/5/voter.c)
+#add_executable(sem1.lab5_2 sem1/5/main2.c sem1/5/voter.h sem1/5/voter.c sem1/5/methods.c sem1/5/methods.h)
 #add_executable(sem1.lab6 sem1/lab6/main.c sem1/lab6/struct.c sem1/lab6/struct.h)
 
-# semestr 2
-add_executable(lab1
-        lab1/main.c)
+# semestr 2a
+add_executable(1
+        1/main.c)
 
-# lab 2
+# lab 2a
 add_executable(lab2-double
-        lab2/main.c
-        lab2/task/input.h
-        lab2/task/input.c
-        lab2/task/task.h
-        lab2/task/task.c
-        lab2/structs/list.h
-        lab2/structs/structs.h
-        lab2/structs/task.h
-        lab2/structs/source/classes/structs.c
-        lab2/structs/source/list/doubleList.c
-        lab2/structs/source/list/doubleList.h)
+        2a/main.c
+        2a/task/input.h
+        2a/task/input.c
+        2a/task/task.h
+        2a/task/task.c
+        2a/structs/list.h
+        2a/structs/structs.h
+        2a/structs/task.h
+        2a/structs/source/classes/structs.c
+        2a/structs/source/list/doubleList.c
+        2a/structs/source/list/doubleList.h)
 
 add_executable(lab2-cycle
-        lab2/main.c
-        lab2/task/input.h
-        lab2/task/input.c
-        lab2/task/task.h
-        lab2/task/task.c
-        lab2/structs/list.h
-        lab2/structs/structs.h
-        lab2/structs/task.h
-        lab2/structs/source/classes/cycleQueue.c
-        lab2/structs/source/list/cycleList.c
-        lab2/structs/source/list/cycleList.h)
+        2a/main.c
+        2a/task/input.h
+        2a/task/input.c
+        2a/task/task.h
+        2a/task/task.c
+        2a/structs/list.h
+        2a/structs/structs.h
+        2a/structs/task.h
+        2a/structs/source/classes/cycleQueue.c
+        2a/structs/source/list/cycleList.c
+        2a/structs/source/list/cycleList.h)
 
 add_executable(lab2-array
-        lab2/main.c
-        lab2/task/input.h
-        lab2/task/input.c
-        lab2/task/task.h
-        lab2/task/task.c
-        lab2/structs/list.h
-        lab2/structs/structs.h
-        lab2/structs/task.h
-        lab2/structs/source/classes/listQueue.c
-        lab2/structs/source/list/arrayList.c
-        lab2/structs/source/list/arrayList.h)
+        2a/main.c
+        2a/task/input.h
+        2a/task/input.c
+        2a/task/task.h
+        2a/task/task.c
+        2a/structs/list.h
+        2a/structs/structs.h
+        2a/structs/task.h
+        2a/structs/source/classes/listQueue.c
+        2a/structs/source/list/arrayList.c
+        2a/structs/source/list/arrayList.h)
 
 # lab 3
 
-add_executable(lab3a
-        lab3a/table/table.c
-        lab3a/table/table.h
-        lab3a/methods.c
-        lab3a/methods.h
-        lab3a/main.c
-        lab3a/menu/classic_menu.h
-        lab3a/menu/classic_menu.c)
+add_executable(3a
+        3a/table/table.c
+        3a/table/table.h
+        3a/methods.c
+        3a/methods.h
+        3a/main.c
+        3a/menu/classic_menu.h
+        3a/menu/classic_menu.c)
 
-add_executable(lab3b
-        lab3b/table/table.c
-        lab3b/table/table.h
-        lab3b/methods.c
-        lab3b/methods.h
-        lab3b/main.c
-        lab3b/menu/classic_menu.h
-        lab3b/menu/classic_menu.c
-        lab3b/file_worker/manager.c
-        lab3b/file_worker/manager.h
-        lab3b/file_worker/removal_list.h)
+add_executable(3b
+        3b/table/table.c
+        3b/table/table.h
+        3b/methods.c
+        3b/methods.h
+        3b/main.c
+        3b/menu/classic_menu.h
+        3b/menu/classic_menu.c
+        3b/file_worker/manager.c
+        3b/file_worker/manager.h
+        3b/file_worker/removal_list.h)
 
 add_executable(lab3c
-        lab3с/main.c
-        lab3с/table/table.c
-        lab3с/table/table.h
-        lab3с/methods.c
-        lab3с/methods.h
-        lab3с/menu/classic_menu.h
-        lab3с/menu/classic_menu.c)
+        3c/main.c
+        3c/table/table.c
+        3c/table/table.h
+        3c/methods.c
+        3c/methods.h
+        3c/menu/classic_menu.h
+        3c/menu/classic_menu.c)
 
-add_executable(lab3d
-        lab3d/main.c
-        lab3d/table/table.c
-        lab3d/table/table.h
-        lab3d/file_worker/manager.h
-        lab3d/file_worker/manager.c
-        lab3d/methods.c
-        lab3d/methods.h
-        lab3d/menu/classic_menu.h
-        lab3d/menu/classic_menu.c)
+add_executable(3d
+        3d/main.c
+        3d/table/table.c
+        3d/table/table.h
+        3d/file_worker/manager.h
+        3d/file_worker/manager.c
+        3d/methods.c
+        3d/methods.h
+        3d/menu/classic_menu.h
+        3d/menu/classic_menu.c)
 
-add_executable(lab4a
-        lab4a/main.c
-        lab4a/menu/classic_menu.h
-        lab4a/menu/classic_menu.c
-        lab4a/tree/tree.c lab4a/tree/tree.h lab4a/methods.c lab4a/methods.h)
+add_executable(4a
+        4a/main.c
+        4a/menu/classic_menu.h
+        4a/menu/classic_menu.c
+        4a/tree/tree.c 4a/tree/tree.h 4a/methods.c 4a/methods.h)
 
-add_executable(lab4b
-        lab4b/main.c
-        lab4b/menu/classic_menu.h
-        lab4b/menu/classic_menu.c
-        lab4b/tree/tree.c lab4b/tree/tree.h lab4b/main.c lab4b/methods.c lab4b/methods.h)
+add_executable(4b
+        4b/main.c
+        4b/menu/classic_menu.h
+        4b/menu/classic_menu.c
+        4b/tree/tree.c 4b/tree/tree.h 4b/main.c 4b/methods.c 4b/methods.h)
 
-add_executable(lab5
-        lab5/main.c
-        lab5/graph/graph.c
-        lab5/graph/graph.h lab5/methods.c lab5/methods.h lab5/algorthm/search.c lab5/algorthm/search.h
-        lab5/menu/classic_menu.c lab5/menu/classic_menu.h)
+add_executable(5
+        5/main.c
+        5/graph/graph.c
+        5/graph/graph.h 5/methods.c 5/methods.h 5/algorthm/search.c 5/algorthm/search.h
+        5/menu/classic_menu.c 5/menu/classic_menu.h)
 
 #target_link_libraries(lab4 readline)

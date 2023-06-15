@@ -4,5 +4,5 @@
 /cmake-build-debug/
 /.idea
 /lab3/tmp/*
-/lab3d/tmp/*
+/3d/tmp/*
 !.gitkeep
