@@ -4,7 +4,7 @@ project(sem1/lab4 C)
 set(CMAKE_C_STANDARD 11)
 #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lreadline")
 
-add_executable(test test/file.c )
+#add_executable(test test/file.c )
 # semestr 1
 #add_executable(sem1.lab3 sem1/lab3/list_class.c sem1/lab3/main.c)
 #add_executable(sem1.2a sem1/2a/file1.c)
