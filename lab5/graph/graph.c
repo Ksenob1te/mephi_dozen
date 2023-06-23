@@ -200,7 +200,7 @@ void file_input(Graph *graph, FILE *file) {
         ull port = -1, port2 = -1;
         ull delay = 0;
         int checker = fscanf(file, "%s", name);
-        if (checker == EOF) return;
+        if (checker == EOF) {free(name); return;}
         fscanf(file, "%llu", &port);
         Vertex *vertex1 = create_vertex(name, port);
         int status = add_vertex(graph, vertex1);
