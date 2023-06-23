@@ -15,7 +15,7 @@
 
 
 int main(void) {
-    SetConsoleOutputCP(CP_UTF8);
+    select_settings();
     Graph *graph = create_graph();
     char *x = malloc(2);
     x[0] = 'A';
