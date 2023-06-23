@@ -1,5 +1,6 @@
 #include "search.h"
 #include "stdlib.h"
+#include "limits.h"
 
 void dfs_step(Graph *graph, ull current, ull port, int *colors) {
     colors[current] = 1;
