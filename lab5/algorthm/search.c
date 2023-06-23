@@ -147,5 +147,6 @@ Graph *create_core_tree(Graph *graph, ull selected_port) {
         }
         k++;
     }
-        return new_graph;
+    free(all_edges);
+    return new_graph;
 }
