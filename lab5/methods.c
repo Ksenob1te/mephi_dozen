@@ -111,14 +111,20 @@ void search_bellman(Graph *graph) {
     ull port = input_ull();
     Vertex *vertex1 = find_vertex(name1, graph);
     if (!vertex1) {
+        free(name1);
+        free(name2);
         fprintf(stderr, "\033[0;31mNo PC has been found\033[0m\n");
         return;
     }
     Vertex *vertex2 = find_vertex(name2, graph);
     if (!vertex2) {
+        free(name1);
+        free(name2);
         fprintf(stderr, "\033[0;31mNo PC has been found\033[0m\n");
         return;
     }
+    free(name1);
+    free(name2);
     Vertex **parent = malloc(sizeof(Vertex *) * graph->current_size);
     ull *dist = bellman_ford(graph, vertex1->current_id, port, parent);
     if (dist[vertex2->current_id] == LLONG_MAX) printf("No path has been found\n");

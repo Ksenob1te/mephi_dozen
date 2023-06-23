@@ -38,6 +38,7 @@ void menu(Graph *graph) {
         if (x == EOF) {
             scanf("%*[^\n]*c");
             print_graph(graph);
+            clear_graph(graph);
             free(graph);
             return;
         }
@@ -60,6 +61,7 @@ void menu(Graph *graph) {
 //                (*func[command - 1])(graph);
 //                break;
             case 0:
+                clear_graph(graph);
                 free(graph);
                 return;
             default:

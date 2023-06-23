@@ -56,6 +56,7 @@ Node * create_node(Edge *data);
 void add_node(List *list, Node *node);
 Node * find_node(List *list, Edge *edge);
 void remove_node(List *list, Node *node);
+void clear_graph(Graph *graph);
 
 
 #endif //SEM1_LAB4_GRAPH_H

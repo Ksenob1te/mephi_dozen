@@ -114,15 +114,18 @@ void add_edge(Vertex *conn_1, Vertex *conn_2, Edge *edge) {
 }
 
 
-
 void remove_edge(Edge *edge) {
     Vertex *first = edge->first;
     Node *first_node = find_node(first->edges, edge);
     remove_node(first->edges, first_node);
+    free(first_node);
 
     Vertex *second = edge->second;
     Node *second_node = find_node(second->edges, edge);
     remove_node(second->edges, second_node);
+    free(second_node);
+    free(edge->ports);
+    free(edge);
 }
 // -------------------------------------------------
 
@@ -138,6 +141,21 @@ Graph * create_graph() {
     graph->current_size = 0;
     graph->vertex_size = BLOCK_SIZE;
     return graph;
+}
+
+void clear_graph(Graph *graph) {
+    for (int i = 0; i < graph->current_size; i++) {
+        Vertex *vertex = (graph->vertexes)[i];
+        Node *tmp1;
+        for (Node *tmp = (vertex->edges)->head; tmp; tmp = tmp1) {
+            tmp1 = tmp->next;
+            remove_edge(tmp->data);
+        }
+        free(vertex->name);
+        free(vertex->edges);
+        free(vertex);
+    }
+    free(graph->vertexes);
 }
 
 int add_vertex(Graph *graph, Vertex *vertex) {
@@ -159,10 +177,13 @@ Vertex * remove_vertex(Graph *graph, char* name) {
     if (!graph) return NULL;
 
     ull index = 0;
-    for (; strcmp((graph->vertexes)[index]->name, name) != 0 && index < graph->current_size; index++);
+    for (; index < graph->current_size && strcmp((graph->vertexes)[index]->name, name) != 0; index++);
     if (index == graph->current_size) return NULL;
 
+
     Vertex *result = (graph->vertexes)[index];
+    for (Node *i = result->edges->head; i; i = i->next)
+        remove_edge(i->data);
     (graph->vertexes)[index] = (graph->vertexes)[--(graph->current_size)];
     (graph->vertexes)[index]->current_id = index;
     return result;
