@@ -86,6 +86,7 @@ void search_dfs(Graph *graph) {
     char *name = readline();
     Vertex *vertex = find_vertex(name, graph);
     if (!vertex) {
+        free(name);
         fprintf(stderr, "\033[0;31mNo PC has been found\033[0m\n");
         return;
     }
@@ -146,6 +147,7 @@ void methods_create_core(Graph *graph) {
     Graph *core = create_core_tree(graph, port);
     write_edges(core);
     system("main.exe");
+    clear_graph(core);
     printf("Done!");
 }
 

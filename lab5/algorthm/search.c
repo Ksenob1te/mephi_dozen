@@ -1,5 +1,6 @@
 #include "search.h"
 #include "stdlib.h"
+#include "string.h"
 #include "limits.h"
 
 void dfs_step(Graph *graph, ull current, ull port, int *colors) {
@@ -63,6 +64,15 @@ int comparator(const void *p, const void *q) {
     else return 0;
 }
 
+void* memdup(const void* mem, size_t size) {
+    void* out = malloc(size);
+
+    if(out != NULL)
+        memcpy(out, mem, size);
+
+    return out;
+}
+
 Graph *create_core_tree(Graph *graph, ull selected_port) {
     Graph *new_graph = create_graph();
 
@@ -104,7 +114,7 @@ Graph *create_core_tree(Graph *graph, ull selected_port) {
                 }
             }
             if (!added[first_old->current_id]) {
-                first = create_vertex(first_old->name, first_old->port);
+                first = create_vertex(strdup(first_old->name), first_old->port);
                 add_vertex(new_graph, first);
                 if (added[second_old->current_id])
                     added[first_old->current_id] = added[second_old->current_id];
@@ -112,7 +122,7 @@ Graph *create_core_tree(Graph *graph, ull selected_port) {
                     added[first_old->current_id] = current_color;
             }
             if (!added[second_old->current_id]) {
-                second = create_vertex(second_old->name, second_old->port);
+                second = create_vertex(strdup(second_old->name), second_old->port);
                 add_vertex(new_graph, second);
                 if (added[first_old->current_id])
                     added[second_old->current_id] = added[first_old->current_id];
@@ -121,14 +131,14 @@ Graph *create_core_tree(Graph *graph, ull selected_port) {
             }
 
             for (int m = 0; m < new_graph->current_size; m++) {
-                if (second_old->name == (new_graph->vertexes)[m]->name)
+                if (!strcmp(second_old->name, (new_graph->vertexes)[m]->name))
                     second = (new_graph->vertexes)[m];
-                if (first_old->name == (new_graph->vertexes)[m]->name)
+                if (!strcmp(first_old->name, (new_graph->vertexes)[m]->name))
                     first = (new_graph->vertexes)[m];
             }
 
             Edge *edge = create_edge(all_edges[k]->delay);
-            edge->ports = all_edges[k]->ports;
+            edge->ports = memdup(all_edges[k]->ports, all_edges[k]->ports_size);
             edge->ports_size = all_edges[k]->ports_size;
             edge->current_size = all_edges[k]->current_size;
             add_edge(first, second, edge);
