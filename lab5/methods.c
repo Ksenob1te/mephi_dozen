@@ -4,6 +4,7 @@
 #include "stdio.h"
 #include "string.h"
 #include "graph/graph.h"
+#include "limits.h"
 
 static void print_vertex(Vertex *vertex) {
     printf("%s(%llu) -> ", vertex->name, vertex->port);
