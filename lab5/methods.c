@@ -5,30 +5,31 @@
 #include "string.h"
 #include "graph/graph.h"
 #include "limits.h"
+#include "time.h"
 
-static void print_vertex(Vertex *vertex) {
-    printf("%s(%llu) -> ", vertex->name, vertex->port);
+static void print_vertex(FILE *file, Vertex *vertex) {
+    fprintf(file, "%s(%llu) -> ", vertex->name, vertex->port);
     for (Node *node = vertex->edges->head; node; node = node->next) {
         Edge *edge = node->data;
-        printf("[(%llums: ", edge->delay);
+        fprintf(file, "[(%llums: ", edge->delay);
         for (ull i = 0; i < edge->current_size; i++)
-            printf((i + 1) == edge->current_size ? "%llu" : "%llu ", (edge->ports)[i]);
-        printf(") -> ");
-        if (edge->first == vertex) printf("%s(%llu)]", edge->second->name, edge->second->port);
-        else printf("%s(%llu)]", edge->first->name, edge->first->port);
-        printf(node->next ? ", " : "");
+            fprintf(file, (i + 1) == edge->current_size ? "%llu" : "%llu ", (edge->ports)[i]);
+        fprintf(file, ") -> ");
+        if (edge->first == vertex) fprintf(file, "%s(%llu)]", edge->second->name, edge->second->port);
+        else fprintf(file, "%s(%llu)]", edge->first->name, edge->first->port);
+        fprintf(file, node->next ? ", " : "");
     }
-    printf("\n");
+    fprintf(file, "\n");
 }
 
 void print_graph(Graph *graph) {
     for (ull i = 0; i < graph->current_size; i++) {
-        print_vertex((graph->vertexes)[i]);
+        print_vertex(stdout, (graph->vertexes)[i]);
     }
 }
 
-void write_edges(Graph *graph) {
-    FILE *file = fopen("file.txt", "w");
+void write_edges(const char *name, Graph *graph) {
+    FILE *file = fopen(name, "w");
     for (int i = 0; i < graph->current_size; i++) {
         Vertex *vertex = (graph->vertexes)[i];
         for (Node *j = vertex->edges->head; j; j = j->next) {
@@ -95,8 +96,17 @@ void search_dfs(Graph *graph) {
     int *colors = dfs(graph, vertex->current_id, port);
     printf("From PC \"%s\" you can get to:\n", name);
     for (int i = 0; i < graph->current_size; i++) {
-        if (colors[i] && (graph->vertexes)[i]->port == port) print_vertex((graph->vertexes)[i]);
+        if (colors[i] && (graph->vertexes)[i]->port == port) print_vertex(stdout, (graph->vertexes)[i]);
     }
+    // get logs
+    time_t now = time(0);
+    char str[20];
+    sprintf(str, "./log/%llu-dfs", now);
+    FILE *file = fopen(str, "w");
+    for (int i = 0; i < graph->current_size; i++) {
+        if (colors[i] && (graph->vertexes)[i]->port == port) print_vertex(file, (graph->vertexes)[i]);
+    }
+    fclose(file);
     free(name);
     free(colors);
     printf("Done!");
@@ -129,9 +139,19 @@ void search_bellman(Graph *graph) {
     if (dist[vertex2->current_id] == LLONG_MAX) printf("No path has been found\n");
     else {
         printf("Length of the path: %llu\n", dist[vertex2->current_id]);
-        print_vertex(vertex2);
+        print_vertex(stdout, vertex2);
         for (Vertex *tmp = parent[vertex2->current_id]; tmp; tmp = parent[tmp->current_id])
-            print_vertex(tmp);
+            print_vertex(stdout, tmp);
+
+        time_t now = time(0);
+        char str[20];
+        sprintf(str, "./log/%llu-bellman", now);
+        FILE *file = fopen(str, "w");
+        fprintf(file, "Length of the path: %llu\n", dist[vertex2->current_id]);
+        print_vertex(file, vertex2);
+        for (Vertex *tmp = parent[vertex2->current_id]; tmp; tmp = parent[tmp->current_id])
+            print_vertex(file, tmp);
+        fclose(file);
     }
     free(parent);
     free(dist);
@@ -142,7 +162,12 @@ void methods_create_core(Graph *graph) {
     printf("Type in port u wanna use (int): ");
     ull port = input_ull();
     Graph *core = create_core_tree(graph, port);
-    write_edges(core);
+    write_edges("file.txt", core);
+
+    time_t now = time(0);
+    char str[20];
+    sprintf(str, "./log/%llu-core", now);
+    write_edges(str, core);
     system("main.exe");
     clear_graph(core);
     free(core);
@@ -275,6 +300,6 @@ void methods_add_port(Graph *graph) {
 }
 
 void draw_graph(Graph *graph) {
-    write_edges(graph);
+    write_edges("file.txt", graph);
     system("main.exe");
 }

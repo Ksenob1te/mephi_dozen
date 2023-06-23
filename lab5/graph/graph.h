@@ -2,7 +2,7 @@
 #define SEM1_LAB4_GRAPH_H
 
 #define ull unsigned long long
-#define BLOCK_SIZE 10000
+#define BLOCK_SIZE 5000
 
 #include "stdio.h"
 

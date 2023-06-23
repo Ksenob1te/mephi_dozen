@@ -7,7 +7,7 @@
 void print_graph(Graph *graph);
 void search_dfs(Graph *graph);
 void search_bellman(Graph *graph);
-void write_edges(Graph *graph);
+void write_edges(const char *name, Graph *graph);
 void methods_create_core(Graph *graph);
 void methods_add_vertex(Graph *graph);
 void methods_add_edge(Graph *graph);
