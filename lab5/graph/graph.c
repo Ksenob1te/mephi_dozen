@@ -182,8 +182,11 @@ Vertex * remove_vertex(Graph *graph, char* name) {
 
 
     Vertex *result = (graph->vertexes)[index];
-    for (Node *i = result->edges->head; i; i = i->next)
+    Node *tmp;
+    for (Node *i = result->edges->head; i; i = tmp) {
+        tmp = i->next;
         remove_edge(i->data);
+    }
     (graph->vertexes)[index] = (graph->vertexes)[--(graph->current_size)];
     (graph->vertexes)[index]->current_id = index;
     return result;
