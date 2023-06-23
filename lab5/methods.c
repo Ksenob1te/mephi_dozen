@@ -160,6 +160,7 @@ void methods_add_vertex(Graph *graph) {
     if (status) {
         fprintf(stderr, "\033[0;31mThis vertex already exists\033[0m\n");
         free(name);
+        free(vertex->edges);
         free(vertex);
     }
     printf("Done!");
