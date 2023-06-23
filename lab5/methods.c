@@ -148,6 +148,7 @@ void methods_create_core(Graph *graph) {
     write_edges(core);
     system("main.exe");
     clear_graph(core);
+    free(core);
     printf("Done!");
 }
 

@@ -138,6 +138,7 @@ Graph *create_core_tree(Graph *graph, ull selected_port) {
             }
 
             Edge *edge = create_edge(all_edges[k]->delay);
+            free(edge->ports);
             edge->ports = memdup(all_edges[k]->ports, all_edges[k]->ports_size * sizeof(ull));
             edge->ports_size = all_edges[k]->ports_size;
             edge->current_size = all_edges[k]->current_size;
