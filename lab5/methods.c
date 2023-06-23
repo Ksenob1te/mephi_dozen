@@ -200,6 +200,8 @@ void methods_remove_vertex(Graph *graph) {
         fprintf(stderr, "\033[0;31mNo vertex has been found\033[0m\n");
         return;
     } else {
+        free(vertex->name);
+        free(vertex->edges);
         free(vertex);
     }
     printf("Done!");
@@ -247,6 +249,9 @@ void methods_add_port(Graph *graph) {
 
     Vertex *vertex1 = find_vertex(name1, graph);
     Vertex *vertex2 = find_vertex(name2, graph);
+
+    free(name1);
+    free(name2);
 
     if (!vertex1 || !vertex2) {
         fprintf(stderr, "\033[0;31mNo vertex has been found\033[0m\n");
