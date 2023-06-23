@@ -192,3 +192,46 @@ Vertex * remove_vertex(Graph *graph, char* name) {
     return result;
 }
 // -------------------------------------------------
+
+
+void file_input(Graph *graph, FILE *file) {
+    while (1) {
+        char *name = malloc(256 * sizeof(char));
+        ull port = -1, port2 = -1;
+        ull delay = 0;
+        int checker = fscanf(file, "%s", name);
+        if (checker == EOF) return;
+        fscanf(file, "%llu", &port);
+        Vertex *vertex1 = create_vertex(name, port);
+        int status = add_vertex(graph, vertex1);
+        if (status) {
+            free(vertex1->edges);
+            free(vertex1);
+            vertex1 = find_vertex(name, graph);
+            free(name);
+        }
+        char *name2 = malloc(256 * sizeof(char));
+        fscanf(file, "%s", name2);
+        fscanf(file, "%llu", &port2);
+        Vertex *vertex2 = create_vertex(name2, port2);
+        status = add_vertex(graph, vertex2);
+        if (status) {
+            free(vertex2->edges);
+            free(vertex2);
+            vertex2 = find_vertex(name2, graph);
+            free(name2);
+        }
+        fscanf(file, "%llu", &delay);
+
+        Edge *edge = create_edge(delay);
+        add_edge(vertex1, vertex2, edge);
+        status = 1;
+        while (status >= 1) {
+            status = fscanf(file, "%llu", &port);
+            add_port(edge, port);
+        }
+        fscanf(file, "*[^\n]");
+        fscanf(file, "*\n");
+    }
+
+}

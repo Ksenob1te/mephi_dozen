@@ -4,6 +4,8 @@
 #define ull unsigned long long
 #define BLOCK_SIZE 100
 
+#include "stdio.h"
+
 typedef struct Edge {
     ull *ports;
     struct Vertex *first;
@@ -58,5 +60,6 @@ Node * find_node(List *list, Edge *edge);
 void remove_node(List *list, Node *node);
 void clear_graph(Graph *graph);
 
+void file_input(Graph *graph, FILE *file);
 
 #endif //SEM1_LAB4_GRAPH_H

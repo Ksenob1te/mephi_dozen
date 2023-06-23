@@ -16,94 +16,101 @@
 
 int main(void) {
     select_settings();
+
+    FILE *file = fopen("try.txt", "r");
+
+
     Graph *graph = create_graph();
-    char *x = malloc(2);
-    x[0] = 'A';
-    x[1] = '\0';
-    Vertex *vertex_1 = create_vertex(x, 10);
+    file_input(graph, file);
+    fclose(file);
 
-    x = malloc(2);
-    x[0] = 'B';
-    x[1] = '\0';
-    Vertex *vertex_2 = create_vertex(x, 10);
-
-    x = malloc(2);
-    x[0] = 'C';
-    x[1] = '\0';
-    Vertex *vertex_3 = create_vertex(x, 10);
-
-    x = malloc(2);
-    x[0] = 'D';
-    x[1] = '\0';
-    Vertex *vertex_4 = create_vertex(x, 10);
-
-    x = malloc(2);
-    x[0] = 'E';
-    x[1] = '\0';
-    Vertex *vertex_5 = create_vertex(x, 10);
-    x = malloc(2);
-    x[0] = 'F';
-    x[1] = '\0';
-    Vertex *vertex_6 = create_vertex(x, 10);
-    x = malloc(2);
-    x[0] = 'G';
-    x[1] = '\0';
-    Vertex *vertex_7 = create_vertex(x, 10);
-////    Vertex *vertex_8 = create_vertex("c8", 2);
+//    char *x = malloc(2);
+//    x[0] = 'A';
+//    x[1] = '\0';
+//    Vertex *vertex_1 = create_vertex(x, 10);
 //
-    add_vertex(graph, vertex_1);
-    add_vertex(graph, vertex_1);
-    add_vertex(graph, vertex_2);
-    add_vertex(graph, vertex_3);
-    add_vertex(graph, vertex_4);
-    add_vertex(graph, vertex_5);
-    add_vertex(graph, vertex_6);
-    add_vertex(graph, vertex_7);
-////    add_vertex(graph, vertex_8);
+//    x = malloc(2);
+//    x[0] = 'B';
+//    x[1] = '\0';
+//    Vertex *vertex_2 = create_vertex(x, 10);
 //
-    Edge *edge = create_edge(7);
-    add_port(edge, 10);
-    add_edge(vertex_1, vertex_2, edge);
-
-    edge = create_edge(8);
-    add_port(edge, 10);
-    add_edge(vertex_2, vertex_3, edge);
-
-    edge = create_edge(5);
-    add_port(edge, 2);
-    add_edge(vertex_1, vertex_4, edge);
-
-    edge = create_edge(9);
-    add_port(edge, 10);
-    add_edge(vertex_4, vertex_2, edge);
-
-    edge = create_edge(7);
-    add_port(edge, 10);
-    add_edge(vertex_2, vertex_5, edge);
-
-    edge = create_edge(5);
-    add_port(edge, 2);
-    add_edge(vertex_3, vertex_5, edge);
-
-    edge = create_edge(15);
-    add_port(edge, 2);
-    add_edge(vertex_4, vertex_5, edge);
-
-    edge = create_edge(6);
-    add_port(edge, 2);
-    add_edge(vertex_4, vertex_6, edge);
-
-    edge = create_edge(8);
-    add_port(edge, 2);
-    add_edge(vertex_5, vertex_6, edge);
-
-    edge = create_edge(11);
-    add_port(edge, 2);
-    add_edge(vertex_6, vertex_7, edge);
-
-    edge = create_edge(9);
-    add_port(edge, 2);
-    add_edge(vertex_5, vertex_7, edge);
+//    x = malloc(2);
+//    x[0] = 'C';
+//    x[1] = '\0';
+//    Vertex *vertex_3 = create_vertex(x, 10);
+//
+//    x = malloc(2);
+//    x[0] = 'D';
+//    x[1] = '\0';
+//    Vertex *vertex_4 = create_vertex(x, 10);
+//
+//    x = malloc(2);
+//    x[0] = 'E';
+//    x[1] = '\0';
+//    Vertex *vertex_5 = create_vertex(x, 10);
+//    x = malloc(2);
+//    x[0] = 'F';
+//    x[1] = '\0';
+//    Vertex *vertex_6 = create_vertex(x, 10);
+//    x = malloc(2);
+//    x[0] = 'G';
+//    x[1] = '\0';
+//    Vertex *vertex_7 = create_vertex(x, 10);
+//////    Vertex *vertex_8 = create_vertex("c8", 2);
+////
+//    add_vertex(graph, vertex_1);
+//    add_vertex(graph, vertex_1);
+//    add_vertex(graph, vertex_2);
+//    add_vertex(graph, vertex_3);
+//    add_vertex(graph, vertex_4);
+//    add_vertex(graph, vertex_5);
+//    add_vertex(graph, vertex_6);
+//    add_vertex(graph, vertex_7);
+//////    add_vertex(graph, vertex_8);
+////
+//    Edge *edge = create_edge(7);
+//    add_port(edge, 10);
+//    add_edge(vertex_1, vertex_2, edge);
+//
+//    edge = create_edge(8);
+//    add_port(edge, 10);
+//    add_edge(vertex_2, vertex_3, edge);
+//
+//    edge = create_edge(5);
+//    add_port(edge, 2);
+//    add_edge(vertex_1, vertex_4, edge);
+//
+//    edge = create_edge(9);
+//    add_port(edge, 10);
+//    add_edge(vertex_4, vertex_2, edge);
+//
+//    edge = create_edge(7);
+//    add_port(edge, 10);
+//    add_edge(vertex_2, vertex_5, edge);
+//
+//    edge = create_edge(5);
+//    add_port(edge, 2);
+//    add_edge(vertex_3, vertex_5, edge);
+//
+//    edge = create_edge(15);
+//    add_port(edge, 2);
+//    add_edge(vertex_4, vertex_5, edge);
+//
+//    edge = create_edge(6);
+//    add_port(edge, 2);
+//    add_edge(vertex_4, vertex_6, edge);
+//
+//    edge = create_edge(8);
+//    add_port(edge, 2);
+//    add_edge(vertex_5, vertex_6, edge);
+//
+//    edge = create_edge(11);
+//    add_port(edge, 2);
+//    add_edge(vertex_6, vertex_7, edge);
+//
+//    edge = create_edge(9);
+//    add_port(edge, 2);
+//    add_edge(vertex_5, vertex_7, edge);
 
 
 //    methods_create_core(graph);
