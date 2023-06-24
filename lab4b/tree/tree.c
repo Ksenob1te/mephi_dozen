@@ -23,7 +23,7 @@ void clear_node(Node *node) {
     Item *k;
     for (Item *i = node->info; i; i = k) {
         k = i->next;
-//        free(i->info);
+        free(i->info);
         free(i);
     }
     free(node);
@@ -87,7 +87,11 @@ static Node *fixUp(Node *nul, Node *node) {
 
 static Node *insert_node(Node *nul, Node *dst, Node *tmp) {
     if (dst == nul) return tmp;
-    else if (tmp->key < dst->key) {
+
+    if (dst->left->color == 1 && dst->right->color == 1)
+        dst = swap(nul, dst);
+
+    if (tmp->key < dst->key) {
         if (dst->left == nul) tmp->parent = dst;
         dst->left = insert_node(nul, dst->left, tmp);
     } else if (tmp->key > dst->key) {
@@ -96,8 +100,12 @@ static Node *insert_node(Node *nul, Node *dst, Node *tmp) {
     } else if (tmp->key == dst->key) {
         dst = move_item(dst, tmp);
     }
+    if (dst->right->color == 1 && dst->left->color == 0)
+        dst = lst(nul, dst);
+    if (dst->left->color == 1 && dst->left->left->color == 1)
+        dst = rst(nul, dst);
 
-    return fixUp(nul, dst);
+    return dst;
 }
 
 void add_node(Node *nul, Tree *tree, Node *process_node) {
@@ -169,6 +177,7 @@ static Node *delete(Node *nul, Node *current_node, Node *process_node) {
             Item *k;
             for (Item *i = current_node->info; i; i = k) {
                 k = i->next;
+                free(i->info);
                 free(i);
             }
             free(current_node->info);
