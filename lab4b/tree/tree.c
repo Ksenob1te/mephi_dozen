@@ -3,7 +3,7 @@
 #include "stdio.h"
 #include "string.h"
 
-Node * create_node(Node *nul, ull key, char *info) {
+Node *create_node(Node *nul, ull key, char *info) {
     Node *node = malloc(sizeof(Node));
     node->info = malloc(sizeof(Item));
     node->info->info = info;
@@ -29,7 +29,7 @@ void clear_node(Node *node) {
     free(node);
 }
 
-static Node * move_item(Node *dst, Node *tmp) {
+static Node *move_item(Node *dst, Node *tmp) {
     tmp->info->next = dst->info;
     dst->info = tmp->info;
 
@@ -37,71 +37,70 @@ static Node * move_item(Node *dst, Node *tmp) {
     return dst;
 }
 
-static Node *lst(Node *parent) {
+static Node *lst(Node *nul, Node *parent) {
     Node *child = parent->right;
     child->color = parent->color;
     child->parent = parent->parent;
-    if (parent->parent->left == parent) parent->parent->left = child;
-    else if (parent->parent->right == parent) parent->parent->right = child;
+    if (parent->parent != nul && parent->parent->left == parent) parent->parent->left = child;
+    else if (parent->parent != nul && parent->parent->right == parent) parent->parent->right = child;
     parent->color = 1;
     parent->parent = child;
 
     parent->right = child->left;
-    if (child->left != NULL) child->left->parent = parent;
+    if (child->left != nul) child->left->parent = parent;
     child->left = parent;
     return child;
 }
 
-static Node *rst(Node *parent) {
+static Node *rst(Node *nul, Node *parent) {
     Node *child = parent->left;
     child->color = parent->color;
     child->parent = parent->parent;
-    if (parent->parent->left == parent) parent->parent->left = child;
-    else if (parent->parent->right == parent) parent->parent->right = child;
+    if (parent->parent != nul && parent->parent->left == parent) parent->parent->left = child;
+    else if (parent->parent != nul && parent->parent->right == parent) parent->parent->right = child;
     parent->color = 1;
     parent->parent = child;
 
     parent->left = child->right;
-    if (child->right != NULL) child->right->parent = parent;
+    if (child->right != nul) child->right->parent = parent;
     child->right = parent;
     return child;
 }
 
-static Node * swap(Node *nul, Node *dst) {
+static Node *swap(Node *nul, Node *dst) {
+    if (dst == nul) return dst;
     if (dst->right != nul) dst->right->color = dst->right->color == 0 ? 1 : 0;
     if (dst->left != nul) dst->left->color = dst->left->color == 0 ? 1 : 0;
     dst->color = dst->color == 0 ? 1 : 0;
     return dst;
 }
 
-static Node * fixUp(Node *nul, Node *node) {
-    if (node->right->color == 1 && node->left->color == 0)
-        node = lst(node);
+static Node *fixUp(Node *nul, Node *node) {
     if (node->left->color == 1 && node->left->left->color == 1)
-        node = rst(node);
+        node = rst(nul, node);
+    if (node->right->color == 1 && node->left != nul && node->left->color == 0)
+        node = lst(nul, node);
     if (node->left->color == 1 && node->right->color == 1)
         node = swap(nul, node);
     return node;
 }
 
-static Node * insert_node(Node *nul, Node *dst, Node *tmp) {
+static Node *insert_node(Node *nul, Node *dst, Node *tmp) {
     if (dst == nul) return tmp;
     else if (tmp->key < dst->key) {
         if (dst->left == nul) tmp->parent = dst;
         dst->left = insert_node(nul, dst->left, tmp);
-    }
-    else if (tmp->key > dst->key){
+    } else if (tmp->key > dst->key) {
         if (dst->right == nul) tmp->parent = dst;
         dst->right = insert_node(nul, dst->right, tmp);
-    }
-    else if (tmp->key == dst->key) {
+    } else if (tmp->key == dst->key) {
         dst = move_item(dst, tmp);
     }
 
     return fixUp(nul, dst);
 }
 
-void add_node(Node *nul, Tree *tree, Node* process_node) {
+void add_node(Node *nul, Tree *tree, Node *process_node) {
     if (tree->root == nul) {
         tree->root = process_node;
         return;
@@ -113,7 +112,7 @@ void add_node(Node *nul, Tree *tree, Node* process_node) {
     tree->root = current_root;
 }
 
-static Node * get_min_subtree (Node *nul, Node *current_root) {
+static Node *get_min_subtree(Node *nul, Node *current_root) {
     if (current_root == nul)
         return nul;
     while (current_root->left != nul)
@@ -121,58 +120,69 @@ static Node * get_min_subtree (Node *nul, Node *current_root) {
     return current_root;
 }
 
-static Node * moveRedLeft(Node *nul, Node *h) {
+static Node *moveRedLeft(Node *nul, Node *h) {
     swap(nul, h);
-    if (h->right && h->right->left == 0) {
-        h->right = rst(h->right);
-        h = lst(h);
+    if (h->right != nul && h->right->left->color == 1) {
+        h->right = rst(nul, h->right);
+        h = lst(nul, h);
         swap(nul, h);
     }
     return h;
 }
 
-static Node * moveRedRight(Node *nul, Node *h) {
+static Node *moveRedRight(Node *nul, Node *h) {
     swap(nul, h);
-    if (h->left && h->left->left == 0) {
-        h = rst(h);
+    if (h->left != nul && h->left->left->color == 1) {
+        h = rst(nul, h);
         swap(nul, h);
     }
     return h;
 }
 
-static Node * deleteMin(Node *nul, Node *h) {
-    if (h->left == nul) return nul;
-    if (h->left->color == 0 && h->left->left->color == 0)
+static Node *deleteMin(Node *nul, Node *h) {
+    if (h->left == nul) {
+        free(h);
+        return nul;
+    }
+    if (h->left != nul && h->left->color == 0 && h->left->left != nul && h->left->left->color == 0)
         h = moveRedLeft(nul, h);
     h->left = deleteMin(nul, h->left);
     return fixUp(nul, h);
 }
 
-static Node * delete(Node *nul, Node *current_node, Node *process_node) {
+
+static Node *delete(Node *nul, Node *current_node, Node *process_node) {
     if (process_node->key < current_node->key) {
-        if (current_node->left->color == 0 && current_node->right->color == 0)
+        if (current_node->left != nul && current_node->left->color == 0 && current_node->left->left->color == 0)
             current_node = moveRedLeft(nul, current_node);
         current_node->left = delete(nul, current_node->left, process_node);
     } else {
         if (current_node->left->color == 1)
-            current_node = rst(current_node);
-        if (current_node->key == process_node->key && current_node->right == nul)
+            current_node = rst(nul, current_node);
+        if (current_node->key == process_node->key && current_node->right == nul) {
+            clear_node(current_node);
             return nul;
+        }
         if (current_node->right->color == 0 && current_node->right->left->color == 0)
             current_node = moveRedRight(nul, current_node);
-        if (current_node->key == process_node->key) {
+        if (current_node->key == process_node->key && current_node != nul) {
+            Item *k;
+            for (Item *i = current_node->info; i; i = k) {
+                k = i->next;
+                free(i);
+            }
+            free(current_node->info);
             current_node->info = get_min_subtree(nul, current_node->right)->info;
             current_node->key = get_min_subtree(nul, current_node->right)->key;
             current_node->right = deleteMin(nul, current_node->right);
-        }
-        else current_node->right = delete(nul, current_node->right, process_node);
+        } else current_node->right = delete(nul, current_node->right, process_node);
     }
     return fixUp(nul, current_node);
 }
 
 void remove_node(Node *nul, Tree *tree, Node *process_node) {
-    Node *root = delete(nul, tree->root, process_node);
-    root->color = 0;
+    tree->root = delete(nul, tree->root, process_node);
+    tree->root->color = 0;
 }
 
 //void remove_node(Node *nul, Tree *tree, Node *process_node) {
@@ -248,8 +258,7 @@ void print_root(Node *nul, char *indent, Node *node, short last) {
     if (last) {
         printf("└── ");
         strcat(indent, "    ");
-    }
-    else {
+    } else {
         printf("├── ");
         strcat(indent, "│   ");
     }
@@ -308,7 +317,7 @@ void preorder_traversal(Node *nul, Node *root, int limit) {
     }
 }
 
-Node * find_min_limit (Node *nul, Tree *tree, ull limit) {
+Node *find_min_limit(Node *nul, Tree *tree, ull limit) {
     Node *current_root = tree->root;
     Node *last_root = nul;
     while (current_root != nul) {
@@ -323,7 +332,7 @@ Node * find_min_limit (Node *nul, Tree *tree, ull limit) {
     return last_root;
 }
 
-Node * search_node(Node *nul, Tree *tree, ull key) {
+Node *search_node(Node *nul, Tree *tree, ull key) {
     Node *current_root = tree->root;
     while (current_root != nul) {
         if (key > current_root->key) {
@@ -337,7 +346,7 @@ Node * search_node(Node *nul, Tree *tree, ull key) {
     return NULL;
 }
 
-Tree * create_tree(Node *nul) {
+Tree *create_tree(Node *nul) {
     Tree *tree = malloc(sizeof(Tree));
     tree->root = nul;
     return tree;
