@@ -111,7 +111,7 @@ add_executable(lab4b
         lab4b/main.c
         lab4b/menu/classic_menu.h
         lab4b/menu/classic_menu.c
-        lab4b/tree/tree.c lab4b/tree/tree.h lab4b/main.c lab4b/methods.c lab4b/methods.h)
+        lab4b/tree/tree.c lab4b/tree/tree.h lab4b/methods.c lab4b/methods.h)
 
 add_executable(lab5
         lab5/main.c
