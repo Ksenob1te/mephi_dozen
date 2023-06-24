@@ -26,22 +26,22 @@ int main(void) {
     select_settings();
     Node nul = create_nul();
     Tree *tree = create_tree(&nul);
-    char *x = malloc(4); strcat(x, "123");
+    char *x = malloc(4); strcpy(x, "123");
     Node *node1 = create_node(&nul, 24, x);
     add_node(&nul, tree, node1);
-    x = malloc(4); strcat(x, "123");
+    x = malloc(4); strcpy(x, "123");
     Node *node = create_node(&nul, 5, x);
     add_node(&nul, tree, node);
-    x = malloc(4); strcat(x, "123");
+    x = malloc(4); strcpy(x, "123");
     node1 = create_node(&nul, 1, x);
     add_node(&nul, tree, node1);
-    x = malloc(4); strcat(x, "123");
+    x = malloc(4); strcpy(x, "123");
     node = create_node(&nul, 15, x);
     add_node(&nul, tree, node);
-    x = malloc(4); strcat(x, "123");
+    x = malloc(4); strcpy(x, "123");
     node = create_node(&nul, 3, x);
     add_node(&nul, tree, node);
-    x = malloc(4); strcat(x, "123");
+    x = malloc(4); strcpy(x, "123");
     node = create_node(&nul, 8, x);
     add_node(&nul, tree, node);
 
